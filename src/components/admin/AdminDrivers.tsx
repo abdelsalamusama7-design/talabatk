@@ -226,6 +226,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
       {filtered.map((d) => (
         <div key={d.id} className="bg-card rounded-2xl p-4 shadow-card">
           <div className="flex items-center justify-between mb-2">
