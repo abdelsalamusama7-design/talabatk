@@ -279,9 +279,33 @@ const CartPage = () => {
             <span className="tabular-nums font-semibold">{total} ج.م</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">رسوم التوصيل</span>
+            <span className="text-muted-foreground flex items-center gap-1">
+              رسوم التوصيل
+              {feeLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+              {dynamicFee !== null && <Zap className="h-3 w-3 text-warning" />}
+            </span>
             <span className="tabular-nums font-semibold">{deliveryFee} ج.م</span>
           </div>
+          {feeDetails && (
+            <div className="bg-accent/50 rounded-xl p-2.5 space-y-1">
+              <div className="flex items-center gap-1.5 text-[11px] text-accent-foreground">
+                <MapPin className="h-3 w-3" />
+                <span>المسافة: {feeDetails.distance_km} كم</span>
+              </div>
+              {feeDetails.is_peak && (
+                <div className="flex items-center gap-1.5 text-[11px] text-warning">
+                  <Clock className="h-3 w-3" />
+                  <span>وقت ذروة (+30%)</span>
+                </div>
+              )}
+              {feeDetails.demand_level !== "low" && (
+                <div className="flex items-center gap-1.5 text-[11px] text-destructive">
+                  <TrendingUp className="h-3 w-3" />
+                  <span>طلب {feeDetails.demand_level === "high" ? "مرتفع (+25%)" : "متوسط (+10%)"}</span>
+                </div>
+              )}
+            </div>
+          )}
           {discount > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-success">الخصم</span>
