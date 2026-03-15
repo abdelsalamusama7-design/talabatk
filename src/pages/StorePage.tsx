@@ -24,7 +24,7 @@ const StorePage = () => {
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
       {/* Header Image */}
-      <div className="relative h-56 overflow-hidden">
+      <div className="relative h-56 md:h-72 lg:h-80 overflow-hidden">
         <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
         <button
