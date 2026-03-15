@@ -56,7 +56,7 @@ const AdminDashboard = () => {
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerForm, setOfferForm] = useState({
-    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0,
+    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "",
   });
 
   useEffect(() => {
