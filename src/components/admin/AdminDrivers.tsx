@@ -37,6 +37,17 @@ const emptyForm = {
 const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const [drivers, setDrivers] = useState<Driver[]>(initial);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+
+  const filtered = drivers.filter((d) => {
+    if (!search.trim()) return true;
+    const q = search.trim().toLowerCase();
+    return (
+      d.id.toLowerCase().includes(q) ||
+      (d.phone && d.phone.includes(q)) ||
+      (d.license_number && d.license_number.toLowerCase().includes(q))
+    );
+  });
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
