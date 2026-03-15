@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         full_name: fullName,
       });
     }
-    return { error };
+    return { error, userId: data?.user?.id };
   };
 
   const signIn = async (email: string, password: string) => {
