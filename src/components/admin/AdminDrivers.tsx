@@ -137,6 +137,22 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
             </div>
           </div>
           <Input placeholder="رقم الرخصة" value={form.license_number} onChange={(e) => setForm({ ...form, license_number: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+          <div className="grid grid-cols-2 gap-3">
+            <AdminImageUpload
+              bucket="driver-documents"
+              folder="id-cards"
+              currentUrl={form.id_card_url || null}
+              onUploaded={(url) => setForm({ ...form, id_card_url: url })}
+              label="صورة البطاقة"
+            />
+            <AdminImageUpload
+              bucket="driver-documents"
+              folder="selfies"
+              currentUrl={form.selfie_with_id_url || null}
+              onUploaded={(url) => setForm({ ...form, selfie_with_id_url: url })}
+              label="سيلفي مع البطاقة"
+            />
+          </div>
           <div>
             <p className="text-xs text-muted-foreground mb-2">حالة التوثيق</p>
             <div className="flex gap-2">
