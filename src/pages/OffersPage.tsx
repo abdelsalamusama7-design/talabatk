@@ -198,7 +198,7 @@ const OffersPage = () => {
               </div>
             </motion.div>
           );
-        })}
+        </div>
       </div>
 
       {/* Browse stores section */}
