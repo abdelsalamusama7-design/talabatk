@@ -74,18 +74,20 @@ const AdminDashboard = () => {
   }, []);
 
   const loadAll = async () => {
-    const [r, o, d, p, of] = await Promise.all([
+    const [r, o, d, p, of, pc] = await Promise.all([
       supabase.from("restaurants").select("*").order("created_at", { ascending: false }),
       supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(50),
       supabase.from("drivers").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("*").order("created_at", { ascending: false }),
       supabase.from("offers").select("*").order("sort_order"),
+      supabase.from("promo_codes").select("*").order("created_at", { ascending: false }),
     ]);
     setRestaurants(r.data || []);
     setOrders(o.data || []);
     setDrivers(d.data || []);
     setProfiles(p.data || []);
     setOffers((of.data as Offer[]) || []);
+    setPromoCodes((pc.data as PromoCode[]) || []);
     setLoading(false);
   };
 
