@@ -1,4 +1,4 @@
-import { sampleOrders } from "@/lib/data";
+import { useOrders } from "@/lib/order-context";
 import { CheckCircle, Truck, Clock } from "lucide-react";
 import DeliveryMap from "@/components/DeliveryMap";
 
@@ -9,13 +9,14 @@ const statusConfig = {
 };
 
 const OrdersPage = () => {
+  const { orders } = useOrders();
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
       <div className="pt-12 px-4">
         <h1 className="text-2xl font-bold mb-6">طلباتك</h1>
 
         <div className="space-y-4">
-          {sampleOrders.map((order) => {
+          {orders.map((order) => {
             const config = statusConfig[order.status];
             const StatusIcon = config.icon;
             return (
