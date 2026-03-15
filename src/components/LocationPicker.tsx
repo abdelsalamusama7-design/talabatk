@@ -105,6 +105,8 @@ const LocationPicker = ({
   const [showSaved, setShowSaved] = useState(false);
   const [saveLabel, setSaveLabel] = useState("المنزل");
   const [showSaveForm, setShowSaveForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editLabel, setEditLabel] = useState("");
 
   useEffect(() => {
     if (currentLat && currentLng) {
