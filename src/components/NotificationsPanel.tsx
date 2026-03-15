@@ -198,10 +198,17 @@ const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => v
               >
                 <div className="flex items-start gap-3">
                   <div className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 ${
-                    notif.type === "order" ? "bg-primary/10" : "bg-warning/10"
+                    notif.type === "order" ? "bg-primary/10" :
+                    notif.type === "driver" ? "bg-success/10" :
+                    notif.type === "restaurant" ? "bg-warning/10" :
+                    "bg-warning/10"
                   }`}>
                     {notif.type === "order" ? (
                       <Package className="h-4 w-4 text-primary" />
+                    ) : notif.type === "driver" ? (
+                      <Truck className="h-4 w-4 text-success" />
+                    ) : notif.type === "restaurant" ? (
+                      <Store className="h-4 w-4 text-warning" />
                     ) : (
                       <Tag className="h-4 w-4 text-warning" />
                     )}
