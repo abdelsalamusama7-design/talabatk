@@ -21,6 +21,7 @@ import LiveTrackingPage from "./pages/LiveTrackingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BottomNav from "./components/BottomNav";
 import InstallPage from "./pages/InstallPage";
+import LoyaltyPage from "./pages/LoyaltyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
