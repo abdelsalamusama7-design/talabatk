@@ -81,7 +81,7 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
           table: "orders",
           filter: `customer_id=eq.${user.id}`,
         },
-        (payload) => {
+        async (payload) => {
           if (payload.eventType === "INSERT") {
             setLiveOrders((prev) => [payload.new as RealtimeOrder, ...prev]);
           } else if (payload.eventType === "UPDATE") {
@@ -90,7 +90,48 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
               prev.map((o) => (o.id === updated.id ? updated : o))
             );
 
-            // Status update handled silently - no toast or browser notification
+            // Push notification
+            const msg = statusMessages[updated.status];
+            if (msg) {
+              // In-app toast
+              toast(msg.title, {
+                description: `طلب #${updated.id.slice(0, 8)}`,
+                duration: 6000,
+                position: "top-center",
+              });
+
+              // Browser push notification (works even when tab is in background)
+              if ("Notification" in window && Notification.permission === "granted") {
+                try {
+                  const reg = await navigator.serviceWorker?.ready;
+                  if (reg) {
+                    const notifOptions: NotificationOptions & Record<string, unknown> = {
+                      body: `طلب #${updated.id.slice(0, 8)}`,
+                      icon: "/pwa-192x192.png",
+                      badge: "/pwa-192x192.png",
+                      tag: `order-${updated.id}-${updated.status}`,
+                      data: { url: `/track/${updated.id}` },
+                      dir: "rtl" as const,
+                      lang: "ar",
+                    };
+                    reg.showNotification(msg.title, notifOptions);
+                  } else {
+                    new Notification(msg.title, {
+                      body: `طلب #${updated.id.slice(0, 8)}`,
+                      icon: "/pwa-192x192.png",
+                      tag: `order-${updated.id}`,
+                    });
+                  }
+                } catch {
+                  // Fallback to basic notification
+                  new Notification(msg.title, {
+                    body: `طلب #${updated.id.slice(0, 8)}`,
+                    icon: "/pwa-192x192.png",
+                    tag: `order-${updated.id}`,
+                  });
+                }
+              }
+            }
           } else if (payload.eventType === "DELETE") {
             setLiveOrders((prev) => prev.filter((o) => o.id !== (payload.old as any).id));
           }
