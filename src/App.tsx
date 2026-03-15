@@ -78,6 +78,7 @@ const App = () => {
               </OrderProvider>
             </CartProvider>
           </AuthProvider>
+          </LangProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </>
