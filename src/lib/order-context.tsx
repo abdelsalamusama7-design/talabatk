@@ -33,28 +33,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [orders]);
 
-  // Simulate status change for the "delivering" order after 15s → delivered
-  useEffect(() => {
-    const deliveringOrder = orders.find((o) => o.status === "preparing");
-    if (!deliveringOrder) return;
-
-    const t1 = setTimeout(() => {
-      updateOrderStatus(deliveringOrder.id, "delivering");
-    }, 12000);
-
-    return () => clearTimeout(t1);
-  }, []);
-
-  useEffect(() => {
-    const deliveringOrder = orders.find((o) => o.status === "delivering");
-    if (!deliveringOrder) return;
-
-    const t = setTimeout(() => {
-      updateOrderStatus(deliveringOrder.id, "delivered");
-    }, 25000);
-
-    return () => clearTimeout(t);
-  }, [orders, updateOrderStatus]);
+  // No auto-simulation — status updates happen via real actions only
 
   return (
     <OrderContext.Provider value={{ orders, updateOrderStatus }}>
