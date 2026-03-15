@@ -90,24 +90,7 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
               prev.map((o) => (o.id === updated.id ? updated : o))
             );
 
-            // Show notification toast
-            const msg = statusMessages[updated.status];
-            if (msg) {
-              toast(msg.title, {
-                description: `طلب #${updated.id.slice(0, 8)}`,
-                duration: 5000,
-                position: "top-center",
-              });
-
-              // Browser notification if permitted
-              if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(msg.title, {
-                  body: `طلب #${updated.id.slice(0, 8)}`,
-                  icon: "/pwa-192x192.png",
-                  tag: `order-${updated.id}`,
-                });
-              }
-            }
+            // Status update handled silently - no toast or browser notification
           } else if (payload.eventType === "DELETE") {
             setLiveOrders((prev) => prev.filter((o) => o.id !== (payload.old as any).id));
           }
