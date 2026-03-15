@@ -112,7 +112,8 @@ const OffersPage = () => {
       </div>
 
       {/* Offers Grid */}
-      <div className="px-4 py-6 space-y-4">
+      <div className="px-4 py-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {offers.length === 0 && (
           <div className="text-center py-16 text-muted-foreground">
             <Gift className="h-16 w-16 mx-auto mb-4 opacity-40" />
