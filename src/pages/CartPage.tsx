@@ -309,10 +309,7 @@ const CartPage = () => {
                 <Edit3 className="h-3 w-3" /> تعديل
               </button>
               <button
-                onClick={() => {
-                  requestLocation();
-                  if (geoError) toast.error(geoError);
-                }}
+                onClick={requestLocation}
                 disabled={geoLoading}
                 className="text-xs text-primary font-medium flex items-center gap-1"
               >
