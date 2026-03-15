@@ -12,7 +12,7 @@ const AccountPage = () => {
     { label: "طلباتي السابقة", icon: ChevronLeft, path: "/orders", show: true },
     { label: "نقاط الولاء والمكافآت", icon: Gift, path: "/loyalty", show: !!user },
     { label: "لوحة المطعم", icon: Store, path: "/restaurant-dashboard", show: hasRole("restaurant_owner") },
-    { label: "لوحة السائق", icon: Truck, path: "/driver", show: hasRole("driver") },
+    { label: "لوحة السائق", icon: Bike, path: "/driver", show: hasRole("driver") },
     { label: "لوحة التحكم (أدمن)", icon: Settings, path: "/admin", show: hasRole("admin") },
     { label: "التسجيل كمطعم", icon: Store, path: "/restaurant-dashboard", show: !hasRole("restaurant_owner") && !!user },
     { label: "التسجيل كسائق", icon: Truck, path: "/driver", show: !hasRole("driver") && !!user },
