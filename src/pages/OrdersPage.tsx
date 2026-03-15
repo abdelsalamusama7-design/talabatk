@@ -107,6 +107,7 @@ const OrdersPage = () => {
                           <LiveDeliveryMap
                             driverName={isLive ? "أحمد" : order.deliveryPerson}
                             orderStatus={order.status}
+                            driverId={isLive ? order.driver_id : undefined}
                             compact
                           />
                         </div>

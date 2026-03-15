@@ -63,6 +63,7 @@ const LiveTrackingPage = () => {
           <LiveDeliveryMap
             driverName="أحمد"
             orderStatus={order.status}
+            driverId={order.driver_id}
             customerLat={order.delivery_lat || undefined}
             customerLng={order.delivery_lng || undefined}
           />
