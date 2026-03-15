@@ -77,19 +77,33 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       } : d));
       toast.success("تم تحديث المندوب ✅");
     } else {
-      // Create a new auth user first is complex, so we create a driver record linked to admin for now
-      // In practice, drivers register themselves. Admin can add phone/vehicle info.
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { toast.error("يجب تسجيل الدخول"); return; }
+      if (!form.email?.trim()) { toast.error("يجب إدخال إيميل المندوب"); return; }
+      // Look up user by email via profiles or create approach
+      // We use supabase admin invite is not available client-side, so we search for existing user
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .ilike("full_name", `%${form.email.trim()}%`)
+        .limit(1);
+      
+      // Try to find user_id from user_roles or direct lookup
+      // Since we can't query auth.users, we'll use the email as a reference
+      // First check if there's already a driver with this info
+      const { data: { user: adminUser } } = await supabase.auth.getUser();
+      if (!adminUser) { toast.error("يجب تسجيل الدخول"); return; }
+
+      // For admin-created drivers, we need a valid user_id
+      // The best approach: admin enters the user_id directly or the driver registers themselves
+      // Here we use a workaround: create with a placeholder and update when driver logs in
       const { data, error } = await supabase.from("drivers").insert({
-        user_id: user.id,
+        user_id: adminUser.id, // Will be linked to admin temporarily
         phone: form.phone || null,
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
         id_card_url: form.id_card_url || null,
         selfie_with_id_url: form.selfie_with_id_url || null,
-        status: "offline" as any,
+        status: "offline" as Database["public"]["Enums"]["driver_status"],
       }).select().single();
       if (error) { toast.error("خطأ في الإضافة: " + error.message); return; }
       setDrivers((prev) => [data as Driver, ...prev]);
