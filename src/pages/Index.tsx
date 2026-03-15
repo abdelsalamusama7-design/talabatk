@@ -33,6 +33,17 @@ const Index = () => {
         <Sparkles className="h-6 w-6" />
       </button>
 
+      {/* WhatsApp FAB */}
+      <a
+        href="https://wa.me/2001140872325"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full bg-[hsl(142,70%,45%)] text-white shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </a>
+      </button>
+
       <AiFoodChat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
