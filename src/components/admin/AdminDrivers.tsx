@@ -113,7 +113,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       // The best approach: admin enters the user_id directly or the driver registers themselves
       // Here we use a workaround: create with a placeholder and update when driver logs in
       const { data, error } = await supabase.from("drivers").insert({
-        user_id: adminUser.id, // Will be linked to admin temporarily
+        user_id: adminUser.id,
+        name: form.name || null,
         phone: form.phone || null,
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
