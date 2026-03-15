@@ -1,19 +1,125 @@
+import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
-import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useGeolocation } from "@/hooks/use-geolocation";
+import { supabase } from "@/integrations/supabase/client";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const CartPage = () => {
   const { items, updateQuantity, removeItem, clearCart, total } = useCart();
+  const { user } = useAuth();
+  const { address, lat, lng, requestLocation, loading: geoLoading } = useGeolocation();
   const navigate = useNavigate();
+  const [notes, setNotes] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [ordering, setOrdering] = useState(false);
 
   const deliveryFee = items.length > 0 ? items[0].store.deliveryFee : 0;
+  const grandTotal = Math.max(0, total + deliveryFee - discount);
 
-  const handleOrder = () => {
-    toast.success("تم تأكيد الطلب! الدفع عند الاستلام 🎉");
-    clearCart();
-    navigate("/orders");
+  const applyPromo = async () => {
+    if (!promoCode.trim()) return;
+    const { data } = await supabase
+      .from("promo_codes")
+      .select("*")
+      .eq("code", promoCode.trim().toUpperCase())
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (!data) {
+      toast.error("كود الخصم غير صالح");
+      return;
+    }
+    if (data.min_order && total < Number(data.min_order)) {
+      toast.error(`الحد الأدنى للطلب ${data.min_order} ج.م`);
+      return;
+    }
+    if (data.max_uses && data.used_count >= data.max_uses) {
+      toast.error("تم استنفاد كود الخصم");
+      return;
+    }
+
+    const disc = data.discount_type === "percentage"
+      ? (total * Number(data.discount_value)) / 100
+      : Number(data.discount_value);
+    setDiscount(Math.min(disc, total));
+    setPromoApplied(true);
+    toast.success(`تم تطبيق خصم ${data.discount_type === "percentage" ? `${data.discount_value}%` : `${data.discount_value} ج.م`}`);
+  };
+
+  const handleOrder = async () => {
+    if (!user) {
+      toast.error("سجل دخولك أولاً");
+      navigate("/auth");
+      return;
+    }
+
+    setOrdering(true);
+    try {
+      // Find restaurant in DB or use a placeholder
+      const storeName = items[0]?.store.name;
+      const { data: restaurant } = await supabase
+        .from("restaurants")
+        .select("id")
+        .eq("name", storeName)
+        .maybeSingle();
+
+      const restaurantId = restaurant?.id;
+      if (!restaurantId) {
+        toast.error("المطعم غير متوفر حالياً في النظام");
+        setOrdering(false);
+        return;
+      }
+
+      const orderItems = items.map((i) => ({
+        name: i.product.name,
+        price: i.product.price,
+        quantity: i.quantity,
+      }));
+
+      const { data: order, error } = await supabase.from("orders").insert({
+        customer_id: user.id,
+        restaurant_id: restaurantId,
+        items: orderItems,
+        subtotal: total,
+        delivery_fee: deliveryFee,
+        total: grandTotal,
+        delivery_address: address,
+        delivery_lat: lat,
+        delivery_lng: lng,
+        notes: notes || null,
+        status: "pending",
+      }).select().single();
+
+      if (error) throw error;
+
+      // Try to auto-assign driver
+      try {
+        await supabase.functions.invoke("assign-driver", {
+          body: { order_id: order.id },
+        });
+      } catch {
+        // Driver assignment is best-effort
+      }
+
+      toast.success("تم تأكيد الطلب بنجاح! 🎉");
+      clearCart();
+      setDiscount(0);
+      setPromoApplied(false);
+      setNotes("");
+      navigate("/orders");
+    } catch (err: any) {
+      toast.error(err.message || "حدث خطأ أثناء إنشاء الطلب");
+    } finally {
+      setOrdering(false);
+    }
   };
 
   if (items.length === 0) {
@@ -33,7 +139,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24" dir="rtl">
+    <div className="min-h-screen bg-background pb-28" dir="rtl">
       <div className="pt-12 px-4">
         <h1 className="text-2xl font-bold mb-6">السلة</h1>
 
@@ -77,8 +183,67 @@ const CartPage = () => {
           ))}
         </AnimatePresence>
 
+        {/* Delivery Address */}
+        <div className="bg-card rounded-2xl p-4 shadow-card mt-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <MapPin className="h-4 w-4 text-primary" /> عنوان التوصيل
+            </span>
+            <button
+              onClick={requestLocation}
+              disabled={geoLoading}
+              className="text-xs text-primary font-medium"
+            >
+              {geoLoading ? "جارٍ التحديد..." : "📍 تحديد موقعي"}
+            </button>
+          </div>
+          <p className="text-sm text-muted-foreground">{address}</p>
+        </div>
+
+        {/* Notes */}
+        <div className="bg-card rounded-2xl p-4 shadow-card mt-3">
+          <label className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-2">
+            <FileText className="h-4 w-4 text-primary" /> ملاحظات
+          </label>
+          <Input
+            placeholder="مثال: بدون بصل، الدور الثالث..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className="rounded-xl h-10"
+            maxLength={500}
+          />
+        </div>
+
+        {/* Promo Code */}
+        <div className="bg-card rounded-2xl p-4 shadow-card mt-3">
+          <label className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-2">
+            <Tag className="h-4 w-4 text-primary" /> كود خصم
+          </label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="أدخل كود الخصم"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+              className="rounded-xl h-10 flex-1"
+              disabled={promoApplied}
+              maxLength={20}
+            />
+            <Button
+              onClick={applyPromo}
+              disabled={promoApplied || !promoCode.trim()}
+              size="sm"
+              className="rounded-xl h-10 px-4"
+            >
+              {promoApplied ? "✓" : "تطبيق"}
+            </Button>
+          </div>
+          {promoApplied && (
+            <p className="text-xs text-success mt-1.5">✅ تم تطبيق خصم {discount} ج.م</p>
+          )}
+        </div>
+
         {/* Summary */}
-        <div className="bg-card rounded-2xl p-4 shadow-card mt-6 space-y-3">
+        <div className="bg-card rounded-2xl p-4 shadow-card mt-4 space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">المجموع الفرعي</span>
             <span className="tabular-nums font-semibold">{total} ج.م</span>
@@ -87,9 +252,15 @@ const CartPage = () => {
             <span className="text-muted-foreground">رسوم التوصيل</span>
             <span className="tabular-nums font-semibold">{deliveryFee} ج.م</span>
           </div>
+          {discount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-success">الخصم</span>
+              <span className="tabular-nums font-semibold text-success">-{discount} ج.م</span>
+            </div>
+          )}
           <div className="border-t border-border pt-3 flex justify-between">
             <span className="font-bold">الإجمالي</span>
-            <span className="font-bold text-primary tabular-nums">{total + deliveryFee} ج.م</span>
+            <span className="font-bold text-primary tabular-nums">{grandTotal} ج.م</span>
           </div>
         </div>
 
@@ -102,9 +273,11 @@ const CartPage = () => {
       <div className="fixed bottom-16 left-0 right-0 p-4 bg-background/80 backdrop-blur">
         <button
           onClick={handleOrder}
-          className="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity shadow-card"
+          disabled={ordering}
+          className="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity shadow-card flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          تأكيد الطلب • {total + deliveryFee} ج.م
+          {ordering && <Loader2 className="h-5 w-5 animate-spin" />}
+          تأكيد الطلب • {grandTotal} ج.م
         </button>
       </div>
     </div>
