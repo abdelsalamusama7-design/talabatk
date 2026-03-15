@@ -29,7 +29,7 @@ interface Restaurant {
 
 const emptyForm = {
   name: "", category: "restaurants", address: "", phone: "", delivery_fee: 10,
-  min_order: 0, delivery_time: "30-45", description: "",
+  min_order: 0, delivery_time: "30-45", description: "", image_url: "", cover_url: "",
 };
 
 const categoryOptions = [
