@@ -37,7 +37,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
         className={`mt-8 text-4xl font-bold text-primary-foreground tracking-tight transition-all duration-700 ease-out ${phase >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         style={{ transitionDelay: "300ms" }}
       >
-        طلبتك
+        طلباتك
       </h1>
 
       {/* Tagline */}
