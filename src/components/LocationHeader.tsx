@@ -94,6 +94,7 @@ const LocationHeader = () => {
         loading={geo.loading}
         onRequestGPS={geo.requestLocation}
       />
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
     </>
   );
 };
