@@ -51,7 +51,7 @@ const OrdersPage = () => {
               طلبات نشطة ({activeOrders.length})
             </h2>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activeOrders.map((order: any) => {
                 const config = allStatusConfig[order.status] || allStatusConfig.pending;
                 const StatusIcon = config.icon;
