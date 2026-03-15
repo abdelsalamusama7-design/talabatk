@@ -53,6 +53,7 @@ const App = () => (
                   <Route path="/install" element={<InstallPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+                <Footer />
                 <BottomNav />
               </BrowserRouter>
             </LiveOrderProvider>
