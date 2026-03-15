@@ -141,6 +141,7 @@ const AdminDashboard = () => {
       is_active: offerForm.is_active,
       sort_order: offerForm.sort_order,
       expires_at: offerForm.expires_at ? new Date(offerForm.expires_at).toISOString() : null,
+      promo_code_id: offerForm.promo_code_id || null,
     };
 
     if (editingOffer) {
