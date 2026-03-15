@@ -87,6 +87,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null,
+        selfie_with_id_url: form.selfie_with_id_url || null,
         status: "offline" as any,
       }).select().single();
       if (error) { toast.error("خطأ في الإضافة: " + error.message); return; }
