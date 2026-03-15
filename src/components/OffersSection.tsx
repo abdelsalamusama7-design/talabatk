@@ -100,6 +100,7 @@ const PromoCodeChip = ({ code }: { code: string }) => {
 const OffersSection = () => {
   const navigate = useNavigate();
   const { setPendingPromoCode } = useCart();
+  const { t, dir, isAr } = useLang();
   const [offers, setOffers] = useState<Offer[]>([]);
   const getTimeLeft = useCountdown(offers);
 
