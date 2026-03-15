@@ -198,6 +198,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
         <h2 className="font-bold text-foreground">المطاعم ({restaurants.length})</h2>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
       {restaurants.map((r) => (
         <div key={r.id} className="bg-card rounded-2xl p-4 shadow-card">
           {editingId === r.id ? (
