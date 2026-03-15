@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
 import LocationPicker from "./LocationPicker";
+import NotificationsPanel from "./NotificationsPanel";
 import { useGeolocation } from "@/hooks/use-geolocation";
 
 const LocationHeader = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const geo = useGeolocation();
   const navigate = useNavigate();
