@@ -1,5 +1,6 @@
 import { sampleOrders } from "@/lib/data";
 import { CheckCircle, Truck, Clock } from "lucide-react";
+import DeliveryMap from "@/components/DeliveryMap";
 
 const statusConfig = {
   preparing: { label: "قيد التجهيز", icon: Clock, color: "text-warning" },
@@ -47,8 +48,11 @@ const OrdersPage = () => {
                 </div>
 
                 {order.status === "delivering" && (
-                  <div className="mt-3 bg-accent rounded-xl p-3 text-sm text-accent-foreground">
-                    🏍️ المندوب: {order.deliveryPerson}
+                  <div className="mt-4 space-y-3">
+                    <div className="bg-accent rounded-xl p-3 text-sm text-accent-foreground">
+                      🏍️ المندوب: {order.deliveryPerson}
+                    </div>
+                    <DeliveryMap deliveryPerson={order.deliveryPerson} />
                   </div>
                 )}
               </div>
