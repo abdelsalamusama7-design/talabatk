@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, Percent, Clock, Gift, Zap, ArrowLeft } from "lucide-react";
+import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const iconMap: Record<string, typeof Flame> = {
-  flame: Flame,
-  gift: Gift,
-  zap: Zap,
-  clock: Clock,
-  percent: Percent,
+  flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
 };
 
 const gradientMap: Record<string, string> = {
@@ -28,11 +24,56 @@ interface Offer {
   bg_color: string;
   icon: string;
   badge: string | null;
+  expires_at: string | null;
 }
+
+const useCountdown = (offers: Offer[]) => {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const hasExpiry = offers.some((o) => o.expires_at);
+    if (!hasExpiry) return;
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, [offers]);
+
+  const getTimeLeft = useCallback((expiresAt: string | null) => {
+    if (!expiresAt) return null;
+    const diff = new Date(expiresAt).getTime() - now;
+    if (diff <= 0) return null;
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    return { days, hours, minutes, seconds, total: diff };
+  }, [now]);
+
+  return getTimeLeft;
+};
+
+const CountdownDisplay = ({ timeLeft }: { timeLeft: { days: number; hours: number; minutes: number; seconds: number } }) => (
+  <div className="flex items-center gap-1 mt-3 bg-black/20 backdrop-blur-sm rounded-xl px-3 py-1.5">
+    <Timer className="h-3.5 w-3.5 text-white/90 ml-1" />
+    <div className="flex items-center gap-1 text-white font-mono text-sm font-bold" dir="ltr">
+      {timeLeft.days > 0 && (
+        <>
+          <span className="bg-white/20 rounded px-1.5 py-0.5 min-w-[28px] text-center">{timeLeft.days}</span>
+          <span className="text-white/60 text-[10px]">ي</span>
+        </>
+      )}
+      <span className="bg-white/20 rounded px-1.5 py-0.5 min-w-[28px] text-center">{String(timeLeft.hours).padStart(2, "0")}</span>
+      <span className="text-white/70">:</span>
+      <span className="bg-white/20 rounded px-1.5 py-0.5 min-w-[28px] text-center">{String(timeLeft.minutes).padStart(2, "0")}</span>
+      <span className="text-white/70">:</span>
+      <span className="bg-white/20 rounded px-1.5 py-0.5 min-w-[28px] text-center">{String(timeLeft.seconds).padStart(2, "0")}</span>
+    </div>
+  </div>
+);
 
 const OffersSection = () => {
   const navigate = useNavigate();
   const [offers, setOffers] = useState<Offer[]>([]);
+  const getTimeLeft = useCountdown(offers);
 
   useEffect(() => {
     supabase
@@ -40,7 +81,14 @@ const OffersSection = () => {
       .select("*")
       .eq("is_active", true)
       .order("sort_order")
-      .then(({ data }) => setOffers(data as Offer[] || []));
+      .then(({ data }) => {
+        // Filter out expired offers
+        const active = (data as Offer[] || []).filter((o) => {
+          if (!o.expires_at) return true;
+          return new Date(o.expires_at).getTime() > Date.now();
+        });
+        setOffers(active);
+      });
   }, []);
 
   if (offers.length === 0) return null;
@@ -56,6 +104,7 @@ const OffersSection = () => {
         {offers.map((offer, i) => {
           const Icon = iconMap[offer.icon] || Gift;
           const gradient = gradientMap[offer.bg_color] || gradientMap.blue;
+          const timeLeft = getTimeLeft(offer.expires_at);
 
           return (
             <motion.div
@@ -64,7 +113,7 @@ const OffersSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1, duration: 0.4 }}
               whileTap={{ scale: 0.97 }}
-              className={`relative min-w-[260px] snap-start rounded-2xl bg-gradient-to-br ${gradient} p-5 cursor-pointer overflow-hidden shadow-lg`}
+              className={`relative min-w-[270px] snap-start rounded-2xl bg-gradient-to-br ${gradient} p-5 cursor-pointer overflow-hidden shadow-lg`}
               onClick={() => navigate("/")}
             >
               <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-white/10" />
@@ -81,10 +130,15 @@ const OffersSection = () => {
                 <p className="text-3xl font-black text-white mb-1">{offer.discount}</p>
                 <h3 className="text-base font-bold text-white mb-1">{offer.title}</h3>
                 <p className="text-xs text-white/80">{offer.subtitle}</p>
-                <div className="flex items-center gap-1 mt-3 text-white/90 text-xs font-medium">
-                  <span>اطلب الآن</span>
-                  <ArrowLeft className="h-3 w-3" />
-                </div>
+
+                {timeLeft ? (
+                  <CountdownDisplay timeLeft={timeLeft} />
+                ) : (
+                  <div className="flex items-center gap-1 mt-3 text-white/90 text-xs font-medium">
+                    <span>اطلب الآن</span>
+                    <ArrowLeft className="h-3 w-3" />
+                  </div>
+                )}
               </div>
             </motion.div>
           );

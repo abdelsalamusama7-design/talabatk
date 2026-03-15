@@ -23,6 +23,7 @@ interface Offer {
   badge: string | null;
   is_active: boolean;
   sort_order: number;
+  expires_at: string | null;
 }
 
 const colorOptions = [
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerForm, setOfferForm] = useState({
-    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0,
+    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "",
   });
 
   useEffect(() => {
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
   // Offers CRUD
   const openNewOffer = () => {
     setEditingOffer(null);
-    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1 });
+    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "" });
     setShowOfferForm(true);
   };
 
@@ -107,6 +108,7 @@ const AdminDashboard = () => {
       badge: offer.badge || "",
       is_active: offer.is_active,
       sort_order: offer.sort_order,
+      expires_at: offer.expires_at ? new Date(offer.expires_at).toISOString().slice(0, 16) : "",
     });
     setShowOfferForm(true);
   };
@@ -125,6 +127,7 @@ const AdminDashboard = () => {
       badge: offerForm.badge.trim() || null,
       is_active: offerForm.is_active,
       sort_order: offerForm.sort_order,
+      expires_at: offerForm.expires_at ? new Date(offerForm.expires_at).toISOString() : null,
     };
 
     if (editingOffer) {
@@ -355,6 +358,11 @@ const AdminDashboard = () => {
                 <Input placeholder="ترتيب العرض (رقم)" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
 
                 <div>
+                  <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري — للعداد التنازلي)</p>
+                  <Input type="datetime-local" value={offerForm.expires_at} onChange={(e) => setOfferForm({ ...offerForm, expires_at: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+                </div>
+
+                <div>
                   <p className="text-xs text-muted-foreground mb-2">اللون</p>
                   <div className="flex gap-2 flex-wrap">
                     {colorOptions.map((c) => (
@@ -410,6 +418,11 @@ const AdminDashboard = () => {
                       {offer.is_active ? "مفعّل" : "معطّل"}
                     </span>
                     {offer.badge && <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">{offer.badge}</span>}
+                    {offer.expires_at && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-warning/10 text-warning font-medium">
+                        ⏰ {new Date(offer.expires_at).toLocaleDateString("ar-EG")} {new Date(offer.expires_at).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    )}
                   </div>
                   <div className="flex gap-1">
                     <Switch checked={offer.is_active} onCheckedChange={(v) => toggleOfferActive(offer.id, v)} />
