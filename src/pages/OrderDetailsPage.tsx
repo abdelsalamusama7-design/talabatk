@@ -90,7 +90,24 @@ const OrderDetailsPage = () => {
 
   const items: OrderItem[] = Array.isArray(order.items) ? order.items : [];
   const isActive = !["delivered", "cancelled"].includes(order.status);
+  const canCancel = ["pending", "confirmed"].includes(order.status);
   const orderDate = new Date(order.created_at);
+
+  const handleCancel = async () => {
+    setCancelling(true);
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({ status: "cancelled" })
+        .eq("id", order.id);
+      if (error) throw error;
+      toast.success("تم إلغاء الطلب بنجاح");
+    } catch {
+      toast.error("حدث خطأ أثناء إلغاء الطلب");
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   const handleReorder = async () => {
     setReordering(true);
