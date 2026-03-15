@@ -8,6 +8,7 @@ import {
   MapPin, Image, Plus, Save, Pencil,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import AdminImageUpload from "./AdminImageUpload";
 
 interface Driver {
   id: string;
