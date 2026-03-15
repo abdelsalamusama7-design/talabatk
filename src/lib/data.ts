@@ -8,6 +8,14 @@ import storeShefa from "@/assets/store-shefa-pharmacy.jpg";
 import storeTech from "@/assets/store-tech-fix.jpg";
 import storeKoshari from "@/assets/store-koshari.jpg";
 import storePizza from "@/assets/store-pizza.jpg";
+import storeShawarma from "@/assets/store-shawarma.jpg";
+import storeGrilled from "@/assets/store-grilled.jpg";
+import storeFoul from "@/assets/store-foul.jpg";
+import storePharmacy2 from "@/assets/store-pharmacy2.jpg";
+import storePharmacy3 from "@/assets/store-pharmacy3.jpg";
+import storeVegetables from "@/assets/store-vegetables.jpg";
+import storeGrocery2 from "@/assets/store-grocery2.jpg";
+import storeSeafood from "@/assets/store-seafood.jpg";
 
 export interface Category {
   id: string;
