@@ -66,11 +66,14 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null,
+        selfie_with_id_url: form.selfie_with_id_url || null,
       }).eq("id", editingId);
       if (error) { toast.error("خطأ في التحديث"); return; }
       setDrivers((prev) => prev.map((d) => d.id === editingId ? {
         ...d, phone: form.phone || null, vehicle_type: form.vehicle_type,
         license_number: form.license_number || null, verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null, selfie_with_id_url: form.selfie_with_id_url || null,
       } : d));
       toast.success("تم تحديث المندوب ✅");
     } else {
