@@ -126,7 +126,7 @@ const DriverDashboard = () => {
     toast({ title: "تم قبول الطلب! 🎉" });
   };
 
-  const updateOrderStatus = async (orderId: string, status: string) => {
+  const updateOrderStatus = async (orderId: string, status: "pending" | "confirmed" | "preparing" | "ready" | "picked_up" | "delivering" | "delivered" | "cancelled") => {
     await supabase.from("orders").update({ status }).eq("id", orderId);
     if (status === "delivered") {
       await supabase.from("drivers").update({

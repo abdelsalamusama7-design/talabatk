@@ -38,13 +38,13 @@ const AdminDashboard = () => {
     setLoading(false);
   };
 
-  const updateRestaurantStatus = async (id: string, status: string) => {
+  const updateRestaurantStatus = async (id: string, status: "pending" | "approved" | "rejected" | "suspended") => {
     await supabase.from("restaurants").update({ status }).eq("id", id);
     setRestaurants((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
     toast.success(status === "approved" ? "تم تفعيل المطعم" : "تم تعليق المطعم");
   };
 
-  const updateOrderStatus = async (id: string, status: string) => {
+  const updateOrderStatus = async (id: string, status: "pending" | "confirmed" | "preparing" | "ready" | "picked_up" | "delivering" | "delivered" | "cancelled") => {
     await supabase.from("orders").update({ status }).eq("id", id);
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
   };
