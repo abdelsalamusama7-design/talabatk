@@ -1,53 +1,43 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  BarChart3, Package, ShoppingCart, Users, ArrowRight, Truck,
-  CheckCircle, Clock, X, Store, DollarSign, Shield, TrendingUp,
-  Eye, UserCheck, UserX, Percent, Plus, Pencil, Trash2, Save,
+  BarChart3, ShoppingCart, Users, ArrowRight, Truck,
+  Store, DollarSign, Shield, TrendingUp, Percent,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AdminRestaurants from "@/components/admin/AdminRestaurants";
+import AdminOrders from "@/components/admin/AdminOrders";
+import AdminDrivers from "@/components/admin/AdminDrivers";
+import AdminUsers from "@/components/admin/AdminUsers";
+
+// Keep offers imports inline since they were already working
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { Plus, Pencil, Trash2, Save } from "lucide-react";
 
 type Tab = "stats" | "restaurants" | "orders" | "drivers" | "users" | "offers";
 
 interface Offer {
-  id: string;
-  title: string;
-  subtitle: string | null;
-  discount: string;
-  bg_color: string;
-  icon: string;
-  badge: string | null;
-  is_active: boolean;
-  sort_order: number;
-  expires_at: string | null;
-  promo_code_id: string | null;
+  id: string; title: string; subtitle: string | null; discount: string;
+  bg_color: string; icon: string; badge: string | null; is_active: boolean;
+  sort_order: number; expires_at: string | null; promo_code_id: string | null;
 }
 
 interface PromoCode {
-  id: string;
-  code: string;
-  discount_type: string;
-  discount_value: number;
-  is_active: boolean | null;
+  id: string; code: string; discount_type: string; discount_value: number; is_active: boolean | null;
 }
 
 const colorOptions = [
-  { value: "blue", label: "أزرق" },
-  { value: "green", label: "أخضر" },
-  { value: "orange", label: "برتقالي" },
-  { value: "purple", label: "بنفسجي" },
+  { value: "blue", label: "أزرق" }, { value: "green", label: "أخضر" },
+  { value: "orange", label: "برتقالي" }, { value: "purple", label: "بنفسجي" },
   { value: "red", label: "أحمر" },
 ];
 
 const iconOptions = [
-  { value: "gift", label: "هدية" },
-  { value: "flame", label: "نار" },
-  { value: "zap", label: "برق" },
-  { value: "clock", label: "ساعة" },
+  { value: "gift", label: "هدية" }, { value: "flame", label: "نار" },
+  { value: "zap", label: "برق" }, { value: "clock", label: "ساعة" },
   { value: "percent", label: "نسبة" },
 ];
 
@@ -62,44 +52,28 @@ const AdminDashboard = () => {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Offer form state
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerForm, setOfferForm] = useState({
-    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "", promo_code_id: "",
+    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift",
+    badge: "", is_active: true, sort_order: 0, expires_at: "", promo_code_id: "",
   });
 
-  useEffect(() => {
-    loadAll();
-  }, []);
+  useEffect(() => { loadAll(); }, []);
 
   const loadAll = async () => {
     const [r, o, d, p, of, pc] = await Promise.all([
       supabase.from("restaurants").select("*").order("created_at", { ascending: false }),
-      supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(50),
+      supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(100),
       supabase.from("drivers").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("*").order("created_at", { ascending: false }),
       supabase.from("offers").select("*").order("sort_order"),
       supabase.from("promo_codes").select("*").order("created_at", { ascending: false }),
     ]);
-    setRestaurants(r.data || []);
-    setOrders(o.data || []);
-    setDrivers(d.data || []);
-    setProfiles(p.data || []);
-    setOffers((of.data as Offer[]) || []);
-    setPromoCodes((pc.data as PromoCode[]) || []);
+    setRestaurants(r.data || []); setOrders(o.data || []);
+    setDrivers(d.data || []); setProfiles(p.data || []);
+    setOffers((of.data as Offer[]) || []); setPromoCodes((pc.data as PromoCode[]) || []);
     setLoading(false);
-  };
-
-  const updateRestaurantStatus = async (id: string, status: "pending" | "approved" | "rejected" | "suspended") => {
-    await supabase.from("restaurants").update({ status }).eq("id", id);
-    setRestaurants((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
-    toast.success(status === "approved" ? "تم تفعيل المطعم" : "تم تعليق المطعم");
-  };
-
-  const updateOrderStatus = async (id: string, status: "pending" | "confirmed" | "preparing" | "ready" | "picked_up" | "delivering" | "delivered" | "cancelled") => {
-    await supabase.from("orders").update({ status }).eq("id", id);
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
   };
 
   // Offers CRUD
@@ -112,14 +86,9 @@ const AdminDashboard = () => {
   const openEditOffer = (offer: Offer) => {
     setEditingOffer(offer);
     setOfferForm({
-      title: offer.title,
-      subtitle: offer.subtitle || "",
-      discount: offer.discount,
-      bg_color: offer.bg_color,
-      icon: offer.icon,
-      badge: offer.badge || "",
-      is_active: offer.is_active,
-      sort_order: offer.sort_order,
+      title: offer.title, subtitle: offer.subtitle || "", discount: offer.discount,
+      bg_color: offer.bg_color, icon: offer.icon, badge: offer.badge || "",
+      is_active: offer.is_active, sort_order: offer.sort_order,
       expires_at: offer.expires_at ? new Date(offer.expires_at).toISOString().slice(0, 16) : "",
       promo_code_id: offer.promo_code_id || "",
     });
@@ -127,23 +96,15 @@ const AdminDashboard = () => {
   };
 
   const saveOffer = async () => {
-    if (!offerForm.title.trim() || !offerForm.discount.trim()) {
-      toast.error("يجب ملء العنوان والخصم");
-      return;
-    }
+    if (!offerForm.title.trim() || !offerForm.discount.trim()) { toast.error("يجب ملء العنوان والخصم"); return; }
     const payload = {
-      title: offerForm.title.trim(),
-      subtitle: offerForm.subtitle.trim() || null,
-      discount: offerForm.discount.trim(),
-      bg_color: offerForm.bg_color,
-      icon: offerForm.icon,
-      badge: offerForm.badge.trim() || null,
-      is_active: offerForm.is_active,
+      title: offerForm.title.trim(), subtitle: offerForm.subtitle.trim() || null,
+      discount: offerForm.discount.trim(), bg_color: offerForm.bg_color, icon: offerForm.icon,
+      badge: offerForm.badge.trim() || null, is_active: offerForm.is_active,
       sort_order: offerForm.sort_order,
       expires_at: offerForm.expires_at ? new Date(offerForm.expires_at).toISOString() : null,
       promo_code_id: offerForm.promo_code_id || null,
     };
-
     if (editingOffer) {
       const { error } = await supabase.from("offers").update(payload).eq("id", editingOffer.id);
       if (error) { toast.error("خطأ في التحديث"); return; }
@@ -169,20 +130,9 @@ const AdminDashboard = () => {
     setOffers((prev) => prev.map((o) => (o.id === id ? { ...o, is_active } : o)));
   };
 
-  const totalRevenue = orders.reduce((s, o) => s + Number(o.total || 0), 0);
+  const totalRevenue = orders.filter(o => o.status === "delivered").reduce((s, o) => s + Number(o.total || 0), 0);
   const activeOrders = orders.filter((o) => !["delivered", "cancelled"].includes(o.status || "")).length;
   const availableDrivers = drivers.filter((d) => d.status === "available").length;
-
-  const statusConfig: Record<string, { label: string; icon: any; color: string }> = {
-    pending: { label: "في الانتظار", icon: Clock, color: "text-warning bg-warning/10" },
-    confirmed: { label: "مؤكد", icon: CheckCircle, color: "text-primary bg-accent" },
-    preparing: { label: "قيد التجهيز", icon: Clock, color: "text-warning bg-warning/10" },
-    ready: { label: "جاهز", icon: Package, color: "text-success bg-success/10" },
-    picked_up: { label: "تم الاستلام", icon: Truck, color: "text-primary bg-accent" },
-    delivering: { label: "قيد التوصيل", icon: Truck, color: "text-primary bg-accent" },
-    delivered: { label: "تم التسليم", icon: CheckCircle, color: "text-success bg-success/10" },
-    cancelled: { label: "ملغي", icon: X, color: "text-destructive bg-destructive/10" },
-  };
 
   const tabs: { id: Tab; label: string; icon: typeof BarChart3 }[] = [
     { id: "stats", label: "إحصائيات", icon: BarChart3 },
@@ -230,130 +180,20 @@ const AdminDashboard = () => {
 
       <div className="px-4 py-6">
         {tab === "stats" && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <StatCard icon={<ShoppingCart className="h-5 w-5 text-primary" />} label="إجمالي الطلبات" value={`${orders.length}`} />
-              <StatCard icon={<DollarSign className="h-5 w-5 text-success" />} label="إجمالي الإيرادات" value={`${totalRevenue.toFixed(0)} ج.م`} />
-              <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="طلبات نشطة" value={`${activeOrders}`} />
-              <StatCard icon={<Truck className="h-5 w-5 text-primary" />} label="مناديب متاحين" value={`${availableDrivers}`} />
-              <StatCard icon={<Store className="h-5 w-5 text-success" />} label="المطاعم" value={`${restaurants.length}`} />
-              <StatCard icon={<Users className="h-5 w-5 text-primary" />} label="المستخدمين" value={`${profiles.length}`} />
-            </div>
+          <div className="grid grid-cols-2 gap-3">
+            <StatCard icon={<ShoppingCart className="h-5 w-5 text-primary" />} label="إجمالي الطلبات" value={`${orders.length}`} />
+            <StatCard icon={<DollarSign className="h-5 w-5 text-success" />} label="إيرادات (مُسلّم)" value={`${totalRevenue.toFixed(0)} ج.م`} />
+            <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="طلبات نشطة" value={`${activeOrders}`} />
+            <StatCard icon={<Truck className="h-5 w-5 text-primary" />} label="مناديب متاحين" value={`${availableDrivers}`} />
+            <StatCard icon={<Store className="h-5 w-5 text-success" />} label="المطاعم" value={`${restaurants.length}`} />
+            <StatCard icon={<Users className="h-5 w-5 text-primary" />} label="المستخدمين" value={`${profiles.length}`} />
           </div>
         )}
 
-        {tab === "restaurants" && (
-          <div className="space-y-3">
-            {restaurants.map((r) => (
-              <div key={r.id} className="bg-card rounded-2xl p-4 shadow-card">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h3 className="font-semibold text-foreground">{r.name}</h3>
-                    <p className="text-xs text-muted-foreground">{r.category} • {r.address || "—"}</p>
-                  </div>
-                  <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${
-                    r.status === "approved" ? "bg-success/10 text-success" :
-                    r.status === "pending" ? "bg-warning/10 text-warning" :
-                    "bg-destructive/10 text-destructive"
-                  }`}>
-                    {r.status === "approved" ? "مفعّل" : r.status === "pending" ? "في الانتظار" : r.status}
-                  </span>
-                </div>
-                <div className="flex gap-2 mt-2">
-                  {r.status !== "approved" && (
-                    <Button size="sm" onClick={() => updateRestaurantStatus(r.id, "approved")} className="rounded-xl text-xs h-8 flex-1">
-                      <UserCheck className="h-3 w-3 ml-1" /> تفعيل
-                    </Button>
-                  )}
-                  {r.status === "approved" && (
-                    <Button size="sm" variant="outline" onClick={() => updateRestaurantStatus(r.id, "suspended")} className="rounded-xl text-xs h-8 flex-1 text-destructive border-destructive/30">
-                      <UserX className="h-3 w-3 ml-1" /> تعليق
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-            {restaurants.length === 0 && <p className="text-center text-muted-foreground py-8">لا توجد مطاعم</p>}
-          </div>
-        )}
-
-        {tab === "orders" && (
-          <div className="space-y-3">
-            {orders.map((order) => {
-              const config = statusConfig[order.status] || statusConfig.pending;
-              const Icon = config.icon;
-              return (
-                <div key={order.id} className="bg-card rounded-2xl p-4 shadow-card">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-foreground font-mono">#{order.id.slice(0, 8)}</span>
-                    <span className={`inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full font-medium ${config.color}`}>
-                      <Icon className="h-3 w-3" /> {config.label}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-1">
-                    {(order.items as any[])?.map((i: any) => i.name).join("، ") || "—"}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-foreground tabular-nums">{order.total} ج.م</span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(order.created_at).toLocaleDateString("ar-EG")}
-                    </span>
-                  </div>
-                  {order.status === "pending" && (
-                    <div className="flex gap-2 mt-2">
-                      <Button size="sm" onClick={() => updateOrderStatus(order.id, "confirmed")} className="rounded-xl text-xs h-8 flex-1">تأكيد</Button>
-                      <Button size="sm" variant="outline" onClick={() => updateOrderStatus(order.id, "cancelled")} className="rounded-xl text-xs h-8 text-destructive border-destructive/30">إلغاء</Button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            {orders.length === 0 && <p className="text-center text-muted-foreground py-8">لا توجد طلبات</p>}
-          </div>
-        )}
-
-        {tab === "drivers" && (
-          <div className="space-y-3">
-            {drivers.map((d) => (
-              <div key={d.id} className="bg-card rounded-2xl p-4 shadow-card">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-foreground text-sm">سائق #{d.id.slice(0, 8)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {d.vehicle_type === "motorcycle" ? "دراجة نارية" : d.vehicle_type === "car" ? "سيارة" : "دراجة"} •
-                      ⭐ {d.rating || 5} • {d.total_deliveries || 0} توصيلة
-                    </p>
-                  </div>
-                  <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${
-                    d.status === "available" ? "bg-success/10 text-success" :
-                    d.status === "busy" ? "bg-warning/10 text-warning" :
-                    "bg-muted text-muted-foreground"
-                  }`}>
-                    {d.status === "available" ? "متاح" : d.status === "busy" ? "مشغول" : "غير متصل"}
-                  </span>
-                </div>
-              </div>
-            ))}
-            {drivers.length === 0 && <p className="text-center text-muted-foreground py-8">لا يوجد مناديب</p>}
-          </div>
-        )}
-
-        {tab === "users" && (
-          <div className="space-y-3">
-            {profiles.map((p) => (
-              <div key={p.id} className="bg-card rounded-2xl p-4 shadow-card flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-foreground text-sm">{p.full_name || "بدون اسم"}</p>
-                  <p className="text-xs text-muted-foreground">{p.phone || "—"} • {p.default_address || "—"}</p>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(p.created_at).toLocaleDateString("ar-EG")}
-                </span>
-              </div>
-            ))}
-            {profiles.length === 0 && <p className="text-center text-muted-foreground py-8">لا يوجد مستخدمين</p>}
-          </div>
-        )}
+        {tab === "restaurants" && <AdminRestaurants restaurants={restaurants} />}
+        {tab === "orders" && <AdminOrders orders={orders} restaurants={restaurants} />}
+        {tab === "drivers" && <AdminDrivers drivers={drivers} />}
+        {tab === "users" && <AdminUsers profiles={profiles} orders={orders} />}
 
         {tab === "offers" && (
           <div className="space-y-4">
@@ -361,7 +201,6 @@ const AdminDashboard = () => {
               <Plus className="h-4 w-4 ml-2" /> إضافة عرض جديد
             </Button>
 
-            {/* Offer Form */}
             {showOfferForm && (
               <div className="bg-card rounded-2xl p-4 shadow-card space-y-3 border-2 border-primary/20">
                 <h3 className="font-bold text-foreground text-sm">{editingOffer ? "تعديل العرض" : "عرض جديد"}</h3>
@@ -369,26 +208,20 @@ const AdminDashboard = () => {
                 <Input placeholder="وصف العرض" value={offerForm.subtitle} onChange={(e) => setOfferForm({ ...offerForm, subtitle: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" maxLength={200} />
                 <Input placeholder="الخصم (مثال: 25% أو مجاني) *" value={offerForm.discount} onChange={(e) => setOfferForm({ ...offerForm, discount: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" maxLength={20} />
                 <Input placeholder="شارة (مثال: جديد، حصري)" value={offerForm.badge} onChange={(e) => setOfferForm({ ...offerForm, badge: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" maxLength={30} />
-                <Input placeholder="ترتيب العرض (رقم)" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
+                <Input placeholder="ترتيب العرض" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
 
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">كود الخصم المرتبط (اختياري)</p>
-                  <select
-                    value={offerForm.promo_code_id}
-                    onChange={(e) => setOfferForm({ ...offerForm, promo_code_id: e.target.value })}
-                    className="w-full h-10 rounded-xl bg-muted/50 border-0 px-3 text-sm text-foreground"
-                  >
+                  <select value={offerForm.promo_code_id} onChange={(e) => setOfferForm({ ...offerForm, promo_code_id: e.target.value })} className="w-full h-10 rounded-xl bg-muted/50 border-0 px-3 text-sm text-foreground">
                     <option value="">— بدون كود خصم —</option>
                     {promoCodes.map((pc) => (
-                      <option key={pc.id} value={pc.id}>
-                        {pc.code} ({pc.discount_type === "percentage" ? `${pc.discount_value}%` : `${pc.discount_value} ج.م`})
-                      </option>
+                      <option key={pc.id} value={pc.id}>{pc.code} ({pc.discount_type === "percentage" ? `${pc.discount_value}%` : `${pc.discount_value} ج.م`})</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري — للعداد التنازلي)</p>
+                  <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري)</p>
                   <Input type="datetime-local" value={offerForm.expires_at} onChange={(e) => setOfferForm({ ...offerForm, expires_at: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
                 </div>
 
@@ -422,15 +255,12 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button onClick={saveOffer} className="flex-1 rounded-xl h-10">
-                    <Save className="h-4 w-4 ml-1" /> حفظ
-                  </Button>
+                  <Button onClick={saveOffer} className="flex-1 rounded-xl h-10"><Save className="h-4 w-4 ml-1" /> حفظ</Button>
                   <Button variant="outline" onClick={() => setShowOfferForm(false)} className="rounded-xl h-10">إلغاء</Button>
                 </div>
               </div>
             )}
 
-            {/* Offers List */}
             {offers.map((offer) => (
               <div key={offer.id} className="bg-card rounded-2xl p-4 shadow-card">
                 <div className="flex items-center justify-between mb-2">
@@ -438,30 +268,24 @@ const AdminDashboard = () => {
                     <h3 className="font-semibold text-foreground text-sm">{offer.title}</h3>
                     <p className="text-xs text-muted-foreground">{offer.subtitle || "—"}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-black text-primary">{offer.discount}</span>
-                  </div>
+                  <span className="text-lg font-black text-primary">{offer.discount}</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${offer.is_active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
                       {offer.is_active ? "مفعّل" : "معطّل"}
                     </span>
                     {offer.badge && <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">{offer.badge}</span>}
                     {offer.expires_at && (
                       <span className="text-[11px] px-2 py-0.5 rounded-full bg-warning/10 text-warning font-medium">
-                        ⏰ {new Date(offer.expires_at).toLocaleDateString("ar-EG")} {new Date(offer.expires_at).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}
+                        ⏰ {new Date(offer.expires_at).toLocaleDateString("ar-EG")}
                       </span>
                     )}
                   </div>
                   <div className="flex gap-1">
                     <Switch checked={offer.is_active} onCheckedChange={(v) => toggleOfferActive(offer.id, v)} />
-                    <button onClick={() => openEditOffer(offer)} className="p-2 rounded-lg hover:bg-muted transition-colors">
-                      <Pencil className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                    <button onClick={() => deleteOffer(offer.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </button>
+                    <button onClick={() => openEditOffer(offer)} className="p-2 rounded-lg hover:bg-muted transition-colors"><Pencil className="h-4 w-4 text-muted-foreground" /></button>
+                    <button onClick={() => deleteOffer(offer.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors"><Trash2 className="h-4 w-4 text-destructive" /></button>
                   </div>
                 </div>
               </div>
