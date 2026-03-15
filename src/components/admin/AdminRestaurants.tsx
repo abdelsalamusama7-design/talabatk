@@ -86,6 +86,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       address: editForm.address || null, phone: editForm.phone || null,
       delivery_fee: editForm.delivery_fee, min_order: editForm.min_order,
       delivery_time: editForm.delivery_time || null, description: editForm.description || null,
+      image_url: editForm.image_url || null, cover_url: editForm.cover_url || null,
     };
     const { error } = await supabase.from("restaurants").update(payload).eq("id", id);
     if (error) { toast.error("خطأ في التحديث"); return; }
