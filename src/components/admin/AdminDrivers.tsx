@@ -299,7 +299,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
           </div>
         </div>
       ))}
-      {drivers.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">لا يوجد مناديب</p>}
+      {filtered.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">{search.trim() ? "لا توجد نتائج" : "لا يوجد مناديب"}</p>}
     </div>
   );
 };
