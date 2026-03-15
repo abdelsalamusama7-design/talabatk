@@ -227,6 +227,48 @@ export type Database = {
           },
         ]
       }
+      offers: {
+        Row: {
+          badge: string | null
+          bg_color: string
+          created_at: string
+          discount: string
+          icon: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          badge?: string | null
+          bg_color?: string
+          created_at?: string
+          discount: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          badge?: string | null
+          bg_color?: string
+          created_at?: string
+          discount?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           created_at: string
