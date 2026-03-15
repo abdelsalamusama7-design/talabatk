@@ -1,4 +1,4 @@
-import { sampleOrders } from "@/lib/data";
+import { useOrders } from "@/lib/order-context";
 import { CheckCircle, Truck, Clock } from "lucide-react";
 import DeliveryMap from "@/components/DeliveryMap";
 
