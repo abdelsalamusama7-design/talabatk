@@ -1,23 +1,35 @@
-import { MapPin, Search } from "lucide-react";
+import { MapPin, Search, Loader2 } from "lucide-react";
 import { useState } from "react";
 import SearchOverlay from "./SearchOverlay";
+import LocationPicker from "./LocationPicker";
+import { useGeolocation } from "@/hooks/use-geolocation";
 
 const LocationHeader = () => {
-  const [address] = useState("شارع التحرير، القاهرة");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
+  const geo = useGeolocation();
 
   return (
     <>
       <div className="bg-primary pt-10 pb-6 px-4 rounded-b-[2rem]">
         <div className="flex items-center justify-center gap-2 mb-4">
           <span className="text-primary-foreground text-sm font-medium">التوصيل إلى</span>
-          <button className="flex items-center gap-1 text-primary-foreground">
-            <span className="font-semibold text-sm">{address}</span>
-            <MapPin className="h-4 w-4" />
-            <span className="relative flex h-2 w-2">
-              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-primary-foreground opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-foreground"></span>
-            </span>
+          <button
+            onClick={() => setMapOpen(true)}
+            className="flex items-center gap-1 text-primary-foreground"
+          >
+            {geo.loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <span className="font-semibold text-sm max-w-[200px] truncate">{geo.address}</span>
+                <MapPin className="h-4 w-4" />
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-primary-foreground opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-foreground"></span>
+                </span>
+              </>
+            )}
           </button>
         </div>
         <button
@@ -29,6 +41,15 @@ const LocationHeader = () => {
         </button>
       </div>
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <LocationPicker
+        open={mapOpen}
+        onClose={() => setMapOpen(false)}
+        onSelect={geo.setManualLocation}
+        currentLat={geo.lat}
+        currentLng={geo.lng}
+        loading={geo.loading}
+        onRequestGPS={geo.requestLocation}
+      />
     </>
   );
 };
