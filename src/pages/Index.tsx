@@ -5,7 +5,7 @@ import TrendingMeals from "@/components/TrendingMeals";
 import StoreCard from "@/components/StoreCard";
 import AiFoodChat from "@/components/AiFoodChat";
 import { stores } from "@/lib/data";
-import { Sparkles } from "lucide-react";
+import { Sparkles, MessageCircle } from "lucide-react";
 
 const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
