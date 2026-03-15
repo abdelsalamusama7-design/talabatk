@@ -81,7 +81,7 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
           table: "orders",
           filter: `customer_id=eq.${user.id}`,
         },
-        (payload) => {
+        async (payload) => {
           if (payload.eventType === "INSERT") {
             setLiveOrders((prev) => [payload.new as RealtimeOrder, ...prev]);
           } else if (payload.eventType === "UPDATE") {
