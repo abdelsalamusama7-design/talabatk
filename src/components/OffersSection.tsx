@@ -193,8 +193,8 @@ const OffersSection = () => {
                   {timeLeft && <CountdownDisplay timeLeft={timeLeft} />}
                   {!offer.promo_code && !timeLeft && (
                     <div className="flex items-center gap-1 text-white/90 text-xs font-medium">
-                      <span>اطلب الآن</span>
-                      <ArrowLeft className="h-3 w-3" />
+                      <span>{t("offers.orderNow")}</span>
+                      {isAr ? <ArrowLeft className="h-3 w-3" /> : <ArrowRight className="h-3 w-3" />}
                     </div>
                   )}
                 </div>
