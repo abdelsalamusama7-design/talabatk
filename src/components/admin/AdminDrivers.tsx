@@ -53,6 +53,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       vehicle_type: d.vehicle_type || "motorcycle",
       license_number: d.license_number || "",
       verification_status: d.verification_status || "pending",
+      id_card_url: d.id_card_url || "",
+      selfie_with_id_url: d.selfie_with_id_url || "",
     });
     setShowForm(true);
   };
