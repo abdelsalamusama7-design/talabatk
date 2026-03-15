@@ -383,6 +383,12 @@ const CartPage = () => {
               <span className="tabular-nums font-semibold text-success">-{discount} ج.م</span>
             </div>
           )}
+          {loyaltyDiscount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-warning">نقاط ولاء 🎁</span>
+              <span className="tabular-nums font-semibold text-warning">-{loyaltyDiscount} ج.م</span>
+            </div>
+          )}
           <div className="border-t border-border pt-3 flex justify-between">
             <span className="font-bold">الإجمالي</span>
             <span className="font-bold text-primary tabular-nums">{grandTotal} ج.م</span>
