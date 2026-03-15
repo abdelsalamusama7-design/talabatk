@@ -26,6 +26,9 @@ const CartPage = () => {
   const [feeDetails, setFeeDetails] = useState<{ distance_km: number; is_peak: boolean; demand_level: string } | null>(null);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [loyaltyDiscount, setLoyaltyDiscount] = useState(0);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [editingAddress, setEditingAddress] = useState(false);
+  const [manualAddress, setManualAddress] = useState("");
 
   const deliveryFee = dynamicFee ?? (items.length > 0 ? items[0].store.deliveryFee : 0);
   const grandTotal = Math.max(0, total + deliveryFee - discount - loyaltyDiscount);
