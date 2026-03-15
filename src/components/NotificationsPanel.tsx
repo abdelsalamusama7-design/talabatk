@@ -79,6 +79,47 @@ const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => v
         });
       }
 
+      // Admin: load recent drivers & restaurants
+      if (hasRole("admin")) {
+        const { data: driversData } = await supabase
+          .from("drivers")
+          .select("id, phone, vehicle_type, created_at, verification_status")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (driversData) {
+          driversData.forEach((d: any) => {
+            items.push({
+              id: `driver-${d.id}`,
+              type: "driver",
+              title: "مندوب جديد",
+              message: `${d.vehicle_type === "motorcycle" ? "🏍️" : "🚗"} ${d.phone || "بدون رقم"} - ${d.verification_status === "approved" ? "موثق" : "قيد المراجعة"}`,
+              time: d.created_at,
+              read: d.verification_status === "approved",
+            });
+          });
+        }
+
+        const { data: restData } = await supabase
+          .from("restaurants")
+          .select("id, name, status, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (restData) {
+          restData.forEach((r: any) => {
+            items.push({
+              id: `restaurant-${r.id}`,
+              type: "restaurant",
+              title: "مطعم جديد",
+              message: `${r.name} - ${r.status === "approved" ? "مفعّل" : "قيد المراجعة"}`,
+              time: r.created_at,
+              read: r.status === "approved",
+            });
+          });
+        }
+      }
+
       // Sort by time
       items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
       setNotifications(items);
