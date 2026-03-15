@@ -127,6 +127,7 @@ const AdminDashboard = () => {
       badge: offerForm.badge.trim() || null,
       is_active: offerForm.is_active,
       sort_order: offerForm.sort_order,
+      expires_at: offerForm.expires_at ? new Date(offerForm.expires_at).toISOString() : null,
     };
 
     if (editingOffer) {
