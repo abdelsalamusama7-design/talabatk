@@ -14,6 +14,7 @@ import AdminImageUpload from "./AdminImageUpload";
 interface Driver {
   id: string;
   user_id: string;
+  name: string | null;
   phone: string | null;
   vehicle_type: string | null;
   status: string | null;
@@ -30,7 +31,7 @@ interface Driver {
 }
 
 const emptyForm = {
-  phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
+  name: "", phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
   id_card_url: "", selfie_with_id_url: "", email: "",
 };
 
@@ -44,6 +45,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
     const q = search.trim().toLowerCase();
     return (
       d.id.toLowerCase().includes(q) ||
+      (d.name && d.name.toLowerCase().includes(q)) ||
       (d.phone && d.phone.includes(q)) ||
       (d.license_number && d.license_number.toLowerCase().includes(q))
     );
@@ -61,6 +63,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const openEdit = (d: Driver) => {
     setEditingId(d.id);
     setForm({
+      name: d.name || "",
       phone: d.phone || "",
       vehicle_type: d.vehicle_type || "motorcycle",
       license_number: d.license_number || "",
@@ -75,16 +78,17 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const saveDriver = async () => {
     if (editingId) {
       const { error } = await supabase.from("drivers").update({
+        name: form.name || null,
         phone: form.phone || null,
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
         id_card_url: form.id_card_url || null,
         selfie_with_id_url: form.selfie_with_id_url || null,
-      }).eq("id", editingId);
+      } as any).eq("id", editingId);
       if (error) { toast.error("خطأ في التحديث"); return; }
       setDrivers((prev) => prev.map((d) => d.id === editingId ? {
-        ...d, phone: form.phone || null, vehicle_type: form.vehicle_type,
+        ...d, name: form.name || null, phone: form.phone || null, vehicle_type: form.vehicle_type,
         license_number: form.license_number || null, verification_status: form.verification_status,
         id_card_url: form.id_card_url || null, selfie_with_id_url: form.selfie_with_id_url || null,
       } : d));
@@ -109,7 +113,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       // The best approach: admin enters the user_id directly or the driver registers themselves
       // Here we use a workaround: create with a placeholder and update when driver logs in
       const { data, error } = await supabase.from("drivers").insert({
-        user_id: adminUser.id, // Will be linked to admin temporarily
+        user_id: adminUser.id,
+        name: form.name || null,
         phone: form.phone || null,
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
@@ -157,6 +162,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       {showForm && (
         <div className="bg-card rounded-2xl p-4 shadow-card space-y-3 border-2 border-primary/20">
           <h3 className="font-bold text-foreground text-sm">{editingId ? "تعديل المندوب" : "مندوب جديد"}</h3>
+          <Input placeholder="اسم المندوب" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
           <Input placeholder="رقم الهاتف" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
           <div>
             <p className="text-xs text-muted-foreground mb-2">نوع المركبة</p>
@@ -224,7 +230,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         <div key={d.id} className="bg-card rounded-2xl p-4 shadow-card">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <p className="font-semibold text-foreground text-sm">مندوب #{d.id.slice(0, 8)}</p>
+              <p className="font-semibold text-foreground text-sm">{d.name || `مندوب #${d.id.slice(0, 8)}`}</p>
               <p className="text-xs text-muted-foreground">
                 {d.vehicle_type === "motorcycle" ? "🏍️ موتوسيكل" : d.vehicle_type === "car" ? "🚗 سيارة" : "🚲 دراجة"}
                 {d.phone && ` • ${d.phone}`}

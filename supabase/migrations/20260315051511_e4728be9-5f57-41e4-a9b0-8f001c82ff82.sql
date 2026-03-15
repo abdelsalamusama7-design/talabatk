@@ -1,0 +1,1 @@
+ALTER TABLE public.drivers ADD COLUMN name text;

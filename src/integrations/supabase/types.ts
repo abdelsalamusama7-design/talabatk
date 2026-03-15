@@ -57,6 +57,7 @@ export type Database = {
           id: string
           id_card_url: string | null
           license_number: string | null
+          name: string | null
           phone: string | null
           rating: number | null
           selfie_with_id_url: string | null
@@ -75,6 +76,7 @@ export type Database = {
           id?: string
           id_card_url?: string | null
           license_number?: string | null
+          name?: string | null
           phone?: string | null
           rating?: number | null
           selfie_with_id_url?: string | null
@@ -93,6 +95,7 @@ export type Database = {
           id?: string
           id_card_url?: string | null
           license_number?: string | null
+          name?: string | null
           phone?: string | null
           rating?: number | null
           selfie_with_id_url?: string | null
