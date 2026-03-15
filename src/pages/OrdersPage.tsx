@@ -2,7 +2,7 @@ import { useOrders } from "@/lib/order-context";
 import { useLiveOrders } from "@/lib/live-order-context";
 import { useAuth } from "@/lib/auth-context";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, Truck, Clock, ChefHat, Package, MapPin, X, Eye } from "lucide-react";
+import { CheckCircle, Truck, Clock, ChefHat, Package, MapPin, X, Eye, Star } from "lucide-react";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -171,6 +171,16 @@ const OrdersPage = () => {
                       </div>
                       <span className="font-bold text-foreground tabular-nums text-sm">{order.total} ج.م</span>
                     </div>
+                    {isLive && order.status === "delivered" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => navigate(`/store/${order.restaurant_id}`)}
+                        className="w-full rounded-xl h-9 mt-2 text-xs font-semibold"
+                      >
+                        <Star className="h-3.5 w-3.5 ml-1 text-warning" /> قيّم الطلب
+                      </Button>
+                    )}
                   </div>
                 );
               })}

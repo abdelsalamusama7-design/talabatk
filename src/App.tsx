@@ -21,6 +21,7 @@ import LiveTrackingPage from "./pages/LiveTrackingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BottomNav from "./components/BottomNav";
 import InstallPage from "./pages/InstallPage";
+import LoyaltyPage from "./pages/LoyaltyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
                   <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
                   <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
                   <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+                  <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
                   <Route path="/install" element={<InstallPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

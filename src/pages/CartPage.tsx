@@ -3,7 +3,7 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -23,9 +23,24 @@ const CartPage = () => {
   const [dynamicFee, setDynamicFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
   const [feeDetails, setFeeDetails] = useState<{ distance_km: number; is_peak: boolean; demand_level: string } | null>(null);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(0);
 
   const deliveryFee = dynamicFee ?? (items.length > 0 ? items[0].store.deliveryFee : 0);
-  const grandTotal = Math.max(0, total + deliveryFee - discount);
+  const grandTotal = Math.max(0, total + deliveryFee - discount - loyaltyDiscount);
+
+  // Load loyalty points
+  useEffect(() => {
+    if (!user) return;
+    const load = async () => {
+      const { data } = await supabase
+        .from("loyalty_points")
+        .select("points")
+        .eq("user_id", user.id);
+      if (data) setLoyaltyPoints(data.reduce((s, p) => s + p.points, 0));
+    };
+    load();
+  }, [user]);
 
   // Fetch dynamic pricing when location or items change
   useEffect(() => {
@@ -139,7 +154,32 @@ const CartPage = () => {
         // Driver assignment is best-effort
       }
 
-      toast.success("تم تأكيد الطلب بنجاح! 🎉");
+      // Award loyalty points (1 point per 10 EGP)
+      const earnedPoints = Math.floor(grandTotal / 10);
+      if (earnedPoints > 0) {
+        try {
+          await supabase.from("loyalty_points").insert({
+            user_id: user.id,
+            points: earnedPoints,
+            action: `طلب من ${storeName}`,
+            order_id: order.id,
+          });
+        } catch { /* best effort */ }
+      }
+
+      // Deduct loyalty points if redeemed
+      if (loyaltyDiscount > 0) {
+        try {
+          await supabase.from("loyalty_points").insert({
+            user_id: user.id,
+            points: -(loyaltyDiscount * 10),
+            action: `استبدال نقاط - طلب #${order.id.slice(0, 8)}`,
+            order_id: order.id,
+          });
+        } catch { /* best effort */ }
+      }
+
+      toast.success(`تم تأكيد الطلب بنجاح! 🎉 +${earnedPoints} نقاط ولاء`);
       clearCart();
       setDiscount(0);
       setPromoApplied(false);
@@ -272,6 +312,37 @@ const CartPage = () => {
           )}
         </div>
 
+        {/* Loyalty Points Redemption */}
+        {user && loyaltyPoints >= 50 && (
+          <div className="bg-card rounded-2xl p-4 shadow-card mt-3">
+            <label className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-2">
+              <Coins className="h-4 w-4 text-warning" /> استبدال نقاط الولاء
+            </label>
+            <p className="text-xs text-muted-foreground mb-2">
+              لديك {loyaltyPoints} نقطة (= {Math.floor(loyaltyPoints / 10)} ج.م)
+            </p>
+            <div className="flex gap-2">
+              {[50, 100, 200].filter(p => loyaltyPoints >= p).map(pts => {
+                const disc = Math.floor(pts / 10);
+                return (
+                  <Button
+                    key={pts}
+                    size="sm"
+                    variant={loyaltyDiscount === disc ? "default" : "outline"}
+                    onClick={() => setLoyaltyDiscount(loyaltyDiscount === disc ? 0 : disc)}
+                    className="rounded-xl text-xs"
+                  >
+                    {disc} ج.م ({pts} نقطة)
+                  </Button>
+                );
+              })}
+            </div>
+            {loyaltyDiscount > 0 && (
+              <p className="text-xs text-success mt-1.5">🎁 سيتم خصم {loyaltyDiscount} ج.م من نقاطك</p>
+            )}
+          </div>
+        )}
+
         {/* Summary */}
         <div className="bg-card rounded-2xl p-4 shadow-card mt-4 space-y-3">
           <div className="flex justify-between text-sm">
@@ -310,6 +381,12 @@ const CartPage = () => {
             <div className="flex justify-between text-sm">
               <span className="text-success">الخصم</span>
               <span className="tabular-nums font-semibold text-success">-{discount} ج.م</span>
+            </div>
+          )}
+          {loyaltyDiscount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-warning">نقاط ولاء 🎁</span>
+              <span className="tabular-nums font-semibold text-warning">-{loyaltyDiscount} ج.م</span>
             </div>
           )}
           <div className="border-t border-border pt-3 flex justify-between">

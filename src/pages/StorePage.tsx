@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { stores } from "@/lib/data";
 import { useCart } from "@/lib/cart-context";
 import { ArrowRight, Star, Clock, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
+import ReviewsList from "@/components/ReviewsList";
+import ReviewForm from "@/components/ReviewForm";
 
 const StorePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { items, addItem, updateQuantity } = useCart();
   const store = stores.find((s) => s.id === id);
+  const [reviewRefresh, setReviewRefresh] = useState(0);
 
   if (!store) return <div className="p-8 text-center">المتجر غير موجود</div>;
 
@@ -84,6 +88,12 @@ const StorePage = () => {
             );
           })}
         </div>
+      </section>
+
+      {/* Reviews Section */}
+      <section className="px-4 pt-6 space-y-4">
+        <ReviewsList restaurantId={id!} refreshKey={reviewRefresh} />
+        <ReviewForm restaurantId={id!} onSubmitted={() => setReviewRefresh((r) => r + 1)} />
       </section>
     </div>
   );
