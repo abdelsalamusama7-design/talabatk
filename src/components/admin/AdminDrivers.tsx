@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import {
   Truck, Eye, Trash2, UserCheck, UserX, Phone, Star, DollarSign,
-  MapPin, CheckCircle, XCircle, Image,
+  MapPin, Image, Plus, Save, Pencil,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface Driver {
   id: string;
@@ -25,9 +27,67 @@ interface Driver {
   created_at: string;
 }
 
+const emptyForm = {
+  phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
+};
+
 const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const [drivers, setDrivers] = useState<Driver[]>(initial);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState(emptyForm);
+
+  const openNew = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setShowForm(true);
+  };
+
+  const openEdit = (d: Driver) => {
+    setEditingId(d.id);
+    setForm({
+      phone: d.phone || "",
+      vehicle_type: d.vehicle_type || "motorcycle",
+      license_number: d.license_number || "",
+      verification_status: d.verification_status || "pending",
+    });
+    setShowForm(true);
+  };
+
+  const saveDriver = async () => {
+    if (editingId) {
+      const { error } = await supabase.from("drivers").update({
+        phone: form.phone || null,
+        vehicle_type: form.vehicle_type,
+        license_number: form.license_number || null,
+        verification_status: form.verification_status,
+      }).eq("id", editingId);
+      if (error) { toast.error("خطأ في التحديث"); return; }
+      setDrivers((prev) => prev.map((d) => d.id === editingId ? {
+        ...d, phone: form.phone || null, vehicle_type: form.vehicle_type,
+        license_number: form.license_number || null, verification_status: form.verification_status,
+      } : d));
+      toast.success("تم تحديث المندوب ✅");
+    } else {
+      // Create a new auth user first is complex, so we create a driver record linked to admin for now
+      // In practice, drivers register themselves. Admin can add phone/vehicle info.
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("يجب تسجيل الدخول"); return; }
+      const { data, error } = await supabase.from("drivers").insert({
+        user_id: user.id,
+        phone: form.phone || null,
+        vehicle_type: form.vehicle_type,
+        license_number: form.license_number || null,
+        verification_status: form.verification_status,
+        status: "offline" as any,
+      }).select().single();
+      if (error) { toast.error("خطأ في الإضافة: " + error.message); return; }
+      setDrivers((prev) => [data as Driver, ...prev]);
+      toast.success("تم إضافة المندوب ✅");
+    }
+    setShowForm(false);
+  };
 
   const updateVerification = async (id: string, status: string) => {
     await supabase.from("drivers").update({ verification_status: status }).eq("id", id);
@@ -48,6 +108,44 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
 
   return (
     <div className="space-y-3">
+      <Button onClick={openNew} className="w-full rounded-xl h-11 font-semibold">
+        <Plus className="h-4 w-4 ml-2" /> إضافة مندوب جديد
+      </Button>
+
+      {showForm && (
+        <div className="bg-card rounded-2xl p-4 shadow-card space-y-3 border-2 border-primary/20">
+          <h3 className="font-bold text-foreground text-sm">{editingId ? "تعديل المندوب" : "مندوب جديد"}</h3>
+          <Input placeholder="رقم الهاتف" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+          <div>
+            <p className="text-xs text-muted-foreground mb-2">نوع المركبة</p>
+            <div className="flex gap-2">
+              {[{ v: "motorcycle", l: "🏍️ موتوسيكل" }, { v: "car", l: "🚗 سيارة" }, { v: "bicycle", l: "🚲 دراجة" }].map((opt) => (
+                <button key={opt.v} onClick={() => setForm({ ...form, vehicle_type: opt.v })}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${form.vehicle_type === opt.v ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                  {opt.l}
+                </button>
+              ))}
+            </div>
+          </div>
+          <Input placeholder="رقم الرخصة" value={form.license_number} onChange={(e) => setForm({ ...form, license_number: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+          <div>
+            <p className="text-xs text-muted-foreground mb-2">حالة التوثيق</p>
+            <div className="flex gap-2">
+              {[{ v: "approved", l: "✅ موثق" }, { v: "pending", l: "⏳ معلق" }, { v: "rejected", l: "❌ مرفوض" }].map((opt) => (
+                <button key={opt.v} onClick={() => setForm({ ...form, verification_status: opt.v })}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${form.verification_status === opt.v ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                  {opt.l}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={saveDriver} className="flex-1 rounded-xl h-10"><Save className="h-4 w-4 ml-1" /> حفظ</Button>
+            <Button variant="outline" onClick={() => setShowForm(false)} className="rounded-xl h-10">إلغاء</Button>
+          </div>
+        </div>
+      )}
+
       {/* Summary */}
       <div className="grid grid-cols-3 gap-2 mb-3">
         <div className="bg-card rounded-xl p-3 shadow-card text-center">
@@ -92,42 +190,28 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
             </div>
           </div>
 
-          {/* Stats row */}
           <div className="flex gap-3 text-xs text-muted-foreground mb-2">
             <span className="flex items-center gap-1"><Star className="h-3 w-3 text-warning" /> {d.rating || 5}</span>
             <span className="flex items-center gap-1"><Truck className="h-3 w-3" /> {d.total_deliveries || 0} توصيلة</span>
             <span className="flex items-center gap-1"><DollarSign className="h-3 w-3 text-success" /> {Number(d.total_earnings || 0).toFixed(0)} ج.م</span>
           </div>
 
-          {/* Expanded details */}
           {expandedId === d.id && (
             <div className="bg-muted/30 rounded-xl p-3 mb-2 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Phone className="h-3 w-3" /> الهاتف: {d.phone || "—"}
-              </div>
-              {d.license_number && (
-                <div className="text-muted-foreground">رقم الرخصة: {d.license_number}</div>
-              )}
+              <div className="flex items-center gap-1.5 text-muted-foreground"><Phone className="h-3 w-3" /> الهاتف: {d.phone || "—"}</div>
+              {d.license_number && <div className="text-muted-foreground">رقم الرخصة: {d.license_number}</div>}
               {d.current_lat && d.current_lng && (
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <MapPin className="h-3 w-3" /> الموقع: {d.current_lat.toFixed(4)}, {d.current_lng.toFixed(4)}
-                </div>
+                <div className="flex items-center gap-1.5 text-muted-foreground"><MapPin className="h-3 w-3" /> الموقع: {d.current_lat.toFixed(4)}, {d.current_lng.toFixed(4)}</div>
               )}
               <div className="text-muted-foreground">تسجيل: {new Date(d.created_at).toLocaleDateString("ar-EG")}</div>
-              
-              {/* ID documents */}
               <div className="border-t border-border pt-2 mt-2">
                 <p className="font-medium text-foreground mb-1">مستندات التحقق:</p>
                 <div className="flex gap-2">
                   {d.id_card_url ? (
-                    <a href={d.id_card_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary text-xs hover:underline">
-                      <Image className="h-3 w-3" /> صورة البطاقة
-                    </a>
+                    <a href={d.id_card_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary text-xs hover:underline"><Image className="h-3 w-3" /> صورة البطاقة</a>
                   ) : <span className="text-muted-foreground">لا توجد صورة بطاقة</span>}
                   {d.selfie_with_id_url ? (
-                    <a href={d.selfie_with_id_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary text-xs hover:underline">
-                      <Image className="h-3 w-3" /> سيلفي مع البطاقة
-                    </a>
+                    <a href={d.selfie_with_id_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary text-xs hover:underline"><Image className="h-3 w-3" /> سيلفي مع البطاقة</a>
                   ) : <span className="text-muted-foreground">لا توجد سيلفي</span>}
                 </div>
               </div>
@@ -137,6 +221,9 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
           <div className="flex gap-1.5 mt-1 flex-wrap">
             <Button size="sm" variant="ghost" onClick={() => setExpandedId(expandedId === d.id ? null : d.id)} className="rounded-xl text-xs h-8">
               <Eye className="h-3 w-3 ml-1" /> {expandedId === d.id ? "إخفاء" : "تفاصيل"}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => openEdit(d)} className="rounded-xl text-xs h-8">
+              <Pencil className="h-3 w-3 ml-1" /> تعديل
             </Button>
             {d.verification_status !== "approved" && (
               <Button size="sm" onClick={() => updateVerification(d.id, "approved")} className="rounded-xl text-xs h-8">
@@ -154,7 +241,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
           </div>
         </div>
       ))}
-      {drivers.length === 0 && <p className="text-center text-muted-foreground py-8">لا يوجد مناديب</p>}
+      {drivers.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">لا يوجد مناديب</p>}
     </div>
   );
 };
