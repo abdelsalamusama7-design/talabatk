@@ -189,6 +189,7 @@ const AdminOrders = ({ orders: initial, restaurants }: { orders: Order[]; restau
           </div>
         );
       })}
+      </div>
       {filtered.length === 0 && <p className="text-center text-muted-foreground py-8">لا توجد طلبات</p>}
     </div>
   );

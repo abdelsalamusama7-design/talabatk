@@ -306,6 +306,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
           </div>
         </div>
       ))}
+      </div>
       {filtered.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">{search.trim() ? "لا توجد نتائج" : "لا يوجد مناديب"}</p>}
     </div>
   );

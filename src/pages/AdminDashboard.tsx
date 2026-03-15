@@ -154,35 +154,37 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-24" dir="rtl">
-      <div className="bg-primary pt-10 pb-6 px-4 rounded-b-[2rem]">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold text-primary-foreground">
-            <Shield className="h-5 w-5 inline ml-1" /> لوحة التحكم
-          </h1>
-          <button onClick={() => navigate("/")} className="bg-card/20 rounded-full p-2">
-            <ArrowRight className="h-5 w-5 text-primary-foreground" />
-          </button>
-        </div>
-        <div className="flex gap-1.5 overflow-x-auto pb-1">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
-                tab === t.id ? "bg-card text-primary shadow-card" : "bg-card/20 text-primary-foreground"
-              }`}
-            >
-              <t.icon className="h-3.5 w-3.5" />
-              {t.label}
+      <div className="bg-primary pt-10 pb-6 px-4 lg:px-8 rounded-b-[2rem]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-xl lg:text-2xl font-bold text-primary-foreground">
+              <Shield className="h-5 w-5 inline ml-1" /> لوحة التحكم
+            </h1>
+            <button onClick={() => navigate("/")} className="bg-card/20 rounded-full p-2">
+              <ArrowRight className="h-5 w-5 text-primary-foreground" />
             </button>
-          ))}
+          </div>
+          <div className="flex gap-1.5 md:gap-2 overflow-x-auto pb-1">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`flex items-center gap-1 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                  tab === t.id ? "bg-card text-primary shadow-card" : "bg-card/20 text-primary-foreground"
+                }`}
+              >
+                <t.icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                {t.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="px-4 py-6">
+      <div className="px-4 lg:px-8 py-6 max-w-7xl mx-auto">
         {tab === "stats" && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
               <StatCard icon={<ShoppingCart className="h-5 w-5 text-primary" />} label="إجمالي الطلبات" value={`${orders.length}`} />
               <StatCard icon={<DollarSign className="h-5 w-5 text-success" />} label="إيرادات (مُسلّم)" value={`${totalRevenue.toFixed(0)} ج.م`} />
               <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="طلبات نشطة" value={`${activeOrders}`} />

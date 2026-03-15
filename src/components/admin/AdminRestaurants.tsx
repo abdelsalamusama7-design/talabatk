@@ -263,6 +263,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
           )}
         </div>
       ))}
+      </div>
       {restaurants.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">لا توجد مطاعم</p>}
     </div>
   );

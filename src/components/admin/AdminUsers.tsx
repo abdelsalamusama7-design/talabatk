@@ -92,6 +92,7 @@ const AdminUsers = ({ profiles: initial, orders }: { profiles: Profile[]; orders
           </div>
         );
       })}
+      </div>
       {profiles.length === 0 && <p className="text-center text-muted-foreground py-8">لا يوجد مستخدمين</p>}
     </div>
   );
