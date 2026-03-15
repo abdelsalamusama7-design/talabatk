@@ -362,7 +362,7 @@ const AdminDashboard = () => {
                   <Input type="datetime-local" value={offerForm.expires_at} onChange={(e) => setOfferForm({ ...offerForm, expires_at: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
                 </div>
 
-                  <p className="text-xs text-muted-foreground mb-2">اللون</p>
+                <div>
                   <div className="flex gap-2 flex-wrap">
                     {colorOptions.map((c) => (
                       <button key={c.value} type="button" onClick={() => setOfferForm({ ...offerForm, bg_color: c.value })}
