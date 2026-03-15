@@ -1,15 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LocationHeader from "@/components/LocationHeader";
 import CategoryGrid from "@/components/CategoryGrid";
 import TrendingMeals from "@/components/TrendingMeals";
 import OffersSection from "@/components/OffersSection";
 import StoreCard from "@/components/StoreCard";
 import AiFoodChat from "@/components/AiFoodChat";
+import { useAuth } from "@/lib/auth-context";
 import { stores } from "@/lib/data";
-import { Sparkles, MessageCircle } from "lucide-react";
+import { Sparkles, MessageCircle, Shield } from "lucide-react";
 
 const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
+  const { hasRole } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -26,6 +30,16 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Admin FAB */}
+      {hasRole("admin") && (
+        <button
+          onClick={() => navigate("/admin")}
+          className="fixed bottom-40 left-4 z-40 w-14 h-14 rounded-full bg-destructive text-destructive-foreground shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+        >
+          <Shield className="h-6 w-6" />
+        </button>
+      )}
 
       {/* AI Chat FAB */}
       <button
