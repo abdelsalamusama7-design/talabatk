@@ -23,6 +23,7 @@ const DriverDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
   const [regForm, setRegForm] = useState({ vehicle_type: "motorcycle", license_number: "" });
+  const [chatOrderId, setChatOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) loadData();
