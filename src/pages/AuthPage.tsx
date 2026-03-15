@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, ShoppingBag, Shield, Phone, Camera, CreditCard } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Bike, ShoppingBag, Shield, Phone, Camera, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,7 +12,7 @@ type AccountType = "customer" | "driver";
 
 const accountTypes: { type: AccountType; label: string; icon: typeof ShoppingBag; desc: string }[] = [
   { type: "customer", label: "عميل", icon: ShoppingBag, desc: "اطلب وجباتك المفضلة" },
-  { type: "driver", label: "سائق موتوسيكل", icon: Truck, desc: "اكسب من التوصيل" },
+  { type: "driver", label: "سائق موتوسيكل", icon: Bike, desc: "اكسب من التوصيل" },
 ];
 
 const AuthPage = () => {

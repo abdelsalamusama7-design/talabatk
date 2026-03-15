@@ -1,4 +1,4 @@
-import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Truck, Sparkles, Gift } from "lucide-react";
+import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Bike, Sparkles, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,10 @@ const AccountPage = () => {
     { label: "طلباتي السابقة", icon: ChevronLeft, path: "/orders", show: true },
     { label: "نقاط الولاء والمكافآت", icon: Gift, path: "/loyalty", show: !!user },
     { label: "لوحة المطعم", icon: Store, path: "/restaurant-dashboard", show: hasRole("restaurant_owner") },
-    { label: "لوحة السائق", icon: Truck, path: "/driver", show: hasRole("driver") },
+    { label: "لوحة السائق", icon: Bike, path: "/driver", show: hasRole("driver") },
     { label: "لوحة التحكم (أدمن)", icon: Settings, path: "/admin", show: hasRole("admin") },
     { label: "التسجيل كمطعم", icon: Store, path: "/restaurant-dashboard", show: !hasRole("restaurant_owner") && !!user },
-    { label: "التسجيل كسائق", icon: Truck, path: "/driver", show: !hasRole("driver") && !!user },
+    { label: "التسجيل كسائق", icon: Bike, path: "/driver", show: !hasRole("driver") && !!user },
     { label: "احصل على المساعدة", icon: HelpCircle, path: "#", show: true },
     { label: "حول التطبيق", icon: Info, path: "#", show: true },
   ].filter((i) => i.show);
