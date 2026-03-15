@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Bell, X, Package, Tag, Clock } from "lucide-react";
+import { Bell, X, Package, Tag, Clock, Truck, Store } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface Notification {
   id: string;
-  type: "order" | "offer";
+  type: "order" | "offer" | "driver" | "restaurant";
   title: string;
   message: string;
   time: string;
