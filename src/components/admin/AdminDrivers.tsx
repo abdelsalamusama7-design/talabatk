@@ -56,6 +56,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       verification_status: d.verification_status || "pending",
       id_card_url: d.id_card_url || "",
       selfie_with_id_url: d.selfie_with_id_url || "",
+      email: "",
     });
     setShowForm(true);
   };
