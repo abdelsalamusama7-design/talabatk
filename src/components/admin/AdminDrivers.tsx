@@ -37,6 +37,17 @@ const emptyForm = {
 const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const [drivers, setDrivers] = useState<Driver[]>(initial);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+
+  const filtered = drivers.filter((d) => {
+    if (!search.trim()) return true;
+    const q = search.trim().toLowerCase();
+    return (
+      d.id.toLowerCase().includes(q) ||
+      (d.phone && d.phone.includes(q)) ||
+      (d.license_number && d.license_number.toLowerCase().includes(q))
+    );
+  });
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
@@ -133,6 +144,12 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
 
   return (
     <div className="space-y-3">
+      <Input
+        placeholder="🔍 بحث بالاسم أو رقم الهاتف أو الرخصة..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="rounded-xl h-11 bg-muted/50 border-0"
+      />
       <Button onClick={openNew} className="w-full rounded-xl h-11 font-semibold">
         <Plus className="h-4 w-4 ml-2" /> إضافة مندوب جديد
       </Button>
@@ -203,7 +220,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         </div>
       </div>
 
-      {drivers.map((d) => (
+      {filtered.map((d) => (
         <div key={d.id} className="bg-card rounded-2xl p-4 shadow-card">
           <div className="flex items-center justify-between mb-2">
             <div>
@@ -282,7 +299,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
           </div>
         </div>
       ))}
-      {drivers.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">لا يوجد مناديب</p>}
+      {filtered.length === 0 && !showForm && <p className="text-center text-muted-foreground py-8">{search.trim() ? "لا توجد نتائج" : "لا يوجد مناديب"}</p>}
     </div>
   );
 };
