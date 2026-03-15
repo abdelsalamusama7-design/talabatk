@@ -62,6 +62,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
   const openEdit = (d: Driver) => {
     setEditingId(d.id);
     setForm({
+      name: d.name || "",
       phone: d.phone || "",
       vehicle_type: d.vehicle_type || "motorcycle",
       license_number: d.license_number || "",
