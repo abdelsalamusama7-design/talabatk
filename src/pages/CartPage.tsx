@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2 } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -20,9 +20,39 @@ const CartPage = () => {
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
   const [ordering, setOrdering] = useState(false);
+  const [dynamicFee, setDynamicFee] = useState<number | null>(null);
+  const [feeLoading, setFeeLoading] = useState(false);
+  const [feeDetails, setFeeDetails] = useState<{ distance_km: number; is_peak: boolean; demand_level: string } | null>(null);
 
-  const deliveryFee = items.length > 0 ? items[0].store.deliveryFee : 0;
+  const deliveryFee = dynamicFee ?? (items.length > 0 ? items[0].store.deliveryFee : 0);
   const grandTotal = Math.max(0, total + deliveryFee - discount);
+
+  // Fetch dynamic pricing when location or items change
+  useEffect(() => {
+    const fetchFee = async () => {
+      if (!lat || !lng || items.length === 0) return;
+      const storeName = items[0]?.store.name;
+      const { data: restaurant } = await supabase
+        .from("restaurants")
+        .select("id")
+        .eq("name", storeName)
+        .maybeSingle();
+      if (!restaurant?.id) return;
+
+      setFeeLoading(true);
+      try {
+        const { data } = await supabase.functions.invoke("calculate-delivery-fee", {
+          body: { restaurant_id: restaurant.id, customer_lat: lat, customer_lng: lng },
+        });
+        if (data?.delivery_fee) {
+          setDynamicFee(data.delivery_fee);
+          setFeeDetails({ distance_km: data.distance_km, is_peak: data.is_peak, demand_level: data.demand_level });
+        }
+      } catch { /* fallback to static fee */ }
+      setFeeLoading(false);
+    };
+    fetchFee();
+  }, [lat, lng, items.length]);
 
   const applyPromo = async () => {
     if (!promoCode.trim()) return;
