@@ -30,6 +30,7 @@ interface Driver {
 
 const emptyForm = {
   phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
+  id_card_url: "", selfie_with_id_url: "",
 };
 
 const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
