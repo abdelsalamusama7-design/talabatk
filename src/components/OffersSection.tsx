@@ -98,8 +98,17 @@ const PromoCodeChip = ({ code }: { code: string }) => {
 
 const OffersSection = () => {
   const navigate = useNavigate();
+  const { setPendingPromoCode } = useCart();
   const [offers, setOffers] = useState<Offer[]>([]);
   const getTimeLeft = useCountdown(offers);
+
+  const handleOfferClick = (offer: Offer) => {
+    if (offer.promo_code) {
+      setPendingPromoCode(offer.promo_code);
+      toast.success(`سيتم تطبيق كود "${offer.promo_code}" تلقائياً في السلة`);
+      navigate("/cart");
+    }
+  };
 
   useEffect(() => {
     const loadOffers = async () => {
