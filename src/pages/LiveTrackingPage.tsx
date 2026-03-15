@@ -12,6 +12,10 @@ const LiveTrackingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { liveOrders } = useLiveOrders();
+  const [chatOpen, setChatOpen] = useState(false);
+  const order = liveOrders.find((o) => o.id === id);
+  const navigate = useNavigate();
+  const { liveOrders } = useLiveOrders();
   const order = liveOrders.find((o) => o.id === id);
 
   if (!order) {
