@@ -147,6 +147,22 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       <Input placeholder="العنوان" value={editForm.address} onChange={(e) => setEditForm({ ...editForm, address: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
       <Input placeholder="رقم الهاتف" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
       <Input placeholder="الوصف" value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+      <div className="grid grid-cols-2 gap-3">
+        <AdminImageUpload
+          bucket="restaurant-images"
+          folder="logos"
+          currentUrl={editForm.image_url || null}
+          onUploaded={(url) => setEditForm({ ...editForm, image_url: url })}
+          label="شعار المطعم"
+        />
+        <AdminImageUpload
+          bucket="restaurant-images"
+          folder="covers"
+          currentUrl={editForm.cover_url || null}
+          onUploaded={(url) => setEditForm({ ...editForm, cover_url: url })}
+          label="صورة الغلاف"
+        />
+      </div>
       <div className="grid grid-cols-3 gap-2">
         <div>
           <p className="text-[10px] text-muted-foreground mb-1">رسوم التوصيل</p>
