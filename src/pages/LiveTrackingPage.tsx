@@ -1,15 +1,18 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLiveOrders } from "@/lib/live-order-context";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
 import OrderProgressStepper from "@/components/OrderProgressStepper";
+import OrderChat from "@/components/OrderChat";
 import { ArrowRight, Phone, MessageCircle, Star, Clock, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const LiveTrackingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { liveOrders } = useLiveOrders();
+  const [chatOpen, setChatOpen] = useState(false);
   const order = liveOrders.find((o) => o.id === id);
 
   if (!order) {
@@ -92,7 +95,10 @@ const LiveTrackingPage = () => {
                 <button className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
                   <Phone className="h-4 w-4 text-success" />
                 </button>
-                <button className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <button
+                  onClick={() => setChatOpen(!chatOpen)}
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"
+                >
                   <MessageCircle className="h-4 w-4 text-primary" />
                 </button>
               </div>
@@ -162,6 +168,13 @@ const LiveTrackingPage = () => {
           </div>
           <span className="text-xs text-muted-foreground font-mono">#{order.id.slice(0, 8)}</span>
         </div>
+
+        {/* Chat panel */}
+        <AnimatePresence>
+          {chatOpen && isActive && (
+            <OrderChat orderId={order.id} onClose={() => setChatOpen(false)} />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

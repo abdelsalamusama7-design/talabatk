@@ -6,11 +6,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
+import OrderChat from "@/components/OrderChat";
 import {
   Truck, MapPin, DollarSign, Package, ArrowRight,
-  Navigation, CheckCircle, Clock, Power, PowerOff, Star, Bell,
+  Navigation, CheckCircle, Clock, Power, PowerOff, Star, Bell, MessageCircle,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DriverDashboard = () => {
   const { user } = useAuth();
@@ -22,6 +23,7 @@ const DriverDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
   const [regForm, setRegForm] = useState({ vehicle_type: "motorcycle", license_number: "" });
+  const [chatOrderId, setChatOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) loadData();
@@ -290,15 +292,32 @@ const DriverDashboard = () => {
                     <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg p-2 mb-3">📝 {order.notes}</p>
                   )}
                   {order.status === "picked_up" && (
-                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivering")} className="w-full rounded-xl h-10">
-                      <Truck className="h-4 w-4 ml-1" /> بدأت التوصيل
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivering")} className="flex-1 rounded-xl h-10">
+                        <Truck className="h-4 w-4 ml-1" /> بدأت التوصيل
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setChatOrderId(chatOrderId === order.id ? null : order.id)} className="rounded-xl h-10">
+                        <MessageCircle className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
                   {order.status === "delivering" && (
-                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")} className="w-full rounded-xl h-10 bg-success hover:bg-success/90">
-                      <CheckCircle className="h-4 w-4 ml-1" /> تم التسليم
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")} className="flex-1 rounded-xl h-10 bg-success hover:bg-success/90">
+                        <CheckCircle className="h-4 w-4 ml-1" /> تم التسليم
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setChatOrderId(chatOrderId === order.id ? null : order.id)} className="rounded-xl h-10">
+                        <MessageCircle className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
+                  <AnimatePresence>
+                    {chatOrderId === order.id && (
+                      <div className="mt-3">
+                        <OrderChat orderId={order.id} isDriver onClose={() => setChatOrderId(null)} />
+                      </div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             ))}
