@@ -144,6 +144,12 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
 
   return (
     <div className="space-y-3">
+      <Input
+        placeholder="🔍 بحث بالاسم أو رقم الهاتف أو الرخصة..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="rounded-xl h-11 bg-muted/50 border-0"
+      />
       <Button onClick={openNew} className="w-full rounded-xl h-11 font-semibold">
         <Plus className="h-4 w-4 ml-2" /> إضافة مندوب جديد
       </Button>
