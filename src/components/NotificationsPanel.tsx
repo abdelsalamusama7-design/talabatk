@@ -25,7 +25,7 @@ const STATUS_AR: Record<string, string> = {
 };
 
 const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const { user } = useAuth();
+  const { user, hasRole } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
 
