@@ -37,7 +37,7 @@ const OrdersPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
-      <div className="pt-12 px-4">
+      <div className="pt-12 px-4 max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">طلباتك</h1>
 
         {/* Active orders */}
