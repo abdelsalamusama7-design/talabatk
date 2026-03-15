@@ -8,6 +8,7 @@ import {
   MapPin, Image, Plus, Save, Pencil,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import AdminImageUpload from "./AdminImageUpload";
 
 interface Driver {
   id: string;
@@ -29,6 +30,7 @@ interface Driver {
 
 const emptyForm = {
   phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
+  id_card_url: "", selfie_with_id_url: "",
 };
 
 const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
@@ -51,6 +53,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       vehicle_type: d.vehicle_type || "motorcycle",
       license_number: d.license_number || "",
       verification_status: d.verification_status || "pending",
+      id_card_url: d.id_card_url || "",
+      selfie_with_id_url: d.selfie_with_id_url || "",
     });
     setShowForm(true);
   };
@@ -62,11 +66,14 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null,
+        selfie_with_id_url: form.selfie_with_id_url || null,
       }).eq("id", editingId);
       if (error) { toast.error("خطأ في التحديث"); return; }
       setDrivers((prev) => prev.map((d) => d.id === editingId ? {
         ...d, phone: form.phone || null, vehicle_type: form.vehicle_type,
         license_number: form.license_number || null, verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null, selfie_with_id_url: form.selfie_with_id_url || null,
       } : d));
       toast.success("تم تحديث المندوب ✅");
     } else {
@@ -80,6 +87,8 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         vehicle_type: form.vehicle_type,
         license_number: form.license_number || null,
         verification_status: form.verification_status,
+        id_card_url: form.id_card_url || null,
+        selfie_with_id_url: form.selfie_with_id_url || null,
         status: "offline" as any,
       }).select().single();
       if (error) { toast.error("خطأ في الإضافة: " + error.message); return; }
@@ -128,6 +137,22 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
             </div>
           </div>
           <Input placeholder="رقم الرخصة" value={form.license_number} onChange={(e) => setForm({ ...form, license_number: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+          <div className="grid grid-cols-2 gap-3">
+            <AdminImageUpload
+              bucket="driver-documents"
+              folder="id-cards"
+              currentUrl={form.id_card_url || null}
+              onUploaded={(url) => setForm({ ...form, id_card_url: url })}
+              label="صورة البطاقة"
+            />
+            <AdminImageUpload
+              bucket="driver-documents"
+              folder="selfies"
+              currentUrl={form.selfie_with_id_url || null}
+              onUploaded={(url) => setForm({ ...form, selfie_with_id_url: url })}
+              label="سيلفي مع البطاقة"
+            />
+          </div>
           <div>
             <p className="text-xs text-muted-foreground mb-2">حالة التوثيق</p>
             <div className="flex gap-2">

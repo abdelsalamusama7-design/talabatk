@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Store, UserCheck, UserX, Trash2, Pencil, Plus, Save, Eye, MapPin, Phone, Star } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import AdminImageUpload from "./AdminImageUpload";
 
 interface Restaurant {
   id: string;
@@ -20,13 +21,15 @@ interface Restaurant {
   delivery_time: string | null;
   min_order: number | null;
   description: string | null;
+  image_url: string | null;
+  cover_url: string | null;
   owner_id: string;
   created_at: string;
 }
 
 const emptyForm = {
   name: "", category: "restaurants", address: "", phone: "", delivery_fee: 10,
-  min_order: 0, delivery_time: "30-45", description: "",
+  min_order: 0, delivery_time: "30-45", description: "", image_url: "", cover_url: "",
 };
 
 const categoryOptions = [
@@ -72,7 +75,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       name: r.name, category: r.category, address: r.address || "",
       phone: r.phone || "", delivery_fee: r.delivery_fee || 0,
       min_order: r.min_order || 0, delivery_time: r.delivery_time || "",
-      description: r.description || "",
+      description: r.description || "", image_url: r.image_url || "", cover_url: r.cover_url || "",
     });
     setShowForm(false);
   };
@@ -83,6 +86,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       address: editForm.address || null, phone: editForm.phone || null,
       delivery_fee: editForm.delivery_fee, min_order: editForm.min_order,
       delivery_time: editForm.delivery_time || null, description: editForm.description || null,
+      image_url: editForm.image_url || null, cover_url: editForm.cover_url || null,
     };
     const { error } = await supabase.from("restaurants").update(payload).eq("id", id);
     if (error) { toast.error("خطأ في التحديث"); return; }
@@ -104,6 +108,8 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       min_order: editForm.min_order,
       delivery_time: editForm.delivery_time || "30-45",
       description: editForm.description || null,
+      image_url: editForm.image_url || null,
+      cover_url: editForm.cover_url || null,
       owner_id: user.id,
       status: "approved" as any,
       is_open: true,
@@ -141,6 +147,22 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       <Input placeholder="العنوان" value={editForm.address} onChange={(e) => setEditForm({ ...editForm, address: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
       <Input placeholder="رقم الهاتف" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
       <Input placeholder="الوصف" value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+      <div className="grid grid-cols-2 gap-3">
+        <AdminImageUpload
+          bucket="restaurant-images"
+          folder="logos"
+          currentUrl={editForm.image_url || null}
+          onUploaded={(url) => setEditForm({ ...editForm, image_url: url })}
+          label="شعار المطعم"
+        />
+        <AdminImageUpload
+          bucket="restaurant-images"
+          folder="covers"
+          currentUrl={editForm.cover_url || null}
+          onUploaded={(url) => setEditForm({ ...editForm, cover_url: url })}
+          label="صورة الغلاف"
+        />
+      </div>
       <div className="grid grid-cols-3 gap-2">
         <div>
           <p className="text-[10px] text-muted-foreground mb-1">رسوم التوصيل</p>
