@@ -108,6 +108,8 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       min_order: editForm.min_order,
       delivery_time: editForm.delivery_time || "30-45",
       description: editForm.description || null,
+      image_url: editForm.image_url || null,
+      cover_url: editForm.cover_url || null,
       owner_id: user.id,
       status: "approved" as any,
       is_open: true,
