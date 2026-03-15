@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, ShoppingBag, Shield } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, ShoppingBag, Shield, Phone, Camera, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 type AccountType = "customer" | "driver";
 
@@ -19,12 +20,52 @@ const AuthPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [accountType, setAccountType] = useState<AccountType>("customer");
+  const [idCardFile, setIdCardFile] = useState<File | null>(null);
+  const [selfieFile, setSelfieFile] = useState<File | null>(null);
+  const [idCardPreview, setIdCardPreview] = useState<string | null>(null);
+  const [selfiePreview, setSelfiePreview] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const handleFileChange = (file: File | null, type: "id" | "selfie") => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "خطأ", description: "حجم الملف يجب أن يكون أقل من 5 ميجابايت", variant: "destructive" });
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "خطأ", description: "يجب رفع صورة فقط", variant: "destructive" });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (type === "id") {
+        setIdCardFile(file);
+        setIdCardPreview(reader.result as string);
+      } else {
+        setSelfieFile(file);
+        setSelfiePreview(reader.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const uploadFile = async (file: File, userId: string, folder: string): Promise<string | null> => {
+    const ext = file.name.split(".").pop();
+    const path = `${userId}/${folder}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("driver-documents").upload(path, file);
+    if (error) {
+      console.error("Upload error:", error);
+      return null;
+    }
+    const { data } = supabase.storage.from("driver-documents").getPublicUrl(path);
+    return data.publicUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,9 +84,41 @@ const AuthPage = () => {
         setLoading(false);
         return;
       }
-      const { error } = await signUp(email, password, fullName, accountType);
+      if (accountType === "driver") {
+        if (!phone.trim() || phone.length < 10) {
+          toast({ title: "خطأ", description: "الرجاء إدخال رقم تليفون صحيح", variant: "destructive" });
+          setLoading(false);
+          return;
+        }
+        if (!idCardFile) {
+          toast({ title: "خطأ", description: "الرجاء رفع صورة البطاقة", variant: "destructive" });
+          setLoading(false);
+          return;
+        }
+        if (!selfieFile) {
+          toast({ title: "خطأ", description: "الرجاء رفع صورة سيلفي بالبطاقة", variant: "destructive" });
+          setLoading(false);
+          return;
+        }
+      }
+
+      const { error, userId } = await signUp(email, password, fullName, accountType);
       if (error) {
         toast({ title: "خطأ في إنشاء الحساب", description: error.message, variant: "destructive" });
+      } else if (userId && accountType === "driver") {
+        // Upload documents
+        const idCardUrl = await uploadFile(idCardFile!, userId, "id-card");
+        const selfieUrl = await uploadFile(selfieFile!, userId, "selfie-id");
+
+        // Update driver record with phone and document URLs
+        await supabase.from("drivers").update({
+          phone,
+          id_card_url: idCardUrl,
+          selfie_with_id_url: selfieUrl,
+        }).eq("user_id", userId);
+
+        toast({ title: "تم إنشاء حساب السائق بنجاح! 🎉", description: "سيتم مراجعة بياناتك والموافقة عليها قريباً" });
+        setIsLogin(true);
       } else {
         toast({ title: "تم إنشاء الحساب بنجاح! 🎉", description: "يمكنك الآن تسجيل الدخول" });
         setIsLogin(true);
@@ -53,6 +126,8 @@ const AuthPage = () => {
     }
     setLoading(false);
   };
+
+  const isDriver = accountType === "driver" && !isLogin;
 
   return (
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
@@ -63,7 +138,7 @@ const AuthPage = () => {
       </div>
 
       {/* Form */}
-      <div className="flex-1 px-6 pt-8">
+      <div className="flex-1 px-6 pt-8 pb-8">
         <h2 className="text-xl font-bold text-foreground mb-1">
           {isLogin ? "تسجيل الدخول" : "إنشاء حساب جديد"}
         </h2>
@@ -143,6 +218,76 @@ const AuthPage = () => {
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
+
+          {/* Driver-specific fields */}
+          {isDriver && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="space-y-4"
+            >
+              {/* Phone */}
+              <div className="relative">
+                <Phone className="absolute right-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="tel"
+                  placeholder="رقم التليفون"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/[^0-9+]/g, ""))}
+                  className="pr-11 h-12 rounded-xl bg-muted/50 border-0 text-foreground placeholder:text-muted-foreground"
+                  maxLength={15}
+                />
+              </div>
+
+              {/* ID Card Upload */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                  <CreditCard className="h-4 w-4 text-primary" />
+                  صورة البطاقة الشخصية
+                </label>
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-xl cursor-pointer bg-muted/30 hover:bg-muted/50 transition-colors overflow-hidden">
+                  {idCardPreview ? (
+                    <img src={idCardPreview} alt="بطاقة" className="h-full w-full object-cover rounded-xl" />
+                  ) : (
+                    <div className="text-center">
+                      <CreditCard className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-xs text-muted-foreground">اضغط لرفع صورة البطاقة</p>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e.target.files?.[0] || null, "id")}
+                  />
+                </label>
+              </div>
+
+              {/* Selfie with ID Upload */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                  <Camera className="h-4 w-4 text-primary" />
+                  صورة سيلفي بالبطاقة (وشك بالبطاقة)
+                </label>
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-xl cursor-pointer bg-muted/30 hover:bg-muted/50 transition-colors overflow-hidden">
+                  {selfiePreview ? (
+                    <img src={selfiePreview} alt="سيلفي" className="h-full w-full object-cover rounded-xl" />
+                  ) : (
+                    <div className="text-center">
+                      <Camera className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-xs text-muted-foreground">اضغط لرفع صورة سيلفي مع البطاقة</p>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e.target.files?.[0] || null, "selfie")}
+                  />
+                </label>
+              </div>
+            </motion.div>
+          )}
 
           <Button
             type="submit"

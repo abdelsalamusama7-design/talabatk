@@ -55,42 +55,54 @@ export type Database = {
           current_lat: number | null
           current_lng: number | null
           id: string
+          id_card_url: string | null
           license_number: string | null
+          phone: string | null
           rating: number | null
+          selfie_with_id_url: string | null
           status: Database["public"]["Enums"]["driver_status"] | null
           total_deliveries: number | null
           total_earnings: number | null
           updated_at: string
           user_id: string
           vehicle_type: string | null
+          verification_status: string | null
         }
         Insert: {
           created_at?: string
           current_lat?: number | null
           current_lng?: number | null
           id?: string
+          id_card_url?: string | null
           license_number?: string | null
+          phone?: string | null
           rating?: number | null
+          selfie_with_id_url?: string | null
           status?: Database["public"]["Enums"]["driver_status"] | null
           total_deliveries?: number | null
           total_earnings?: number | null
           updated_at?: string
           user_id: string
           vehicle_type?: string | null
+          verification_status?: string | null
         }
         Update: {
           created_at?: string
           current_lat?: number | null
           current_lng?: number | null
           id?: string
+          id_card_url?: string | null
           license_number?: string | null
+          phone?: string | null
           rating?: number | null
+          selfie_with_id_url?: string | null
           status?: Database["public"]["Enums"]["driver_status"] | null
           total_deliveries?: number | null
           total_earnings?: number | null
           updated_at?: string
           user_id?: string
           vehicle_type?: string | null
+          verification_status?: string | null
         }
         Relationships: []
       }
