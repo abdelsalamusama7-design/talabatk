@@ -60,7 +60,7 @@ const AdminOrders = ({ orders: initial, restaurants }: { orders: Order[]; restau
   const [filter, setFilter] = useState<string>("all");
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from("orders").update({ status }).eq("id", id);
+    await supabase.from("orders").update({ status: status as any }).eq("id", id);
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
     toast.success(`تم تحديث الحالة إلى: ${STATUS_CONFIG[status]?.label}`);
   };

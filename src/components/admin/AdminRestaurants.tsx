@@ -31,7 +31,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
   const [editForm, setEditForm] = useState({ name: "", category: "", address: "", phone: "", delivery_fee: 0, min_order: 0, delivery_time: "", description: "" });
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from("restaurants").update({ status }).eq("id", id);
+    await supabase.from("restaurants").update({ status: status as any }).eq("id", id);
     setRestaurants((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
     toast.success(status === "approved" ? "تم تفعيل المطعم ✅" : status === "suspended" ? "تم تعليق المطعم" : "تم تحديث الحالة");
   };
