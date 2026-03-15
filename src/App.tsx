@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/lib/cart-context";
+import { OrderProvider } from "@/lib/order-context";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
 import CartPage from "./pages/CartPage";
