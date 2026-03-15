@@ -126,7 +126,7 @@ const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => v
       setLoading(false);
     };
     load();
-  }, [open, user]);
+  }, [open, user, hasRole]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
