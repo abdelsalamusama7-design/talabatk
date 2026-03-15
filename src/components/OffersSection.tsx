@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useCart } from "@/lib/cart-context";
 
 const iconMap: Record<string, typeof Flame> = {
   flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
