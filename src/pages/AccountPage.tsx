@@ -1,7 +1,8 @@
-import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Truck, Sparkles } from "lucide-react";
+import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Truck, Sparkles, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
+import LoyaltyWidget from "@/components/LoyaltyWidget";
 
 const AccountPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const AccountPage = () => {
 
   const menuItems = [
     { label: "طلباتي السابقة", icon: ChevronLeft, path: "/orders", show: true },
+    { label: "نقاط الولاء والمكافآت", icon: Gift, path: "/loyalty", show: !!user },
     { label: "لوحة المطعم", icon: Store, path: "/restaurant-dashboard", show: hasRole("restaurant_owner") },
     { label: "لوحة السائق", icon: Truck, path: "/driver", show: hasRole("driver") },
     { label: "لوحة التحكم (أدمن)", icon: Settings, path: "/admin", show: hasRole("admin") },
@@ -22,7 +24,7 @@ const AccountPage = () => {
     <div className="min-h-screen bg-background pb-20" dir="rtl">
       <div className="pt-12 px-4">
         {/* Profile */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-6">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <User className="h-8 w-8 text-primary" />
           </div>
@@ -35,6 +37,13 @@ const AccountPage = () => {
             </p>
           </div>
         </div>
+
+        {/* Loyalty compact */}
+        {user && (
+          <div className="mb-4">
+            <LoyaltyWidget compact />
+          </div>
+        )}
 
         {!user && (
           <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl mb-4 font-semibold text-base">
