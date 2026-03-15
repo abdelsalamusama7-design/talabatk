@@ -3,8 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, Store, ShieldCheck } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, ShoppingBag, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+
+type AccountType = "customer" | "driver";
+
+const accountTypes: { type: AccountType; label: string; icon: typeof ShoppingBag; desc: string }[] = [
+  { type: "customer", label: "عميل", icon: ShoppingBag, desc: "اطلب وجباتك المفضلة" },
+  { type: "driver", label: "سائق توصيل", icon: Truck, desc: "اكسب من التوصيل" },
+];
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,6 +21,7 @@ const AuthPage = () => {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [accountType, setAccountType] = useState<AccountType>("customer");
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -34,11 +43,11 @@ const AuthPage = () => {
         setLoading(false);
         return;
       }
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(email, password, fullName, accountType);
       if (error) {
         toast({ title: "خطأ في إنشاء الحساب", description: error.message, variant: "destructive" });
       } else {
-        toast({ title: "تم إنشاء الحساب بنجاح!", description: "يمكنك الآن تسجيل الدخول" });
+        toast({ title: "تم إنشاء الحساب بنجاح! 🎉", description: "يمكنك الآن تسجيل الدخول" });
         setIsLogin(true);
       }
     }
@@ -53,28 +62,39 @@ const AuthPage = () => {
         <p className="text-primary-foreground/80 text-sm">أسرع منصة توصيل بالذكاء الاصطناعي</p>
       </div>
 
-      {/* Features */}
-      <div className="flex justify-center gap-6 -mt-6 px-4">
-        {[
-          { icon: Truck, label: "توصيل سريع" },
-          { icon: Store, label: "مطاعم متنوعة" },
-          { icon: ShieldCheck, label: "دفع آمن" },
-        ].map((f) => (
-          <div key={f.label} className="bg-card rounded-2xl p-3 shadow-card flex flex-col items-center gap-1 w-24">
-            <f.icon className="h-5 w-5 text-primary" />
-            <span className="text-[11px] font-medium text-foreground">{f.label}</span>
-          </div>
-        ))}
-      </div>
-
       {/* Form */}
       <div className="flex-1 px-6 pt-8">
         <h2 className="text-xl font-bold text-foreground mb-1">
           {isLogin ? "تسجيل الدخول" : "إنشاء حساب جديد"}
         </h2>
         <p className="text-sm text-muted-foreground mb-6">
-          {isLogin ? "أدخل بياناتك للمتابعة" : "أنشئ حسابك للبدء في الطلب"}
+          {isLogin ? "أدخل بياناتك للمتابعة" : "اختر نوع حسابك وأنشئ حسابك"}
         </p>
+
+        {/* Account Type Selection (only for signup) */}
+        {!isLogin && (
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {accountTypes.map((at) => (
+              <motion.button
+                key={at.type}
+                type="button"
+                onClick={() => setAccountType(at.type)}
+                whileTap={{ scale: 0.97 }}
+                className={`p-4 rounded-2xl border-2 transition-all text-center ${
+                  accountType === at.type
+                    ? "border-primary bg-primary/5 shadow-card"
+                    : "border-border bg-card"
+                }`}
+              >
+                <at.icon className={`h-8 w-8 mx-auto mb-2 ${accountType === at.type ? "text-primary" : "text-muted-foreground"}`} />
+                <p className={`font-semibold text-sm ${accountType === at.type ? "text-primary" : "text-foreground"}`}>
+                  {at.label}
+                </p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{at.desc}</p>
+              </motion.button>
+            ))}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
@@ -129,7 +149,7 @@ const AuthPage = () => {
             disabled={loading}
             className="w-full h-12 rounded-xl text-base font-semibold"
           >
-            {loading ? "جارٍ التحميل..." : isLogin ? "تسجيل الدخول" : "إنشاء حساب"}
+            {loading ? "جارٍ التحميل..." : isLogin ? "تسجيل الدخول" : `إنشاء حساب ${accountType === "driver" ? "سائق" : "عميل"}`}
             <ArrowRight className="h-5 w-5 mr-2" />
           </Button>
         </form>
@@ -142,6 +162,16 @@ const AuthPage = () => {
             {isLogin ? "ليس لديك حساب؟ أنشئ حساباً جديداً" : "لديك حساب بالفعل؟ سجل الدخول"}
           </button>
         </div>
+
+        {/* Admin hint */}
+        {isLogin && (
+          <div className="mt-6 bg-muted/50 rounded-xl p-3 flex items-center gap-2">
+            <Shield className="h-4 w-4 text-muted-foreground shrink-0" />
+            <p className="text-[11px] text-muted-foreground">
+              حساب الأدمن يتم إنشاؤه من لوحة التحكم. سجل دخول بحسابك العادي وسيتم ترقيتك.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
