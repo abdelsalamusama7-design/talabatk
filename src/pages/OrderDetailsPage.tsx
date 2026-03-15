@@ -336,6 +336,39 @@ const OrderDetailsPage = () => {
             </Button>
           )}
 
+          {/* Cancel button for pending/confirmed */}
+          {canCancel && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full rounded-2xl h-11 font-semibold gap-2 border-destructive text-destructive hover:bg-destructive/10"
+                  disabled={cancelling}
+                >
+                  <XCircle className="h-4 w-4" />
+                  {cancelling ? "جاري الإلغاء..." : "إلغاء الطلب"}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent dir="rtl">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>هل أنت متأكد من إلغاء الطلب؟</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    لا يمكن التراجع عن هذا الإجراء بعد تأكيده.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex-row-reverse gap-2">
+                  <AlertDialogCancel>تراجع</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleCancel}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    تأكيد الإلغاء
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+
           {/* Rate delivered order */}
           {order.status === "delivered" && (
             <Button
