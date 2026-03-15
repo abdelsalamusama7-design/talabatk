@@ -220,6 +220,39 @@ const LocationPicker = ({
     }
   };
 
+  const updateAddressLabel = async (id: string, newLabel: string) => {
+    if (!newLabel.trim()) return;
+    const { error } = await supabase
+      .from("saved_addresses")
+      .update({ label: newLabel.trim() })
+      .eq("id", id);
+    if (!error) {
+      setSavedAddresses((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, label: newLabel.trim() } : a))
+      );
+      toast.success("تم تعديل اسم العنوان");
+    }
+    setEditingId(null);
+  };
+
+  const setAsDefault = async (id: string) => {
+    if (!user) return;
+    // Remove default from all
+    await supabase
+      .from("saved_addresses")
+      .update({ is_default: false })
+      .eq("user_id", user.id);
+    // Set new default
+    await supabase
+      .from("saved_addresses")
+      .update({ is_default: true })
+      .eq("id", id);
+    setSavedAddresses((prev) =>
+      prev.map((a) => ({ ...a, is_default: a.id === id }))
+    );
+    toast.success("تم تعيين العنوان الافتراضي ⭐");
+  };
+
   if (!open) return null;
 
   const handleConfirm = async () => {
