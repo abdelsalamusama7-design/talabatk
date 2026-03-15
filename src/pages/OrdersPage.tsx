@@ -136,7 +136,7 @@ const OrdersPage = () => {
             <h2 className="text-sm font-semibold text-muted-foreground mb-3">
               طلبات سابقة ({pastOrders.length})
             </h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {pastOrders.map((order: any) => {
                 const config = allStatusConfig[order.status] || allStatusConfig.delivered;
                 const StatusIcon = config.icon;

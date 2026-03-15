@@ -525,6 +525,7 @@ const CartPage = () => {
           {ordering && <Loader2 className="h-5 w-5 animate-spin" />}
           تأكيد الطلب • {grandTotal} ج.م
         </button>
+        </div>
       </div>
     </div>
   );

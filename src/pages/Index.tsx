@@ -20,18 +20,20 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <LocationHeader />
-      <OffersSection />
-      <CategoryGrid />
-      <TrendingMeals />
+      <div className="max-w-7xl mx-auto">
+        <OffersSection />
+        <CategoryGrid />
+        <TrendingMeals />
 
-      <section className="px-4" dir={dir}>
-        <h2 className="text-lg font-semibold text-foreground mb-4">{t("home.discoverStores")}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stores.map((store) => (
-            <StoreCard key={store.id} store={store} />
-          ))}
-        </div>
-      </section>
+        <section className="px-4" dir={dir}>
+          <h2 className="text-lg font-semibold text-foreground mb-4">{t("home.discoverStores")}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {stores.map((store) => (
+              <StoreCard key={store.id} store={store} />
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* Admin FAB */}
       {hasRole("admin") && (

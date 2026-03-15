@@ -88,14 +88,15 @@ const StorePage = () => {
               </motion.div>
             );
           })}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Reviews Section */}
-      <section className="px-4 pt-6 space-y-4">
-        <ReviewsList restaurantId={id!} refreshKey={reviewRefresh} />
-        <ReviewForm restaurantId={id!} onSubmitted={() => setReviewRefresh((r) => r + 1)} />
-      </section>
+        {/* Reviews Section */}
+        <section className="px-4 pt-6 space-y-4">
+          <ReviewsList restaurantId={id!} refreshKey={reviewRefresh} />
+          <ReviewForm restaurantId={id!} onSubmitted={() => setReviewRefresh((r) => r + 1)} />
+        </section>
+      </div>
     </div>
   );
 };

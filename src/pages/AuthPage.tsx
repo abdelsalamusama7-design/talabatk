@@ -128,7 +128,7 @@ const AuthPage = () => {
       </div>
 
       {/* Form */}
-      <div className="flex-1 px-6 pt-8 pb-8">
+      <div className="flex-1 px-6 pt-8 pb-8 max-w-md mx-auto w-full">
         <h2 className="text-xl font-bold text-foreground mb-1">
           {isLogin ? t("auth.login") : t("auth.createAccount")}
         </h2>
