@@ -29,6 +29,7 @@ const LocationHeader = () => {
   return (
     <>
       <div className="bg-primary pt-10 pb-6 px-4 rounded-b-[2rem]">
+        <div className="max-w-7xl mx-auto">
         {/* Top bar with icons */}
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
