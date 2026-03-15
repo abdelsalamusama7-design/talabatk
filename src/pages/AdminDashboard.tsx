@@ -24,6 +24,15 @@ interface Offer {
   is_active: boolean;
   sort_order: number;
   expires_at: string | null;
+  promo_code_id: string | null;
+}
+
+interface PromoCode {
+  id: string;
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  is_active: boolean | null;
 }
 
 const colorOptions = [
@@ -50,13 +59,14 @@ const AdminDashboard = () => {
   const [drivers, setDrivers] = useState<any[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Offer form state
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerForm, setOfferForm] = useState({
-    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "",
+    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "", promo_code_id: "",
   });
 
   useEffect(() => {
