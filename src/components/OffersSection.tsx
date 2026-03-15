@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer, Copy, Check } from "lucide-react";
+import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, ArrowRight, Timer, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { useLang } from "@/lib/lang-context";
 
 const iconMap: Record<string, typeof Flame> = {
   flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
@@ -99,6 +100,7 @@ const PromoCodeChip = ({ code }: { code: string }) => {
 const OffersSection = () => {
   const navigate = useNavigate();
   const { setPendingPromoCode } = useCart();
+  const { t, dir, isAr } = useLang();
   const [offers, setOffers] = useState<Offer[]>([]);
   const getTimeLeft = useCountdown(offers);
 
@@ -149,10 +151,10 @@ const OffersSection = () => {
   if (offers.length === 0) return null;
 
   return (
-    <section className="px-4 mb-6" dir="rtl">
+    <section className="px-4 mb-6" dir={dir}>
       <div className="flex items-center gap-2 mb-4">
         <Percent className="h-5 w-5 text-primary" />
-        <h2 className="text-lg font-semibold text-foreground">عروض وتخفيضات 🎉</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("home.offers")}</h2>
       </div>
 
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
@@ -191,8 +193,8 @@ const OffersSection = () => {
                   {timeLeft && <CountdownDisplay timeLeft={timeLeft} />}
                   {!offer.promo_code && !timeLeft && (
                     <div className="flex items-center gap-1 text-white/90 text-xs font-medium">
-                      <span>اطلب الآن</span>
-                      <ArrowLeft className="h-3 w-3" />
+                      <span>{t("offers.orderNow")}</span>
+                      {isAr ? <ArrowLeft className="h-3 w-3" /> : <ArrowRight className="h-3 w-3" />}
                     </div>
                   )}
                 </div>
