@@ -6,11 +6,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
+import OrderChat from "@/components/OrderChat";
 import {
   Truck, MapPin, DollarSign, Package, ArrowRight,
-  Navigation, CheckCircle, Clock, Power, PowerOff, Star, Bell,
+  Navigation, CheckCircle, Clock, Power, PowerOff, Star, Bell, MessageCircle,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DriverDashboard = () => {
   const { user } = useAuth();
