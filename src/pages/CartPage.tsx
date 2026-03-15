@@ -300,6 +300,37 @@ const CartPage = () => {
           )}
         </div>
 
+        {/* Loyalty Points Redemption */}
+        {user && loyaltyPoints >= 50 && (
+          <div className="bg-card rounded-2xl p-4 shadow-card mt-3">
+            <label className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-2">
+              <Coins className="h-4 w-4 text-warning" /> استبدال نقاط الولاء
+            </label>
+            <p className="text-xs text-muted-foreground mb-2">
+              لديك {loyaltyPoints} نقطة (= {Math.floor(loyaltyPoints / 10)} ج.م)
+            </p>
+            <div className="flex gap-2">
+              {[50, 100, 200].filter(p => loyaltyPoints >= p).map(pts => {
+                const disc = Math.floor(pts / 10);
+                return (
+                  <Button
+                    key={pts}
+                    size="sm"
+                    variant={loyaltyDiscount === disc ? "default" : "outline"}
+                    onClick={() => setLoyaltyDiscount(loyaltyDiscount === disc ? 0 : disc)}
+                    className="rounded-xl text-xs"
+                  >
+                    {disc} ج.م ({pts} نقطة)
+                  </Button>
+                );
+              })}
+            </div>
+            {loyaltyDiscount > 0 && (
+              <p className="text-xs text-success mt-1.5">🎁 سيتم خصم {loyaltyDiscount} ج.م من نقاطك</p>
+            )}
+          </div>
+        )}
+
         {/* Summary */}
         <div className="bg-card rounded-2xl p-4 shadow-card mt-4 space-y-3">
           <div className="flex justify-between text-sm">
