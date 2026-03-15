@@ -262,23 +262,6 @@ export const stores: Store[] = [
       { id: "p41", name: "ماسك شعر", price: 85, description: "ماسك ترطيب عميق للشعر", image: storePharmacy3 },
     ],
   },
-  {
-    id: "khedar-eltazeg",
-    name: "خضار الطازج",
-    category: "خضار وفواكه",
-    categoryId: "grocery",
-    image: storeVegetables,
-    rating: 4.4,
-    reviewCount: 190,
-    deliveryTime: "25-35",
-    deliveryFee: 10,
-    products: [
-      { id: "p42", name: "كيلو طماطم", price: 15, description: "طماطم طازة من المزرعة", image: storeVegetables },
-      { id: "p43", name: "كيلو بطاطس", price: 12, description: "بطاطس نظيفة ومختارة", image: storeVegetables },
-      { id: "p44", name: "كيلو خيار", price: 10, description: "خيار طازج ومقرمش", image: storeVegetables },
-      { id: "p45", name: "كيلو بصل", price: 8, description: "بصل أحمر طازج", image: storeVegetables },
-      { id: "p46", name: "باكت سلطة جاهزة", price: 25, description: "خس + طماطم + خيار + جزر مقطعة", image: storeVegetables },
-    ],
   },
   {
     id: "supermarket-elkhair",
