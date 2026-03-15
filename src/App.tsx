@@ -9,6 +9,7 @@ import { OrderProvider } from "@/lib/order-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { LiveOrderProvider } from "@/lib/live-order-context";
 import OfferNotificationListener from "@/components/OfferNotificationListener";
+import AdminNotificationListener from "@/components/AdminNotificationListener";
 import SplashScreen from "@/components/SplashScreen";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
