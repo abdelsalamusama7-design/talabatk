@@ -103,7 +103,7 @@ const RestaurantDashboard = () => {
     setMenuItems(menuItems.filter((i) => i.id !== id));
   };
 
-  const updateOrderStatus = async (orderId: string, status: string) => {
+  const updateOrderStatus = async (orderId: string, status: "pending" | "confirmed" | "preparing" | "ready" | "picked_up" | "delivering" | "delivered" | "cancelled") => {
     await supabase.from("orders").update({ status }).eq("id", orderId);
     setOrders(orders.map((o) => (o.id === orderId ? { ...o, status } : o)));
   };
