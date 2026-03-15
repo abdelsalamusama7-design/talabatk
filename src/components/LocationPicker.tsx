@@ -466,7 +466,7 @@ const LocationPicker = ({
       )}
 
       {/* Map */}
-      <div className="flex-1 relative">
+      <div className="flex-1 min-h-0 relative">
         <MapContainer
           center={selectedPos}
           zoom={15}
