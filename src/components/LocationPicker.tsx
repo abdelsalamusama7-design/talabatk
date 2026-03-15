@@ -50,6 +50,8 @@ const LABEL_ICONS: Record<string, typeof Home> = {
 const FlyTo = ({ center }: { center: [number, number] }) => {
   const map = useMap();
   useEffect(() => {
+    // Invalidate size on first render to fix white map issue
+    setTimeout(() => map.invalidateSize(), 100);
     map.flyTo(center, 16, { duration: 1.2 });
   }, [center, map]);
   return null;
@@ -464,7 +466,7 @@ const LocationPicker = ({
       )}
 
       {/* Map */}
-      <div className="flex-1 relative">
+      <div className="flex-1 min-h-0 relative">
         <MapContainer
           center={selectedPos}
           zoom={15}
