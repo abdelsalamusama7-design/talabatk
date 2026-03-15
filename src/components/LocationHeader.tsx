@@ -1,4 +1,4 @@
-import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe } from "lucide-react";
+import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
@@ -55,6 +55,12 @@ const LocationHeader = () => {
             >
               <Globe className="h-[18px] w-[18px] text-primary-foreground" />
               <span className="text-[11px] font-bold text-primary-foreground">{lang === "ar" ? "EN" : "عربي"}</span>
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+            >
+              <RefreshCw className="h-[18px] w-[18px] text-primary-foreground" />
             </button>
           </div>
           <button
