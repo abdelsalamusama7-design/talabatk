@@ -24,6 +24,15 @@ interface Offer {
   is_active: boolean;
   sort_order: number;
   expires_at: string | null;
+  promo_code_id: string | null;
+}
+
+interface PromoCode {
+  id: string;
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  is_active: boolean | null;
 }
 
 const colorOptions = [
@@ -50,13 +59,14 @@ const AdminDashboard = () => {
   const [drivers, setDrivers] = useState<any[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Offer form state
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerForm, setOfferForm] = useState({
-    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "",
+    title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: 0, expires_at: "", promo_code_id: "",
   });
 
   useEffect(() => {
@@ -64,18 +74,20 @@ const AdminDashboard = () => {
   }, []);
 
   const loadAll = async () => {
-    const [r, o, d, p, of] = await Promise.all([
+    const [r, o, d, p, of, pc] = await Promise.all([
       supabase.from("restaurants").select("*").order("created_at", { ascending: false }),
       supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(50),
       supabase.from("drivers").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("*").order("created_at", { ascending: false }),
       supabase.from("offers").select("*").order("sort_order"),
+      supabase.from("promo_codes").select("*").order("created_at", { ascending: false }),
     ]);
     setRestaurants(r.data || []);
     setOrders(o.data || []);
     setDrivers(d.data || []);
     setProfiles(p.data || []);
     setOffers((of.data as Offer[]) || []);
+    setPromoCodes((pc.data as PromoCode[]) || []);
     setLoading(false);
   };
 
@@ -93,7 +105,7 @@ const AdminDashboard = () => {
   // Offers CRUD
   const openNewOffer = () => {
     setEditingOffer(null);
-    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "" });
+    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "", promo_code_id: "" });
     setShowOfferForm(true);
   };
 
@@ -109,6 +121,7 @@ const AdminDashboard = () => {
       is_active: offer.is_active,
       sort_order: offer.sort_order,
       expires_at: offer.expires_at ? new Date(offer.expires_at).toISOString().slice(0, 16) : "",
+      promo_code_id: offer.promo_code_id || "",
     });
     setShowOfferForm(true);
   };
@@ -128,6 +141,7 @@ const AdminDashboard = () => {
       is_active: offerForm.is_active,
       sort_order: offerForm.sort_order,
       expires_at: offerForm.expires_at ? new Date(offerForm.expires_at).toISOString() : null,
+      promo_code_id: offerForm.promo_code_id || null,
     };
 
     if (editingOffer) {
@@ -356,6 +370,22 @@ const AdminDashboard = () => {
                 <Input placeholder="الخصم (مثال: 25% أو مجاني) *" value={offerForm.discount} onChange={(e) => setOfferForm({ ...offerForm, discount: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" maxLength={20} />
                 <Input placeholder="شارة (مثال: جديد، حصري)" value={offerForm.badge} onChange={(e) => setOfferForm({ ...offerForm, badge: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" maxLength={30} />
                 <Input placeholder="ترتيب العرض (رقم)" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
+
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">كود الخصم المرتبط (اختياري)</p>
+                  <select
+                    value={offerForm.promo_code_id}
+                    onChange={(e) => setOfferForm({ ...offerForm, promo_code_id: e.target.value })}
+                    className="w-full h-10 rounded-xl bg-muted/50 border-0 px-3 text-sm text-foreground"
+                  >
+                    <option value="">— بدون كود خصم —</option>
+                    {promoCodes.map((pc) => (
+                      <option key={pc.id} value={pc.id}>
+                        {pc.code} ({pc.discount_type === "percentage" ? `${pc.discount_value}%` : `${pc.discount_value} ج.م`})
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري — للعداد التنازلي)</p>

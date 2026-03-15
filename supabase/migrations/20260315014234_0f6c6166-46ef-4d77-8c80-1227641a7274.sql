@@ -1,0 +1,2 @@
+
+ALTER TABLE public.offers ADD COLUMN IF NOT EXISTS promo_code_id uuid REFERENCES public.promo_codes(id) ON DELETE SET NULL;

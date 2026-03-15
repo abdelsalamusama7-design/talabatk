@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer } from "lucide-react";
+import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const iconMap: Record<string, typeof Flame> = {
   flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
@@ -25,6 +26,8 @@ interface Offer {
   icon: string;
   badge: string | null;
   expires_at: string | null;
+  promo_code_id: string | null;
+  promo_code?: string | null;
 }
 
 const useCountdown = (offers: Offer[]) => {
@@ -52,7 +55,7 @@ const useCountdown = (offers: Offer[]) => {
 };
 
 const CountdownDisplay = ({ timeLeft }: { timeLeft: { days: number; hours: number; minutes: number; seconds: number } }) => (
-  <div className="flex items-center gap-1 mt-3 bg-black/20 backdrop-blur-sm rounded-xl px-3 py-1.5">
+  <div className="flex items-center gap-1 bg-black/20 backdrop-blur-sm rounded-xl px-3 py-1.5">
     <Timer className="h-3.5 w-3.5 text-white/90 ml-1" />
     <div className="flex items-center gap-1 text-white font-mono text-sm font-bold" dir="ltr">
       {timeLeft.days > 0 && (
@@ -70,25 +73,71 @@ const CountdownDisplay = ({ timeLeft }: { timeLeft: { days: number; hours: numbe
   </div>
 );
 
+const PromoCodeChip = ({ code }: { code: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    toast.success(`تم نسخ الكود: ${code}`);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1.5 hover:bg-white/30 transition-colors"
+    >
+      {copied ? <Check className="h-3.5 w-3.5 text-white" /> : <Copy className="h-3.5 w-3.5 text-white/80" />}
+      <span className="text-white font-bold text-sm tracking-wider font-mono" dir="ltr">{code}</span>
+    </button>
+  );
+};
+
 const OffersSection = () => {
   const navigate = useNavigate();
   const [offers, setOffers] = useState<Offer[]>([]);
   const getTimeLeft = useCountdown(offers);
 
   useEffect(() => {
-    supabase
-      .from("offers")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order")
-      .then(({ data }) => {
-        // Filter out expired offers
-        const active = (data as Offer[] || []).filter((o) => {
-          if (!o.expires_at) return true;
-          return new Date(o.expires_at).getTime() > Date.now();
-        });
-        setOffers(active);
-      });
+    const loadOffers = async () => {
+      const { data: offersData } = await supabase
+        .from("offers")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order");
+
+      if (!offersData) return;
+
+      // Fetch linked promo codes
+      const promoIds = offersData
+        .filter((o: any) => o.promo_code_id)
+        .map((o: any) => o.promo_code_id);
+
+      let promoMap: Record<string, string> = {};
+      if (promoIds.length > 0) {
+        const { data: codes } = await supabase
+          .from("promo_codes")
+          .select("id, code")
+          .in("id", promoIds);
+        if (codes) {
+          promoMap = Object.fromEntries(codes.map((c: any) => [c.id, c.code]));
+        }
+      }
+
+      const active = (offersData as Offer[]).filter((o) => {
+        if (!o.expires_at) return true;
+        return new Date(o.expires_at).getTime() > Date.now();
+      }).map((o) => ({
+        ...o,
+        promo_code: o.promo_code_id ? promoMap[o.promo_code_id] || null : null,
+      }));
+
+      setOffers(active);
+    };
+
+    loadOffers();
   }, []);
 
   if (offers.length === 0) return null;
@@ -131,14 +180,16 @@ const OffersSection = () => {
                 <h3 className="text-base font-bold text-white mb-1">{offer.title}</h3>
                 <p className="text-xs text-white/80">{offer.subtitle}</p>
 
-                {timeLeft ? (
-                  <CountdownDisplay timeLeft={timeLeft} />
-                ) : (
-                  <div className="flex items-center gap-1 mt-3 text-white/90 text-xs font-medium">
-                    <span>اطلب الآن</span>
-                    <ArrowLeft className="h-3 w-3" />
-                  </div>
-                )}
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  {offer.promo_code && <PromoCodeChip code={offer.promo_code} />}
+                  {timeLeft && <CountdownDisplay timeLeft={timeLeft} />}
+                  {!offer.promo_code && !timeLeft && (
+                    <div className="flex items-center gap-1 text-white/90 text-xs font-medium">
+                      <span>اطلب الآن</span>
+                      <ArrowLeft className="h-3 w-3" />
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           );

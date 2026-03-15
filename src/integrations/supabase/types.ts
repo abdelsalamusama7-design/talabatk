@@ -237,6 +237,7 @@ export type Database = {
           icon: string
           id: string
           is_active: boolean
+          promo_code_id: string | null
           sort_order: number
           subtitle: string | null
           title: string
@@ -251,6 +252,7 @@ export type Database = {
           icon?: string
           id?: string
           is_active?: boolean
+          promo_code_id?: string | null
           sort_order?: number
           subtitle?: string | null
           title: string
@@ -265,12 +267,21 @@ export type Database = {
           icon?: string
           id?: string
           is_active?: boolean
+          promo_code_id?: string | null
           sort_order?: number
           subtitle?: string | null
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "offers_promo_code_id_fkey"
+            columns: ["promo_code_id"]
+            isOneToOne: false
+            referencedRelation: "promo_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       orders: {
         Row: {
