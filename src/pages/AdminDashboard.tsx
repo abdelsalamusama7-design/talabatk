@@ -418,6 +418,11 @@ const AdminDashboard = () => {
                       {offer.is_active ? "مفعّل" : "معطّل"}
                     </span>
                     {offer.badge && <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">{offer.badge}</span>}
+                    {offer.expires_at && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-warning/10 text-warning font-medium">
+                        ⏰ {new Date(offer.expires_at).toLocaleDateString("ar-EG")} {new Date(offer.expires_at).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    )}
                   </div>
                   <div className="flex gap-1">
                     <Switch checked={offer.is_active} onCheckedChange={(v) => toggleOfferActive(offer.id, v)} />
