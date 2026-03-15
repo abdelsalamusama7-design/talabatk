@@ -3,17 +3,18 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins, Edit3, Navigation } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import LocationPicker from "@/components/LocationPicker";
 
 const CartPage = () => {
   const { items, updateQuantity, removeItem, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
   const { user } = useAuth();
-  const { address, lat, lng, requestLocation, loading: geoLoading } = useGeolocation();
+  const { address, lat, lng, loading: geoLoading, error: geoError, requestLocation, setManualLocation } = useGeolocation();
   const navigate = useNavigate();
   const [notes, setNotes] = useState("");
   const [promoCode, setPromoCode] = useState("");
@@ -25,6 +26,9 @@ const CartPage = () => {
   const [feeDetails, setFeeDetails] = useState<{ distance_km: number; is_peak: boolean; demand_level: string } | null>(null);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [loyaltyDiscount, setLoyaltyDiscount] = useState(0);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [editingAddress, setEditingAddress] = useState(false);
+  const [manualAddress, setManualAddress] = useState("");
 
   const deliveryFee = dynamicFee ?? (items.length > 0 ? items[0].store.deliveryFee : 0);
   const grandTotal = Math.max(0, total + deliveryFee - discount - loyaltyDiscount);
@@ -74,6 +78,11 @@ const CartPage = () => {
       return () => clearTimeout(timer);
     }
   }, [pendingPromoCode, items.length]);
+
+  // Show GPS error toast
+  useEffect(() => {
+    if (geoError) toast.error(geoError);
+  }, [geoError]);
 
   // Fetch dynamic pricing when location or items change
   useEffect(() => {
@@ -292,16 +301,88 @@ const CartPage = () => {
             <span className="text-sm font-semibold text-foreground flex items-center gap-1.5">
               <MapPin className="h-4 w-4 text-primary" /> عنوان التوصيل
             </span>
-            <button
-              onClick={requestLocation}
-              disabled={geoLoading}
-              className="text-xs text-primary font-medium"
-            >
-              {geoLoading ? "جارٍ التحديد..." : "📍 تحديد موقعي"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setEditingAddress(true)}
+                className="text-xs text-muted-foreground font-medium flex items-center gap-1"
+              >
+                <Edit3 className="h-3 w-3" /> تعديل
+              </button>
+              <button
+                onClick={requestLocation}
+                disabled={geoLoading}
+                className="text-xs text-primary font-medium flex items-center gap-1"
+              >
+                {geoLoading ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <Navigation className="h-3 w-3" />
+                )}
+                {geoLoading ? "جارٍ التحديد..." : "تحديد موقعي"}
+              </button>
+              <button
+                onClick={() => setShowLocationPicker(true)}
+                className="text-xs text-primary font-medium flex items-center gap-1"
+              >
+                <MapPin className="h-3 w-3" /> الخريطة
+              </button>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground">{address}</p>
+
+          {editingAddress ? (
+            <div className="flex gap-2">
+              <Input
+                placeholder="اكتب عنوان التوصيل..."
+                value={manualAddress}
+                onChange={(e) => setManualAddress(e.target.value)}
+                className="rounded-xl h-10 flex-1 text-sm"
+                autoFocus
+              />
+              <Button
+                size="sm"
+                className="rounded-xl h-10 px-4"
+                onClick={() => {
+                  if (manualAddress.trim()) {
+                    setManualLocation(lat || 30.0444, lng || 31.2357, manualAddress.trim());
+                    toast.success("تم تحديث العنوان");
+                  }
+                  setEditingAddress(false);
+                  setManualAddress("");
+                }}
+              >
+                حفظ
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="rounded-xl h-10 px-3"
+                onClick={() => {
+                  setEditingAddress(false);
+                  setManualAddress("");
+                }}
+              >
+                إلغاء
+              </Button>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{address}</p>
+          )}
+
+          {geoError && (
+            <p className="text-xs text-destructive mt-1.5">{geoError}</p>
+          )}
         </div>
+
+        {/* Location Picker Modal */}
+        <LocationPicker
+          open={showLocationPicker}
+          onClose={() => setShowLocationPicker(false)}
+          onSelect={(lat, lng, addr) => setManualLocation(lat, lng, addr)}
+          currentLat={lat}
+          currentLng={lng}
+          loading={geoLoading}
+          onRequestGPS={requestLocation}
+        />
 
         {/* Notes */}
         <div className="bg-card rounded-2xl p-4 shadow-card mt-3">
