@@ -42,7 +42,6 @@ const Index = () => {
       >
         <MessageCircle className="h-6 w-6" />
       </a>
-      </button>
 
       <AiFoodChat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
