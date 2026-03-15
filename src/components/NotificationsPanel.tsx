@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Bell, X, Package, Tag, Clock } from "lucide-react";
+import { Bell, X, Package, Tag, Clock, Truck, Store } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface Notification {
   id: string;
-  type: "order" | "offer";
+  type: "order" | "offer" | "driver" | "restaurant";
   title: string;
   message: string;
   time: string;
@@ -25,7 +25,7 @@ const STATUS_AR: Record<string, string> = {
 };
 
 const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const { user } = useAuth();
+  const { user, hasRole } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,13 +79,54 @@ const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => v
         });
       }
 
+      // Admin: load recent drivers & restaurants
+      if (hasRole("admin")) {
+        const { data: driversData } = await supabase
+          .from("drivers")
+          .select("id, phone, vehicle_type, created_at, verification_status")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (driversData) {
+          driversData.forEach((d: any) => {
+            items.push({
+              id: `driver-${d.id}`,
+              type: "driver",
+              title: "مندوب جديد",
+              message: `${d.vehicle_type === "motorcycle" ? "🏍️" : "🚗"} ${d.phone || "بدون رقم"} - ${d.verification_status === "approved" ? "موثق" : "قيد المراجعة"}`,
+              time: d.created_at,
+              read: d.verification_status === "approved",
+            });
+          });
+        }
+
+        const { data: restData } = await supabase
+          .from("restaurants")
+          .select("id, name, status, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (restData) {
+          restData.forEach((r: any) => {
+            items.push({
+              id: `restaurant-${r.id}`,
+              type: "restaurant",
+              title: "مطعم جديد",
+              message: `${r.name} - ${r.status === "approved" ? "مفعّل" : "قيد المراجعة"}`,
+              time: r.created_at,
+              read: r.status === "approved",
+            });
+          });
+        }
+      }
+
       // Sort by time
       items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
       setNotifications(items);
       setLoading(false);
     };
     load();
-  }, [open, user]);
+  }, [open, user, hasRole]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -157,10 +198,17 @@ const NotificationsPanel = ({ open, onClose }: { open: boolean; onClose: () => v
               >
                 <div className="flex items-start gap-3">
                   <div className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 ${
-                    notif.type === "order" ? "bg-primary/10" : "bg-warning/10"
+                    notif.type === "order" ? "bg-primary/10" :
+                    notif.type === "driver" ? "bg-success/10" :
+                    notif.type === "restaurant" ? "bg-warning/10" :
+                    "bg-warning/10"
                   }`}>
                     {notif.type === "order" ? (
                       <Package className="h-4 w-4 text-primary" />
+                    ) : notif.type === "driver" ? (
+                      <Truck className="h-4 w-4 text-success" />
+                    ) : notif.type === "restaurant" ? (
+                      <Store className="h-4 w-4 text-warning" />
                     ) : (
                       <Tag className="h-4 w-4 text-warning" />
                     )}
