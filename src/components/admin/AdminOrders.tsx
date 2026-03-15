@@ -106,6 +106,7 @@ const AdminOrders = ({ orders: initial, restaurants }: { orders: Order[]; restau
         ))}
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
       {filtered.map((order) => {
         const config = STATUS_CONFIG[order.status || "pending"] || STATUS_CONFIG.pending;
         const Icon = config.icon;
