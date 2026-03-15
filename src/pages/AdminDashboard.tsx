@@ -121,6 +121,7 @@ const AdminDashboard = () => {
       is_active: offer.is_active,
       sort_order: offer.sort_order,
       expires_at: offer.expires_at ? new Date(offer.expires_at).toISOString().slice(0, 16) : "",
+      promo_code_id: offer.promo_code_id || "",
     });
     setShowOfferForm(true);
   };
