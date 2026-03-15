@@ -23,9 +23,24 @@ const CartPage = () => {
   const [dynamicFee, setDynamicFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
   const [feeDetails, setFeeDetails] = useState<{ distance_km: number; is_peak: boolean; demand_level: string } | null>(null);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(0);
 
   const deliveryFee = dynamicFee ?? (items.length > 0 ? items[0].store.deliveryFee : 0);
-  const grandTotal = Math.max(0, total + deliveryFee - discount);
+  const grandTotal = Math.max(0, total + deliveryFee - discount - loyaltyDiscount);
+
+  // Load loyalty points
+  useEffect(() => {
+    if (!user) return;
+    const load = async () => {
+      const { data } = await supabase
+        .from("loyalty_points")
+        .select("points")
+        .eq("user_id", user.id);
+      if (data) setLoyaltyPoints(data.reduce((s, p) => s + p.points, 0));
+    };
+    load();
+  }, [user]);
 
   // Fetch dynamic pricing when location or items change
   useEffect(() => {
