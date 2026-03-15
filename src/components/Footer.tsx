@@ -17,7 +17,7 @@ const Footer = () => {
           </a>
         </div>
         <p className="text-[11px] text-muted-foreground">
-          © 2026 Insta-Tech Labs. جميع الحقوق محفوظة.
+          © 2026 <a href="https://www.facebook.com/share/1GDrQ7sQp4/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Insta-Tech Labs</a>. جميع الحقوق محفوظة.
         </p>
       </div>
     </footer>
