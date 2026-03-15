@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Store, UserCheck, UserX, Trash2, Pencil, Plus, Save, Eye, MapPin, Phone, Star } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import AdminImageUpload from "./AdminImageUpload";
 
 interface Restaurant {
   id: string;
