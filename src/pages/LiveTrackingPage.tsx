@@ -168,6 +168,13 @@ const LiveTrackingPage = () => {
           </div>
           <span className="text-xs text-muted-foreground font-mono">#{order.id.slice(0, 8)}</span>
         </div>
+
+        {/* Chat panel */}
+        <AnimatePresence>
+          {chatOpen && isActive && (
+            <OrderChat orderId={order.id} onClose={() => setChatOpen(false)} />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
