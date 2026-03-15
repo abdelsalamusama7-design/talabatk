@@ -105,16 +105,16 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
                 try {
                   const reg = await navigator.serviceWorker?.ready;
                   if (reg) {
-                    reg.showNotification(msg.title, {
+                    const notifOptions: NotificationOptions & Record<string, unknown> = {
                       body: `طلب #${updated.id.slice(0, 8)}`,
                       icon: "/pwa-192x192.png",
                       badge: "/pwa-192x192.png",
                       tag: `order-${updated.id}-${updated.status}`,
-                      vibrate: [200, 100, 200] as any,
                       data: { url: `/track/${updated.id}` },
-                      dir: "rtl",
+                      dir: "rtl" as const,
                       lang: "ar",
-                    });
+                    };
+                    reg.showNotification(msg.title, notifOptions);
                   } else {
                     new Notification(msg.title, {
                       body: `طلب #${updated.id.slice(0, 8)}`,
