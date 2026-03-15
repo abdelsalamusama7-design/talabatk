@@ -9,6 +9,17 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import OrderProgressStepper from "@/components/OrderProgressStepper";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   ArrowRight,
   RefreshCw,
   MapPin,
@@ -18,6 +29,7 @@ import {
   Copy,
   MessageCircle,
   Star,
+  XCircle,
 } from "lucide-react";
 
 interface OrderItem {
