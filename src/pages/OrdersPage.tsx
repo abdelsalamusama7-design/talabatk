@@ -22,7 +22,7 @@ const OrdersPage = () => {
         <h1 className="text-2xl font-bold mb-6">طلباتك</h1>
 
         <div className="space-y-4">
-          {sampleOrders.map((order) => {
+          {orders.map((order) => {
             const config = statusConfig[order.status];
             const StatusIcon = config.icon;
             return (
