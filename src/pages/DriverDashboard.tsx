@@ -292,15 +292,32 @@ const DriverDashboard = () => {
                     <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg p-2 mb-3">📝 {order.notes}</p>
                   )}
                   {order.status === "picked_up" && (
-                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivering")} className="w-full rounded-xl h-10">
-                      <Truck className="h-4 w-4 ml-1" /> بدأت التوصيل
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivering")} className="flex-1 rounded-xl h-10">
+                        <Truck className="h-4 w-4 ml-1" /> بدأت التوصيل
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setChatOrderId(chatOrderId === order.id ? null : order.id)} className="rounded-xl h-10">
+                        <MessageCircle className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
                   {order.status === "delivering" && (
-                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")} className="w-full rounded-xl h-10 bg-success hover:bg-success/90">
-                      <CheckCircle className="h-4 w-4 ml-1" /> تم التسليم
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")} className="flex-1 rounded-xl h-10 bg-success hover:bg-success/90">
+                        <CheckCircle className="h-4 w-4 ml-1" /> تم التسليم
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setChatOrderId(chatOrderId === order.id ? null : order.id)} className="rounded-xl h-10">
+                        <MessageCircle className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
+                  <AnimatePresence>
+                    {chatOrderId === order.id && (
+                      <div className="mt-3">
+                        <OrderChat orderId={order.id} isDriver onClose={() => setChatOrderId(null)} />
+                      </div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             ))}
