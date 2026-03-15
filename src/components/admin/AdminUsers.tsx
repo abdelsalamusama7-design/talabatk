@@ -35,6 +35,7 @@ const AdminUsers = ({ profiles: initial, orders }: { profiles: Profile[]; orders
         <h2 className="font-bold text-foreground">المستخدمين ({profiles.length})</h2>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
       {profiles.map((p) => {
         const userOrders = getUserOrders(p.user_id);
         const spending = getUserSpending(p.user_id);
