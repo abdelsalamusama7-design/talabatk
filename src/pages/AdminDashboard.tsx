@@ -105,7 +105,7 @@ const AdminDashboard = () => {
   // Offers CRUD
   const openNewOffer = () => {
     setEditingOffer(null);
-    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "" });
+    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "", promo_code_id: "" });
     setShowOfferForm(true);
   };
 
