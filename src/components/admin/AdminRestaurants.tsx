@@ -21,6 +21,8 @@ interface Restaurant {
   delivery_time: string | null;
   min_order: number | null;
   description: string | null;
+  image_url: string | null;
+  cover_url: string | null;
   owner_id: string;
   created_at: string;
 }
