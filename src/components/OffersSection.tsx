@@ -173,7 +173,7 @@ const OffersSection = () => {
               transition={{ delay: i * 0.1, duration: 0.4 }}
               whileTap={{ scale: 0.97 }}
               className={`relative min-w-[270px] snap-start rounded-2xl bg-gradient-to-br ${gradient} p-5 cursor-pointer overflow-hidden shadow-lg`}
-              onClick={() => navigate("/")}
+              onClick={() => handleOfferClick(offer)}
             >
               <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-white/10" />
               <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full bg-white/10" />
