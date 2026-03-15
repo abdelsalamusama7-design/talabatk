@@ -93,7 +93,7 @@ const AdminDashboard = () => {
   // Offers CRUD
   const openNewOffer = () => {
     setEditingOffer(null);
-    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1 });
+    setOfferForm({ title: "", subtitle: "", discount: "", bg_color: "blue", icon: "gift", badge: "", is_active: true, sort_order: offers.length + 1, expires_at: "" });
     setShowOfferForm(true);
   };
 
