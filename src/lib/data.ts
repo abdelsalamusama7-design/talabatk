@@ -16,6 +16,11 @@ import storePharmacy3 from "@/assets/store-pharmacy3.jpg";
 import storeVegetables from "@/assets/store-vegetables.jpg";
 import storeGrocery2 from "@/assets/store-grocery2.jpg";
 import storeSeafood from "@/assets/store-seafood.jpg";
+import catVegetables from "@/assets/cat-vegetables.jpg";
+import catFruits from "@/assets/cat-fruits.jpg";
+import storeFruits1 from "@/assets/store-fruits1.jpg";
+import storeFruits2 from "@/assets/store-fruits2.jpg";
+import storeVegetables2 from "@/assets/store-vegetables2.jpg";
 
 export interface Category {
   id: string;
