@@ -169,14 +169,14 @@ const OrdersPage = () => {
                       </div>
                       <span className="font-bold text-foreground tabular-nums text-sm">{order.total} ج.م</span>
                     </div>
-                    {isLive && order.status === "delivered" && (
+                    {isLive && (
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => navigate(`/store/${order.restaurant_id}`)}
+                        onClick={() => navigate(`/order/${order.id}`)}
                         className="w-full rounded-xl h-9 mt-2 text-xs font-semibold"
                       >
-                        <Star className="h-3.5 w-3.5 ml-1 text-warning" /> قيّم الطلب
+                        <Eye className="h-3.5 w-3.5 ml-1" /> عرض التفاصيل
                       </Button>
                     )}
                   </div>

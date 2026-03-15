@@ -46,6 +46,7 @@ const App = () => (
                   <Route path="/store/:id" element={<StorePage />} />
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
                   <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
                   <Route path="/account" element={<AccountPage />} />
                   <Route path="/category/:id" element={<CategoryPage />} />
