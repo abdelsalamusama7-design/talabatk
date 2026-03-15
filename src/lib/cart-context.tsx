@@ -9,6 +9,8 @@ interface CartContextType {
   clearCart: () => void;
   total: number;
   itemCount: number;
+  pendingPromoCode: string | null;
+  setPendingPromoCode: (code: string | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
