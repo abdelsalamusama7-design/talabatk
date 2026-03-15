@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Truck, ShoppingBag, Shield, Phone, Camera, CreditCard } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Bike, ShoppingBag, Shield, Phone, Camera, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
