@@ -108,6 +108,7 @@ const AdminDashboard = () => {
       badge: offer.badge || "",
       is_active: offer.is_active,
       sort_order: offer.sort_order,
+      expires_at: offer.expires_at ? new Date(offer.expires_at).toISOString().slice(0, 16) : "",
     });
     setShowOfferForm(true);
   };
