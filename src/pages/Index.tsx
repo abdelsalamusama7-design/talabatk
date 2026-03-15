@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LocationHeader from "@/components/LocationHeader";
 import CategoryGrid from "@/components/CategoryGrid";
+import TrendingMeals from "@/components/TrendingMeals";
 import StoreCard from "@/components/StoreCard";
 import AiFoodChat from "@/components/AiFoodChat";
 import { stores } from "@/lib/data";
@@ -13,6 +14,7 @@ const Index = () => {
     <div className="min-h-screen bg-background pb-20">
       <LocationHeader />
       <CategoryGrid />
+      <TrendingMeals />
 
       <section className="px-4" dir="rtl">
         <h2 className="text-lg font-semibold text-foreground mb-4">اكتشف كل المتاجر</h2>

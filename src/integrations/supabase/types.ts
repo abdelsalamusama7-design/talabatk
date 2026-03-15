@@ -411,6 +411,66 @@ export type Database = {
           },
         ]
       }
+      trending_meals: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          meal_description: string | null
+          meal_name: string
+          menu_item_id: string | null
+          prediction_date: string
+          price: number | null
+          reason: string | null
+          restaurant_id: string | null
+          restaurant_name: string | null
+          score: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          meal_description?: string | null
+          meal_name: string
+          menu_item_id?: string | null
+          prediction_date?: string
+          price?: number | null
+          reason?: string | null
+          restaurant_id?: string | null
+          restaurant_name?: string | null
+          score?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          meal_description?: string | null
+          meal_name?: string
+          menu_item_id?: string | null
+          prediction_date?: string
+          price?: number | null
+          reason?: string | null
+          restaurant_id?: string | null
+          restaurant_name?: string | null
+          score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trending_meals_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trending_meals_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
