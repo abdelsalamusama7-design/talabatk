@@ -45,6 +45,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
     const q = search.trim().toLowerCase();
     return (
       d.id.toLowerCase().includes(q) ||
+      (d.name && d.name.toLowerCase().includes(q)) ||
       (d.phone && d.phone.includes(q)) ||
       (d.license_number && d.license_number.toLowerCase().includes(q))
     );
