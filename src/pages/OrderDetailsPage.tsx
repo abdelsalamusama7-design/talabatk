@@ -9,6 +9,17 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import OrderProgressStepper from "@/components/OrderProgressStepper";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   ArrowRight,
   RefreshCw,
   MapPin,
@@ -18,6 +29,7 @@ import {
   Copy,
   MessageCircle,
   Star,
+  XCircle,
 } from "lucide-react";
 
 interface OrderItem {
@@ -35,7 +47,7 @@ const OrderDetailsPage = () => {
   const { addItem } = useCart();
   const [restaurantName, setRestaurantName] = useState<string>("");
   const [reordering, setReordering] = useState(false);
-
+  const [cancelling, setCancelling] = useState(false);
   const order = liveOrders.find((o) => o.id === id);
 
   // Fetch restaurant name
@@ -78,7 +90,24 @@ const OrderDetailsPage = () => {
 
   const items: OrderItem[] = Array.isArray(order.items) ? order.items : [];
   const isActive = !["delivered", "cancelled"].includes(order.status);
+  const canCancel = ["pending", "confirmed"].includes(order.status);
   const orderDate = new Date(order.created_at);
+
+  const handleCancel = async () => {
+    setCancelling(true);
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({ status: "cancelled" })
+        .eq("id", order.id);
+      if (error) throw error;
+      toast.success("تم إلغاء الطلب بنجاح");
+    } catch {
+      toast.error("حدث خطأ أثناء إلغاء الطلب");
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   const handleReorder = async () => {
     setReordering(true);
@@ -305,6 +334,39 @@ const OrderDetailsPage = () => {
             >
               تتبع الطلب مباشرة
             </Button>
+          )}
+
+          {/* Cancel button for pending/confirmed */}
+          {canCancel && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full rounded-2xl h-11 font-semibold gap-2 border-destructive text-destructive hover:bg-destructive/10"
+                  disabled={cancelling}
+                >
+                  <XCircle className="h-4 w-4" />
+                  {cancelling ? "جاري الإلغاء..." : "إلغاء الطلب"}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent dir="rtl">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>هل أنت متأكد من إلغاء الطلب؟</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    لا يمكن التراجع عن هذا الإجراء بعد تأكيده.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex-row-reverse gap-2">
+                  <AlertDialogCancel>تراجع</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleCancel}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    تأكيد الإلغاء
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
 
           {/* Rate delivered order */}
