@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/lib/cart-context";
 import { OrderProvider } from "@/lib/order-context";
 import { AuthProvider } from "@/lib/auth-context";
+import { LiveOrderProvider } from "@/lib/live-order-context";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
 import CartPage from "./pages/CartPage";
@@ -16,6 +17,7 @@ import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import RestaurantDashboard from "./pages/RestaurantDashboard";
 import DriverDashboard from "./pages/DriverDashboard";
+import LiveTrackingPage from "./pages/LiveTrackingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BottomNav from "./components/BottomNav";
 import InstallPage from "./pages/InstallPage";
@@ -29,25 +31,28 @@ const App = () => (
       <AuthProvider>
         <CartProvider>
           <OrderProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/store/:id" element={<StorePage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
-                <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
-                <Route path="/category/:id" element={<CategoryPage />} />
-                <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
-                <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
-                <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
-                <Route path="/install" element={<InstallPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <BottomNav />
-            </BrowserRouter>
+            <LiveOrderProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/store/:id" element={<StorePage />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/category/:id" element={<CategoryPage />} />
+                  <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                  <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
+                  <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+                  <Route path="/install" element={<InstallPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <BottomNav />
+              </BrowserRouter>
+            </LiveOrderProvider>
           </OrderProvider>
         </CartProvider>
       </AuthProvider>
