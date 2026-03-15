@@ -110,7 +110,7 @@ export const LiveOrderProvider = ({ children }: { children: ReactNode }) => {
                       icon: "/pwa-192x192.png",
                       badge: "/pwa-192x192.png",
                       tag: `order-${updated.id}-${updated.status}`,
-                      vibrate: [200, 100, 200],
+                      vibrate: [200, 100, 200] as any,
                       data: { url: `/track/${updated.id}` },
                       dir: "rtl",
                       lang: "ar",
