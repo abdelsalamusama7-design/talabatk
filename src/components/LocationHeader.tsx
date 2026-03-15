@@ -31,7 +31,7 @@ const LocationHeader = () => {
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
             <button
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/account")}
               className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
             >
               <User className="h-[18px] w-[18px] text-primary-foreground" />
