@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GeoState {
   lat: number | null;
@@ -12,12 +13,44 @@ const DEFAULT_ADDRESS = "شارع التحرير، القاهرة";
 
 export const useGeolocation = () => {
   const [state, setState] = useState<GeoState>({
-    lat: null,
-    lng: null,
+    lat: Number(localStorage.getItem("user_lat")) || null,
+    lng: Number(localStorage.getItem("user_lng")) || null,
     address: localStorage.getItem("user_address") || DEFAULT_ADDRESS,
     loading: false,
     error: null,
   });
+
+  // Auto-load default saved address on mount
+  useEffect(() => {
+    const loadDefault = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("saved_addresses")
+        .select("lat, lng, address")
+        .eq("user_id", user.id)
+        .eq("is_default", true)
+        .maybeSingle();
+
+      if (data) {
+        localStorage.setItem("user_address", data.address);
+        localStorage.setItem("user_lat", String(data.lat));
+        localStorage.setItem("user_lng", String(data.lng));
+        setState((s) => ({
+          ...s,
+          lat: data.lat,
+          lng: data.lng,
+          address: data.address,
+        }));
+      }
+    };
+
+    // Only load if no address was manually set
+    if (!localStorage.getItem("user_lat")) {
+      loadDefault();
+    }
+  }, []);
 
   const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
     try {
