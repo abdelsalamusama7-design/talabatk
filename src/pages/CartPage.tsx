@@ -139,7 +139,20 @@ const CartPage = () => {
         // Driver assignment is best-effort
       }
 
-      toast.success("تم تأكيد الطلب بنجاح! 🎉");
+      // Award loyalty points (1 point per 10 EGP)
+      const earnedPoints = Math.floor(grandTotal / 10);
+      if (earnedPoints > 0) {
+        try {
+          await supabase.from("loyalty_points").insert({
+            user_id: user.id,
+            points: earnedPoints,
+            action: `طلب من ${storeName}`,
+            order_id: order.id,
+          });
+        } catch { /* best effort */ }
+      }
+
+      toast.success(`تم تأكيد الطلب بنجاح! 🎉 +${earnedPoints} نقاط ولاء`);
       clearCart();
       setDiscount(0);
       setPromoApplied(false);
