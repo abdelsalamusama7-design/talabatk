@@ -36,42 +36,46 @@ const App = () => {
   const handleSplashFinish = useCallback(() => setShowSplash(false), []);
 
   return (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <CartProvider>
-          <OrderProvider>
-            <LiveOrderProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <OfferNotificationListener />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/store/:id" element={<StorePage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/orders" element={<OrdersPage />} />
-                  <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
-                  <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
-                  <Route path="/account" element={<AccountPage />} />
-                  <Route path="/category/:id" element={<CategoryPage />} />
-                  <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
-                  <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
-                  <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
-                  <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
-                  <Route path="/install" element={<InstallPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-                <Footer />
-                <BottomNav />
-              </BrowserRouter>
-            </LiveOrderProvider>
-          </OrderProvider>
-        </CartProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    <>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AuthProvider>
+            <CartProvider>
+              <OrderProvider>
+                <LiveOrderProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <OfferNotificationListener />
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/auth" element={<AuthPage />} />
+                      <Route path="/store/:id" element={<StorePage />} />
+                      <Route path="/cart" element={<CartPage />} />
+                      <Route path="/orders" element={<OrdersPage />} />
+                      <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
+                      <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
+                      <Route path="/account" element={<AccountPage />} />
+                      <Route path="/category/:id" element={<CategoryPage />} />
+                      <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                      <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
+                      <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+                      <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
+                      <Route path="/install" element={<InstallPage />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    <Footer />
+                    <BottomNav />
+                  </BrowserRouter>
+                </LiveOrderProvider>
+              </OrderProvider>
+            </CartProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </>
+  );
+};
 
 export default App;
