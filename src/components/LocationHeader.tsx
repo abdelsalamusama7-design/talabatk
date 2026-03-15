@@ -47,7 +47,10 @@ const LocationHeader = () => {
               )}
             </button>
           </div>
-          <button className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors relative">
+          <button
+            onClick={() => setNotifOpen(true)}
+            className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors relative"
+          >
             <Bell className="h-[18px] w-[18px] text-primary-foreground" />
             <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-destructive border-2 border-primary" />
           </button>
