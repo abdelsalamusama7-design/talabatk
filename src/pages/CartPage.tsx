@@ -79,6 +79,11 @@ const CartPage = () => {
     }
   }, [pendingPromoCode, items.length]);
 
+  // Show GPS error toast
+  useEffect(() => {
+    if (geoError) toast.error(geoError);
+  }, [geoError]);
+
   // Fetch dynamic pricing when location or items change
   useEffect(() => {
     const fetchFee = async () => {
