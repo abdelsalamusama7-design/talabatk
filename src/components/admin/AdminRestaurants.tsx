@@ -75,7 +75,7 @@ const AdminRestaurants = ({ restaurants: initial }: { restaurants: Restaurant[] 
       name: r.name, category: r.category, address: r.address || "",
       phone: r.phone || "", delivery_fee: r.delivery_fee || 0,
       min_order: r.min_order || 0, delivery_time: r.delivery_time || "",
-      description: r.description || "",
+      description: r.description || "", image_url: r.image_url || "", cover_url: r.cover_url || "",
     });
     setShowForm(false);
   };
