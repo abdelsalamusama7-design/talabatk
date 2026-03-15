@@ -53,8 +53,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
+  const signUp = async (email: string, password: string, fullName: string, role?: string) => {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -62,6 +62,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         emailRedirectTo: window.location.origin,
       },
     });
+    if (!error && data.user && role) {
+      // Assign role
+      await supabase.from("user_roles").insert({
+        user_id: data.user.id,
+        role: role as any,
+      });
+      // If driver, also create driver record
+      if (role === "driver") {
+        await supabase.from("drivers").insert({
+          user_id: data.user.id,
+          vehicle_type: "motorcycle",
+        });
+      }
+      // Create profile
+      await supabase.from("profiles").insert({
+        user_id: data.user.id,
+        full_name: fullName,
+      });
+    }
     return { error };
   };
 
