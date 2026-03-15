@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -8,6 +9,7 @@ import { OrderProvider } from "@/lib/order-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { LiveOrderProvider } from "@/lib/live-order-context";
 import OfferNotificationListener from "@/components/OfferNotificationListener";
+import SplashScreen from "@/components/SplashScreen";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
 import CartPage from "./pages/CartPage";
@@ -29,43 +31,51 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <CartProvider>
-          <OrderProvider>
-            <LiveOrderProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <OfferNotificationListener />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/store/:id" element={<StorePage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/orders" element={<OrdersPage />} />
-                  <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
-                  <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
-                  <Route path="/account" element={<AccountPage />} />
-                  <Route path="/category/:id" element={<CategoryPage />} />
-                  <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
-                  <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
-                  <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
-                  <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
-                  <Route path="/install" element={<InstallPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-                <Footer />
-                <BottomNav />
-              </BrowserRouter>
-            </LiveOrderProvider>
-          </OrderProvider>
-        </CartProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+  const handleSplashFinish = useCallback(() => setShowSplash(false), []);
+
+  return (
+    <>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AuthProvider>
+            <CartProvider>
+              <OrderProvider>
+                <LiveOrderProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <OfferNotificationListener />
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/auth" element={<AuthPage />} />
+                      <Route path="/store/:id" element={<StorePage />} />
+                      <Route path="/cart" element={<CartPage />} />
+                      <Route path="/orders" element={<OrdersPage />} />
+                      <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
+                      <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
+                      <Route path="/account" element={<AccountPage />} />
+                      <Route path="/category/:id" element={<CategoryPage />} />
+                      <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                      <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
+                      <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+                      <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
+                      <Route path="/install" element={<InstallPage />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    <Footer />
+                    <BottomNav />
+                  </BrowserRouter>
+                </LiveOrderProvider>
+              </OrderProvider>
+            </CartProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </>
+  );
+};
 
 export default App;
