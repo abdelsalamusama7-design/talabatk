@@ -14,7 +14,8 @@ const BottomNav = () => {
   const navigate = useNavigate();
   const { itemCount } = useCart();
 
-  if (location.pathname.startsWith("/admin")) return null;
+  const hiddenPaths = ["/admin", "/restaurant-dashboard", "/driver", "/install", "/auth"];
+  if (hiddenPaths.some((p) => location.pathname.startsWith(p))) return null;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card shadow-[0_-1px_3px_rgba(0,0,0,0.1)] safe-area-pb">
