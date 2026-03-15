@@ -12,7 +12,7 @@ type AccountType = "customer" | "driver";
 
 const accountTypes: { type: AccountType; label: string; icon: typeof ShoppingBag; desc: string }[] = [
   { type: "customer", label: "عميل", icon: ShoppingBag, desc: "اطلب وجباتك المفضلة" },
-  { type: "driver", label: "سائق موتوسيكل", icon: Truck, desc: "اكسب من التوصيل" },
+  { type: "driver", label: "سائق موتوسيكل", icon: Bike, desc: "اكسب من التوصيل" },
 ];
 
 const AuthPage = () => {

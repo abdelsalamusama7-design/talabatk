@@ -1,4 +1,4 @@
-import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Truck, Sparkles, Gift } from "lucide-react";
+import { User, Settings, HelpCircle, Info, ChevronLeft, LogOut, LogIn, Store, Bike, Sparkles, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
