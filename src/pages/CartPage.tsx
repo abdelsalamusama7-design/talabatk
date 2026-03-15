@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const CartPage = () => {
-  const { items, updateQuantity, removeItem, clearCart, total } = useCart();
+  const { items, updateQuantity, removeItem, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
   const { user } = useAuth();
   const { address, lat, lng, requestLocation, loading: geoLoading } = useGeolocation();
   const navigate = useNavigate();
