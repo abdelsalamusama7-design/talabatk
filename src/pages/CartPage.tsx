@@ -516,6 +516,7 @@ const CartPage = () => {
 
       {/* Fixed CTA */}
       <div className="fixed bottom-16 left-0 right-0 p-4 bg-background/80 backdrop-blur">
+        <div className="max-w-3xl mx-auto">
         <button
           onClick={handleOrder}
           disabled={ordering}
