@@ -9,6 +9,7 @@ import AdminRestaurants from "@/components/admin/AdminRestaurants";
 import AdminOrders from "@/components/admin/AdminOrders";
 import AdminDrivers from "@/components/admin/AdminDrivers";
 import AdminUsers from "@/components/admin/AdminUsers";
+import { AdminCharts } from "@/components/admin/AdminCharts";
 
 // Keep offers imports inline since they were already working
 import { Button } from "@/components/ui/button";
