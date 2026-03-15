@@ -98,7 +98,10 @@ const LiveTrackingPage = () => {
                 <button className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
                   <Phone className="h-4 w-4 text-success" />
                 </button>
-                <button className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <button
+                  onClick={() => setChatOpen(!chatOpen)}
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"
+                >
                   <MessageCircle className="h-4 w-4 text-primary" />
                 </button>
               </div>
