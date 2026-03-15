@@ -151,10 +151,10 @@ const OffersSection = () => {
   if (offers.length === 0) return null;
 
   return (
-    <section className="px-4 mb-6" dir="rtl">
+    <section className="px-4 mb-6" dir={dir}>
       <div className="flex items-center gap-2 mb-4">
         <Percent className="h-5 w-5 text-primary" />
-        <h2 className="text-lg font-semibold text-foreground">عروض وتخفيضات 🎉</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("home.offers")}</h2>
       </div>
 
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
