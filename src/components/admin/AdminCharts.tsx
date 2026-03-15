@@ -50,7 +50,6 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export const AdminCharts = ({ orders }: { orders: Order[] }) => {
-  // Daily orders for last 14 days
   const dailyData = useMemo(() => {
     const days: Record<string, { orders: number; revenue: number }> = {};
     const now = new Date();
@@ -74,7 +73,6 @@ export const AdminCharts = ({ orders }: { orders: Order[] }) => {
     }));
   }, [orders]);
 
-  // Monthly revenue
   const monthlyData = useMemo(() => {
     const months: Record<string, number> = {};
     orders.forEach((o) => {
@@ -92,7 +90,6 @@ export const AdminCharts = ({ orders }: { orders: Order[] }) => {
       }));
   }, [orders]);
 
-  // Order status distribution
   const statusData = useMemo(() => {
     const counts: Record<string, number> = {};
     orders.forEach((o) => {
@@ -108,78 +105,78 @@ export const AdminCharts = ({ orders }: { orders: Order[] }) => {
 
   return (
     <div className="space-y-6">
-      {/* Daily Orders Bar Chart */}
-      <div className="bg-card rounded-2xl p-4 shadow-card">
-        <h3 className="text-sm font-bold text-foreground mb-4">📊 الطلبات اليومية (آخر 14 يوم)</h3>
-        <div className="h-[220px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-              <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="عدد الطلبات" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-card rounded-2xl p-4 shadow-card">
+          <h3 className="text-sm font-bold text-foreground mb-4">📊 الطلبات اليومية (آخر 14 يوم)</h3>
+          <div className="h-[220px] lg:h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={dailyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="عدد الطلبات" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="bg-card rounded-2xl p-4 shadow-card">
+          <h3 className="text-sm font-bold text-foreground mb-4">💰 الإيرادات الشهرية</h3>
+          {monthlyData.length > 0 ? (
+            <div className="h-[220px] lg:h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={monthlyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Line type="monotone" dataKey="إيرادات (ج.م)" stroke="hsl(142, 70%, 45%)" strokeWidth={3} dot={{ r: 5, fill: "hsl(142, 70%, 45%)" }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p className="text-center text-muted-foreground text-sm py-8">لا توجد بيانات إيرادات بعد</p>
+          )}
         </div>
       </div>
 
-      {/* Monthly Revenue Line Chart */}
-      <div className="bg-card rounded-2xl p-4 shadow-card">
-        <h3 className="text-sm font-bold text-foreground mb-4">💰 الإيرادات الشهرية</h3>
-        {monthlyData.length > 0 ? (
-          <div className="h-[220px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-card rounded-2xl p-4 shadow-card">
+          <h3 className="text-sm font-bold text-foreground mb-4">📈 إيرادات يومية (آخر 14 يوم)</h3>
+          <div className="h-[220px] lg:h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={monthlyData}>
+              <BarChart data={dailyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
                 <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="إيرادات (ج.م)" stroke="hsl(142, 70%, 45%)" strokeWidth={3} dot={{ r: 5, fill: "hsl(142, 70%, 45%)" }} />
-              </LineChart>
+                <Bar dataKey="إيرادات (ج.م)" fill="hsl(142, 70%, 45%)" radius={[6, 6, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
-        ) : (
-          <p className="text-center text-muted-foreground text-sm py-8">لا توجد بيانات إيرادات بعد</p>
-        )}
-      </div>
-
-      {/* Daily Revenue Area */}
-      <div className="bg-card rounded-2xl p-4 shadow-card">
-        <h3 className="text-sm font-bold text-foreground mb-4">📈 إيرادات يومية (آخر 14 يوم)</h3>
-        <div className="h-[220px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-              <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="إيرادات (ج.م)" fill="hsl(142, 70%, 45%)" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
         </div>
-      </div>
 
-      {/* Order Status Pie Chart */}
-      <div className="bg-card rounded-2xl p-4 shadow-card">
-        <h3 className="text-sm font-bold text-foreground mb-4">🥧 توزيع حالات الطلبات</h3>
-        {statusData.length > 0 ? (
-          <div className="h-[260px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={10}>
-                  {statusData.map((entry, i) => (
-                    <Cell key={i} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        ) : (
-          <p className="text-center text-muted-foreground text-sm py-8">لا توجد طلبات بعد</p>
-        )}
+        <div className="bg-card rounded-2xl p-4 shadow-card">
+          <h3 className="text-sm font-bold text-foreground mb-4">🥧 توزيع حالات الطلبات</h3>
+          {statusData.length > 0 ? (
+            <div className="h-[260px] lg:h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={10}>
+                    {statusData.map((entry, i) => (
+                      <Cell key={i} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p className="text-center text-muted-foreground text-sm py-8">لا توجد طلبات بعد</p>
+          )}
+        </div>
       </div>
     </div>
   );
