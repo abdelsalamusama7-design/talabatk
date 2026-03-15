@@ -113,17 +113,15 @@ const OrdersPage = () => {
                         </div>
                       )}
 
-                      {/* Track button */}
-                      {isLive && (
-                        <Button
-                          onClick={() => navigate(`/track/${order.id}`)}
-                          className="w-full rounded-xl h-10 font-semibold"
-                          size="sm"
-                        >
-                          <Eye className="h-4 w-4 ml-1" />
-                          تتبع الطلب مباشرة
-                        </Button>
-                      )}
+                      {/* Details button */}
+                      <Button
+                        onClick={() => navigate(isLive ? `/order/${order.id}` : `/track/${order.id}`)}
+                        className="w-full rounded-xl h-10 font-semibold"
+                        size="sm"
+                      >
+                        <Eye className="h-4 w-4 ml-1" />
+                        {isLive ? "عرض التفاصيل" : "تتبع الطلب"}
+                      </Button>
                     </div>
                   </motion.div>
                 );
