@@ -26,7 +26,7 @@ const AccountPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20" dir={dir}>
-      <div className="pt-12 px-4">
+      <div className="pt-12 px-4 max-w-2xl mx-auto">
         {/* Profile */}
         <div className="flex items-center gap-4 mb-6">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">

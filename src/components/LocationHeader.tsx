@@ -29,6 +29,7 @@ const LocationHeader = () => {
   return (
     <>
       <div className="bg-primary pt-10 pb-6 px-4 rounded-b-[2rem]">
+        <div className="max-w-7xl mx-auto">
         {/* Top bar with icons */}
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
@@ -92,6 +93,7 @@ const LocationHeader = () => {
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <span>{t("header.search")}</span>
         </button>
+        </div>
       </div>
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <LocationPicker

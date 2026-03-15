@@ -24,7 +24,7 @@ const StorePage = () => {
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
       {/* Header Image */}
-      <div className="relative h-56 overflow-hidden">
+      <div className="relative h-56 md:h-72 lg:h-80 overflow-hidden">
         <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
         <button
@@ -49,9 +49,10 @@ const StorePage = () => {
       </div>
 
       {/* Products */}
-      <section className="px-4 pt-6">
-        <h2 className="text-lg font-semibold mb-4">القائمة</h2>
-        <div className="space-y-3">
+      <div className="max-w-4xl mx-auto">
+        <section className="px-4 pt-6">
+          <h2 className="text-lg font-semibold mb-4">القائمة</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {store.products.map((product) => {
             const qty = getQuantity(product.id);
             return (
@@ -87,14 +88,15 @@ const StorePage = () => {
               </motion.div>
             );
           })}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Reviews Section */}
-      <section className="px-4 pt-6 space-y-4">
-        <ReviewsList restaurantId={id!} refreshKey={reviewRefresh} />
-        <ReviewForm restaurantId={id!} onSubmitted={() => setReviewRefresh((r) => r + 1)} />
-      </section>
+        {/* Reviews Section */}
+        <section className="px-4 pt-6 space-y-4">
+          <ReviewsList restaurantId={id!} refreshKey={reviewRefresh} />
+          <ReviewForm restaurantId={id!} onSubmitted={() => setReviewRefresh((r) => r + 1)} />
+        </section>
+      </div>
     </div>
   );
 };

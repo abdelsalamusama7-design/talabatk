@@ -252,7 +252,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-28" dir="rtl">
-      <div className="pt-12 px-4">
+      <div className="pt-12 px-4 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">السلة</h1>
 
         <AnimatePresence>
@@ -516,6 +516,7 @@ const CartPage = () => {
 
       {/* Fixed CTA */}
       <div className="fixed bottom-16 left-0 right-0 p-4 bg-background/80 backdrop-blur">
+        <div className="max-w-3xl mx-auto">
         <button
           onClick={handleOrder}
           disabled={ordering}
@@ -524,6 +525,7 @@ const CartPage = () => {
           {ordering && <Loader2 className="h-5 w-5 animate-spin" />}
           تأكيد الطلب • {grandTotal} ج.م
         </button>
+        </div>
       </div>
     </div>
   );

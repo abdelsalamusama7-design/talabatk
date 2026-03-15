@@ -37,7 +37,7 @@ const OrdersPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
-      <div className="pt-12 px-4">
+      <div className="pt-12 px-4 max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">طلباتك</h1>
 
         {/* Active orders */}
@@ -51,7 +51,7 @@ const OrdersPage = () => {
               طلبات نشطة ({activeOrders.length})
             </h2>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activeOrders.map((order: any) => {
                 const config = allStatusConfig[order.status] || allStatusConfig.pending;
                 const StatusIcon = config.icon;
@@ -136,7 +136,7 @@ const OrdersPage = () => {
             <h2 className="text-sm font-semibold text-muted-foreground mb-3">
               طلبات سابقة ({pastOrders.length})
             </h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {pastOrders.map((order: any) => {
                 const config = allStatusConfig[order.status] || allStatusConfig.delivered;
                 const StatusIcon = config.icon;
