@@ -23,6 +23,7 @@ interface Offer {
   badge: string | null;
   is_active: boolean;
   sort_order: number;
+  expires_at: string | null;
 }
 
 const colorOptions = [
