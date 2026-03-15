@@ -16,6 +16,7 @@ const CartPage = () => {
   const { user } = useAuth();
   const { address, lat, lng, loading: geoLoading, error: geoError, requestLocation, setManualLocation } = useGeolocation();
   const navigate = useNavigate();
+  const [notes, setNotes] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
