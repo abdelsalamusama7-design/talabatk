@@ -14,6 +14,7 @@ import AdminImageUpload from "./AdminImageUpload";
 interface Driver {
   id: string;
   user_id: string;
+  name: string | null;
   phone: string | null;
   vehicle_type: string | null;
   status: string | null;
@@ -30,7 +31,7 @@ interface Driver {
 }
 
 const emptyForm = {
-  phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
+  name: "", phone: "", vehicle_type: "motorcycle", license_number: "", verification_status: "approved",
   id_card_url: "", selfie_with_id_url: "", email: "",
 };
 
