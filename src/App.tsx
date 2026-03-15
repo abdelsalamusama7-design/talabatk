@@ -24,6 +24,7 @@ import BottomNav from "./components/BottomNav";
 import Footer from "./components/Footer";
 import InstallPage from "./pages/InstallPage";
 import LoyaltyPage from "./pages/LoyaltyPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
                   <Route path="/store/:id" element={<StorePage />} />
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
                   <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
                   <Route path="/account" element={<AccountPage />} />
                   <Route path="/category/:id" element={<CategoryPage />} />
