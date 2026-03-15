@@ -167,6 +167,18 @@ const CartPage = () => {
         } catch { /* best effort */ }
       }
 
+      // Deduct loyalty points if redeemed
+      if (loyaltyDiscount > 0) {
+        try {
+          await supabase.from("loyalty_points").insert({
+            user_id: user.id,
+            points: -(loyaltyDiscount * 10),
+            action: `استبدال نقاط - طلب #${order.id.slice(0, 8)}`,
+            order_id: order.id,
+          });
+        } catch { /* best effort */ }
+      }
+
       toast.success(`تم تأكيد الطلب بنجاح! 🎉 +${earnedPoints} نقاط ولاء`);
       clearCart();
       setDiscount(0);
