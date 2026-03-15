@@ -363,6 +363,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div>
+                  <p className="text-xs text-muted-foreground mb-2">اللون</p>
                   <div className="flex gap-2 flex-wrap">
                     {colorOptions.map((c) => (
                       <button key={c.value} type="button" onClick={() => setOfferForm({ ...offerForm, bg_color: c.value })}
