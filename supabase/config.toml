@@ -2,3 +2,6 @@ project_id = "lxlforxurxtrcrhnghbs"
 
 [functions.predict-trending]
 verify_jwt = false
+
+[functions.assign-driver]
+verify_jwt = false
