@@ -2,6 +2,7 @@ import { useState } from "react";
 import LocationHeader from "@/components/LocationHeader";
 import CategoryGrid from "@/components/CategoryGrid";
 import TrendingMeals from "@/components/TrendingMeals";
+import OffersSection from "@/components/OffersSection";
 import StoreCard from "@/components/StoreCard";
 import AiFoodChat from "@/components/AiFoodChat";
 import { stores } from "@/lib/data";
@@ -13,6 +14,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <LocationHeader />
+      <OffersSection />
       <CategoryGrid />
       <TrendingMeals />
 
