@@ -43,6 +43,7 @@ const App = () => {
       {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
+          <LangProvider>
           <AuthProvider>
             <CartProvider>
               <OrderProvider>
