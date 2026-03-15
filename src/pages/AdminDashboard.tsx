@@ -358,6 +358,10 @@ const AdminDashboard = () => {
                 <Input placeholder="ترتيب العرض (رقم)" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
 
                 <div>
+                  <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري — للعداد التنازلي)</p>
+                  <Input type="datetime-local" value={offerForm.expires_at} onChange={(e) => setOfferForm({ ...offerForm, expires_at: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
+                </div>
+
                   <p className="text-xs text-muted-foreground mb-2">اللون</p>
                   <div className="flex gap-2 flex-wrap">
                     {colorOptions.map((c) => (
