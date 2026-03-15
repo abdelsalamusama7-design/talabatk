@@ -372,6 +372,22 @@ const AdminDashboard = () => {
                 <Input placeholder="ترتيب العرض (رقم)" type="number" value={offerForm.sort_order} onChange={(e) => setOfferForm({ ...offerForm, sort_order: Number(e.target.value) })} className="rounded-xl h-10 bg-muted/50 border-0" />
 
                 <div>
+                  <p className="text-xs text-muted-foreground mb-1">كود الخصم المرتبط (اختياري)</p>
+                  <select
+                    value={offerForm.promo_code_id}
+                    onChange={(e) => setOfferForm({ ...offerForm, promo_code_id: e.target.value })}
+                    className="w-full h-10 rounded-xl bg-muted/50 border-0 px-3 text-sm text-foreground"
+                  >
+                    <option value="">— بدون كود خصم —</option>
+                    {promoCodes.map((pc) => (
+                      <option key={pc.id} value={pc.id}>
+                        {pc.code} ({pc.discount_type === "percentage" ? `${pc.discount_value}%` : `${pc.discount_value} ج.م`})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
                   <p className="text-xs text-muted-foreground mb-1">تاريخ انتهاء العرض (اختياري — للعداد التنازلي)</p>
                   <Input type="datetime-local" value={offerForm.expires_at} onChange={(e) => setOfferForm({ ...offerForm, expires_at: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
                 </div>
