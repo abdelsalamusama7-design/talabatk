@@ -1,9 +1,14 @@
+import { useState } from "react";
 import LocationHeader from "@/components/LocationHeader";
 import CategoryGrid from "@/components/CategoryGrid";
 import StoreCard from "@/components/StoreCard";
+import AiFoodChat from "@/components/AiFoodChat";
 import { stores } from "@/lib/data";
+import { Sparkles } from "lucide-react";
 
 const Index = () => {
+  const [chatOpen, setChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <LocationHeader />
@@ -17,6 +22,16 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* AI Chat FAB */}
+      <button
+        onClick={() => setChatOpen(true)}
+        className="fixed bottom-24 left-4 z-40 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+      >
+        <Sparkles className="h-6 w-6" />
+      </button>
+
+      <AiFoodChat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 };
