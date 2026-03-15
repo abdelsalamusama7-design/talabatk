@@ -1,10 +1,11 @@
-import { MapPin, Search, Loader2, Bell, User, Moon, Sun } from "lucide-react";
+import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
 import LocationPicker from "./LocationPicker";
 import NotificationsPanel from "./NotificationsPanel";
 import { useGeolocation } from "@/hooks/use-geolocation";
+import { useLang } from "@/lib/lang-context";
 
 const LocationHeader = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -13,6 +14,7 @@ const LocationHeader = () => {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const geo = useGeolocation();
   const navigate = useNavigate();
+  const { lang, setLang, t } = useLang();
 
   useEffect(() => {
     if (dark) {
@@ -46,6 +48,13 @@ const LocationHeader = () => {
                 <Moon className="h-[18px] w-[18px] text-primary-foreground" />
               )}
             </button>
+            <button
+              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+              className="h-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors px-2.5 gap-1.5"
+            >
+              <Globe className="h-[18px] w-[18px] text-primary-foreground" />
+              <span className="text-[11px] font-bold text-primary-foreground">{lang === "ar" ? "EN" : "عربي"}</span>
+            </button>
           </div>
           <button
             onClick={() => setNotifOpen(true)}
@@ -57,7 +66,7 @@ const LocationHeader = () => {
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-4">
-          <span className="text-primary-foreground text-sm font-medium">التوصيل إلى</span>
+          <span className="text-primary-foreground text-sm font-medium">{t("header.deliverTo")}</span>
           <button
             onClick={() => setMapOpen(true)}
             className="flex items-center gap-1 text-primary-foreground"
@@ -81,7 +90,7 @@ const LocationHeader = () => {
           className="w-full h-12 rounded-xl bg-card text-muted-foreground px-4 pr-12 text-sm shadow-card flex items-center gap-2 relative"
         >
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <span>ابحث عن متاجر أو منتجات...</span>
+          <span>{t("header.search")}</span>
         </button>
       </div>
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />

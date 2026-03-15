@@ -1,18 +1,20 @@
 import { Home, ClipboardList, ShoppingBag, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "@/lib/cart-context";
-
-const tabs = [
-  { path: "/", label: "الرئيسية", icon: Home },
-  { path: "/orders", label: "طلباتك", icon: ClipboardList },
-  { path: "/cart", label: "السلة", icon: ShoppingBag },
-  { path: "/account", label: "حسابك", icon: User },
-];
+import { useLang } from "@/lib/lang-context";
 
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { itemCount } = useCart();
+  const { t, dir } = useLang();
+
+  const tabs = [
+    { path: "/", label: t("nav.home"), icon: Home },
+    { path: "/orders", label: t("nav.orders"), icon: ClipboardList },
+    { path: "/cart", label: t("nav.cart"), icon: ShoppingBag },
+    { path: "/account", label: t("nav.account"), icon: User },
+  ];
 
   const hiddenPaths = ["/admin", "/restaurant-dashboard", "/driver", "/install", "/auth"];
   if (hiddenPaths.some((p) => location.pathname.startsWith(p))) return null;

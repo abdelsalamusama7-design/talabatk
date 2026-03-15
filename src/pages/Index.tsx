@@ -7,6 +7,7 @@ import OffersSection from "@/components/OffersSection";
 import StoreCard from "@/components/StoreCard";
 import AiFoodChat from "@/components/AiFoodChat";
 import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
 import { stores } from "@/lib/data";
 import { Sparkles, MessageCircle, Shield } from "lucide-react";
 
@@ -14,6 +15,7 @@ const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const { hasRole } = useAuth();
   const navigate = useNavigate();
+  const { t, dir } = useLang();
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -22,8 +24,8 @@ const Index = () => {
       <CategoryGrid />
       <TrendingMeals />
 
-      <section className="px-4" dir="rtl">
-        <h2 className="text-lg font-semibold text-foreground mb-4">اكتشف كل المتاجر</h2>
+      <section className="px-4" dir={dir}>
+        <h2 className="text-lg font-semibold text-foreground mb-4">{t("home.discoverStores")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {stores.map((store) => (
             <StoreCard key={store.id} store={store} />
