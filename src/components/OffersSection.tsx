@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useCart } from "@/lib/cart-context";
 
 const iconMap: Record<string, typeof Flame> = {
   flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
@@ -97,8 +98,17 @@ const PromoCodeChip = ({ code }: { code: string }) => {
 
 const OffersSection = () => {
   const navigate = useNavigate();
+  const { setPendingPromoCode } = useCart();
   const [offers, setOffers] = useState<Offer[]>([]);
   const getTimeLeft = useCountdown(offers);
+
+  const handleOfferClick = (offer: Offer) => {
+    if (offer.promo_code) {
+      setPendingPromoCode(offer.promo_code);
+      toast.success(`سيتم تطبيق كود "${offer.promo_code}" تلقائياً في السلة`);
+      navigate("/cart");
+    }
+  };
 
   useEffect(() => {
     const loadOffers = async () => {
@@ -163,7 +173,7 @@ const OffersSection = () => {
               transition={{ delay: i * 0.1, duration: 0.4 }}
               whileTap={{ scale: 0.97 }}
               className={`relative min-w-[270px] snap-start rounded-2xl bg-gradient-to-br ${gradient} p-5 cursor-pointer overflow-hidden shadow-lg`}
-              onClick={() => navigate("/")}
+              onClick={() => handleOfferClick(offer)}
             >
               <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-white/10" />
               <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full bg-white/10" />

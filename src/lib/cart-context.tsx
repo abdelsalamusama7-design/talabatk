@@ -9,12 +9,15 @@ interface CartContextType {
   clearCart: () => void;
   total: number;
   itemCount: number;
+  pendingPromoCode: string | null;
+  setPendingPromoCode: (code: string | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [pendingPromoCode, setPendingPromoCode] = useState<string | null>(null);
 
   const addItem = useCallback((product: Product, store: Store) => {
     setItems((prev) => {
@@ -48,7 +51,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, itemCount }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, itemCount, pendingPromoCode, setPendingPromoCode }}>
       {children}
     </CartContext.Provider>
   );

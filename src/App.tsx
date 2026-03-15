@@ -7,6 +7,7 @@ import { CartProvider } from "@/lib/cart-context";
 import { OrderProvider } from "@/lib/order-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { LiveOrderProvider } from "@/lib/live-order-context";
+import OfferNotificationListener from "@/components/OfferNotificationListener";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
 import CartPage from "./pages/CartPage";
@@ -37,6 +38,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <BrowserRouter>
+                <OfferNotificationListener />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<AuthPage />} />

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const CartPage = () => {
-  const { items, updateQuantity, removeItem, clearCart, total } = useCart();
+  const { items, updateQuantity, removeItem, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
   const { user } = useAuth();
   const { address, lat, lng, requestLocation, loading: geoLoading } = useGeolocation();
   const navigate = useNavigate();
@@ -41,6 +41,39 @@ const CartPage = () => {
     };
     load();
   }, [user]);
+
+  // Auto-apply pending promo code from offers
+  useEffect(() => {
+    if (pendingPromoCode && !promoApplied && items.length > 0) {
+      setPromoCode(pendingPromoCode);
+      setPendingPromoCode(null);
+      // Trigger apply after state update
+      const timer = setTimeout(async () => {
+        const { data } = await supabase
+          .from("promo_codes")
+          .select("*")
+          .eq("code", pendingPromoCode.toUpperCase())
+          .eq("is_active", true)
+          .maybeSingle();
+
+        if (!data) {
+          toast.error("كود الخصم غير صالح");
+          return;
+        }
+        if (data.min_order && total < Number(data.min_order)) {
+          toast.error(`الحد الأدنى للطلب ${data.min_order} ج.م`);
+          return;
+        }
+        const disc = data.discount_type === "percentage"
+          ? (total * Number(data.discount_value)) / 100
+          : Number(data.discount_value);
+        setDiscount(Math.min(disc, total));
+        setPromoApplied(true);
+        toast.success(`تم تطبيق خصم ${data.discount_type === "percentage" ? `${data.discount_value}%` : `${data.discount_value} ج.م`} تلقائياً 🎉`);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingPromoCode, items.length]);
 
   // Fetch dynamic pricing when location or items change
   useEffect(() => {
