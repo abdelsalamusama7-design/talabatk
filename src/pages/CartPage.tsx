@@ -3,7 +3,7 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
