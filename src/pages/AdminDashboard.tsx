@@ -181,13 +181,16 @@ const AdminDashboard = () => {
 
       <div className="px-4 py-6">
         {tab === "stats" && (
-          <div className="grid grid-cols-2 gap-3">
-            <StatCard icon={<ShoppingCart className="h-5 w-5 text-primary" />} label="إجمالي الطلبات" value={`${orders.length}`} />
-            <StatCard icon={<DollarSign className="h-5 w-5 text-success" />} label="إيرادات (مُسلّم)" value={`${totalRevenue.toFixed(0)} ج.م`} />
-            <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="طلبات نشطة" value={`${activeOrders}`} />
-            <StatCard icon={<Truck className="h-5 w-5 text-primary" />} label="مناديب متاحين" value={`${availableDrivers}`} />
-            <StatCard icon={<Store className="h-5 w-5 text-success" />} label="المطاعم" value={`${restaurants.length}`} />
-            <StatCard icon={<Users className="h-5 w-5 text-primary" />} label="المستخدمين" value={`${profiles.length}`} />
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-3">
+              <StatCard icon={<ShoppingCart className="h-5 w-5 text-primary" />} label="إجمالي الطلبات" value={`${orders.length}`} />
+              <StatCard icon={<DollarSign className="h-5 w-5 text-success" />} label="إيرادات (مُسلّم)" value={`${totalRevenue.toFixed(0)} ج.م`} />
+              <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="طلبات نشطة" value={`${activeOrders}`} />
+              <StatCard icon={<Truck className="h-5 w-5 text-primary" />} label="مناديب متاحين" value={`${availableDrivers}`} />
+              <StatCard icon={<Store className="h-5 w-5 text-success" />} label="المطاعم" value={`${restaurants.length}`} />
+              <StatCard icon={<Users className="h-5 w-5 text-primary" />} label="المستخدمين" value={`${profiles.length}`} />
+            </div>
+            <AdminCharts orders={orders} />
           </div>
         )}
 
