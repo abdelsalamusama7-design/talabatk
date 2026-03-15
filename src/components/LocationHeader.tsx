@@ -1,5 +1,6 @@
-import { MapPin, Search, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { MapPin, Search, Loader2, Bell, User, Moon, Sun } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
 import LocationPicker from "./LocationPicker";
 import { useGeolocation } from "@/hooks/use-geolocation";
@@ -7,11 +8,49 @@ import { useGeolocation } from "@/hooks/use-geolocation";
 const LocationHeader = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const geo = useGeolocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dark]);
 
   return (
     <>
       <div className="bg-primary pt-10 pb-6 px-4 rounded-b-[2rem]">
+        {/* Top bar with icons */}
+        <div className="flex items-center justify-between mb-3 px-1">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/auth")}
+              className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+            >
+              <User className="h-[18px] w-[18px] text-primary-foreground" />
+            </button>
+            <button
+              onClick={() => setDark(!dark)}
+              className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+            >
+              {dark ? (
+                <Sun className="h-[18px] w-[18px] text-primary-foreground" />
+              ) : (
+                <Moon className="h-[18px] w-[18px] text-primary-foreground" />
+              )}
+            </button>
+          </div>
+          <button className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors relative">
+            <Bell className="h-[18px] w-[18px] text-primary-foreground" />
+            <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-destructive border-2 border-primary" />
+          </button>
+        </div>
+
         <div className="flex items-center justify-center gap-2 mb-4">
           <span className="text-primary-foreground text-sm font-medium">التوصيل إلى</span>
           <button
