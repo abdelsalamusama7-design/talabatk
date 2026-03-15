@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { MapPin, Loader2, Navigation, X, Search, Star, Trash2, Home, Briefcase, Heart } from "lucide-react";
+import { MapPin, Loader2, Navigation, X, Search, Star, Trash2, Home, Briefcase, Heart, Edit3, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
