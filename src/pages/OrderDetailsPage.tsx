@@ -47,7 +47,7 @@ const OrderDetailsPage = () => {
   const { addItem } = useCart();
   const [restaurantName, setRestaurantName] = useState<string>("");
   const [reordering, setReordering] = useState(false);
-
+  const [cancelling, setCancelling] = useState(false);
   const order = liveOrders.find((o) => o.id === id);
 
   // Fetch restaurant name
