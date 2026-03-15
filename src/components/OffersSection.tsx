@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, Timer, Copy, Check } from "lucide-react";
+import { Flame, Percent, Clock, Gift, Zap, ArrowLeft, ArrowRight, Timer, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { useLang } from "@/lib/lang-context";
 
 const iconMap: Record<string, typeof Flame> = {
   flame: Flame, gift: Gift, zap: Zap, clock: Clock, percent: Percent,
