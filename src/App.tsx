@@ -50,6 +50,7 @@ const App = () => {
                   <Sonner />
                   <BrowserRouter>
                     <OfferNotificationListener />
+                    <AdminNotificationListener />
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/auth" element={<AuthPage />} />
