@@ -103,11 +103,7 @@ const OffersSection = () => {
   const getTimeLeft = useCountdown(offers);
 
   const handleOfferClick = (offer: Offer) => {
-    if (offer.promo_code) {
-      setPendingPromoCode(offer.promo_code);
-      toast.success(`سيتم تطبيق كود "${offer.promo_code}" تلقائياً في السلة`);
-      navigate("/cart");
-    }
+    navigate("/offers");
   };
 
   useEffect(() => {
