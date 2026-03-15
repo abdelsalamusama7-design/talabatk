@@ -8,6 +8,7 @@ import { CartProvider } from "@/lib/cart-context";
 import { OrderProvider } from "@/lib/order-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { LiveOrderProvider } from "@/lib/live-order-context";
+import { LangProvider } from "@/lib/lang-context";
 import OfferNotificationListener from "@/components/OfferNotificationListener";
 import AdminNotificationListener from "@/components/AdminNotificationListener";
 import SplashScreen from "@/components/SplashScreen";
