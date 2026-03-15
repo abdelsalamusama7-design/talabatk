@@ -1,1 +1,4 @@
 project_id = "lxlforxurxtrcrhnghbs"
+
+[functions.predict-trending]
+verify_jwt = false
