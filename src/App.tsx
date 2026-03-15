@@ -27,6 +27,7 @@ import Footer from "./components/Footer";
 import InstallPage from "./pages/InstallPage";
 import LoyaltyPage from "./pages/LoyaltyPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
+import OffersPage from "./pages/OffersPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
