@@ -27,6 +27,7 @@ import Footer from "./components/Footer";
 import InstallPage from "./pages/InstallPage";
 import LoyaltyPage from "./pages/LoyaltyPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
+import OffersPage from "./pages/OffersPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => {
                       <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
                       <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
                       <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
+                      <Route path="/offers" element={<OffersPage />} />
                       <Route path="/install" element={<InstallPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
