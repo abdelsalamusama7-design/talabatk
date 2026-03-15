@@ -230,7 +230,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
         <div key={d.id} className="bg-card rounded-2xl p-4 shadow-card">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <p className="font-semibold text-foreground text-sm">مندوب #{d.id.slice(0, 8)}</p>
+              <p className="font-semibold text-foreground text-sm">{d.name || `مندوب #${d.id.slice(0, 8)}`}</p>
               <p className="text-xs text-muted-foreground">
                 {d.vehicle_type === "motorcycle" ? "🏍️ موتوسيكل" : d.vehicle_type === "car" ? "🚗 سيارة" : "🚲 دراجة"}
                 {d.phone && ` • ${d.phone}`}
