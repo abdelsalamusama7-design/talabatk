@@ -262,7 +262,6 @@ export const stores: Store[] = [
       { id: "p41", name: "ماسك شعر", price: 85, description: "ماسك ترطيب عميق للشعر", image: storePharmacy3 },
     ],
   },
-  },
   {
     id: "supermarket-elkhair",
     name: "سوبر ماركت الخير",
