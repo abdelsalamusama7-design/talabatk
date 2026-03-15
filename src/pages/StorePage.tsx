@@ -49,9 +49,10 @@ const StorePage = () => {
       </div>
 
       {/* Products */}
-      <section className="px-4 pt-6">
-        <h2 className="text-lg font-semibold mb-4">القائمة</h2>
-        <div className="space-y-3">
+      <div className="max-w-4xl mx-auto">
+        <section className="px-4 pt-6">
+          <h2 className="text-lg font-semibold mb-4">القائمة</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {store.products.map((product) => {
             const qty = getQuantity(product.id);
             return (
