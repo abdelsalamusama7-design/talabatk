@@ -162,6 +162,7 @@ const AdminDrivers = ({ drivers: initial }: { drivers: Driver[] }) => {
       {showForm && (
         <div className="bg-card rounded-2xl p-4 shadow-card space-y-3 border-2 border-primary/20">
           <h3 className="font-bold text-foreground text-sm">{editingId ? "تعديل المندوب" : "مندوب جديد"}</h3>
+          <Input placeholder="اسم المندوب" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
           <Input placeholder="رقم الهاتف" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="rounded-xl h-10 bg-muted/50 border-0" />
           <div>
             <p className="text-xs text-muted-foreground mb-2">نوع المركبة</p>
