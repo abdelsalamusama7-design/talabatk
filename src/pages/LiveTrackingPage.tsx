@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLiveOrders } from "@/lib/live-order-context";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
 import OrderProgressStepper from "@/components/OrderProgressStepper";
+import OrderChat from "@/components/OrderChat";
 import { ArrowRight, Phone, MessageCircle, Star, Clock, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const LiveTrackingPage = () => {
