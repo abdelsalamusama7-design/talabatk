@@ -43,6 +43,7 @@ const App = () => (
                 <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
                 <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+                <Route path="/install" element={<InstallPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <BottomNav />
