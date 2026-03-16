@@ -200,8 +200,10 @@ const CartPage = () => {
 
       const orderItems = items.map((i) => ({
         name: i.product.name,
-        price: i.product.price,
+        price: i.weight ? i.product.price * parseFloat(i.weight) : i.product.price,
         quantity: i.quantity,
+        weight: i.weight ? weightLabels[i.weight] : undefined,
+        itemNote: i.itemNote || undefined,
       }));
 
       const { data: order, error } = await supabase.from("orders").insert({
