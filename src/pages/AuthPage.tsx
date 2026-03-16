@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,12 @@ const AuthPage = () => {
   const [selfiePreview, setSelfiePreview] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { t, dir, isAr, lang } = useLang();
+
+  // Determine where to redirect after auth
+  const from = (location.state as any)?.from || "/";
 
   const accountTypes = [
     { type: "customer" as AccountType, label: t("auth.customer"), icon: ShoppingBag, desc: t("auth.customerDesc") },
@@ -75,7 +79,8 @@ const AuthPage = () => {
       if (error) {
         toast({ title: lang === "ar" ? "خطأ في تسجيل الدخول" : "Login Error", description: error.message, variant: "destructive" });
       } else {
-        navigate("/");
+        // Navigate to where user came from (cart, etc.) or home
+        navigate(from, { replace: true });
       }
     } else {
       if (!fullName.trim()) {
@@ -107,10 +112,24 @@ const AuthPage = () => {
           phone, id_card_url: idCardUrl, selfie_with_id_url: selfieUrl,
         }).eq("user_id", userId);
         toast({ title: lang === "ar" ? "تم إنشاء حساب السائق بنجاح! 🎉" : "Driver account created! 🎉", description: lang === "ar" ? "سيتم مراجعة بياناتك والموافقة عليها قريباً" : "Your data will be reviewed soon" });
-        setIsLogin(true);
+        // Auto-login and redirect after signup
+        const { error: loginErr } = await signIn(email, password);
+        if (!loginErr) {
+          navigate(from, { replace: true });
+        } else {
+          setIsLogin(true);
+        }
       } else {
-        toast({ title: lang === "ar" ? "تم إنشاء الحساب بنجاح! 🎉" : "Account created! 🎉", description: lang === "ar" ? "يمكنك الآن تسجيل الدخول" : "You can now login" });
-        setIsLogin(true);
+        toast({ title: lang === "ar" ? "تم إنشاء الحساب بنجاح! 🎉" : "Account created! 🎉" });
+        // Auto-login after signup and redirect to where user was
+        const { error: loginErr } = await signIn(email, password);
+        if (!loginErr) {
+          navigate(from, { replace: true });
+        } else {
+          // Fallback: tell user to login manually
+          toast({ description: lang === "ar" ? "يمكنك الآن تسجيل الدخول" : "You can now login" });
+          setIsLogin(true);
+        }
       }
     }
     setLoading(false);

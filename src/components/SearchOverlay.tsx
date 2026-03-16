@@ -15,8 +15,12 @@ const SearchOverlay = ({ open, onClose }: SearchOverlayProps) => {
 
   useEffect(() => {
     if (open) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      // Immediate focus + delayed retry for mobile keyboards
+      inputRef.current?.focus();
+      const t1 = setTimeout(() => inputRef.current?.focus(), 50);
+      const t2 = setTimeout(() => inputRef.current?.focus(), 200);
       setQuery("");
+      return () => { clearTimeout(t1); clearTimeout(t2); };
     }
   }, [open]);
 
