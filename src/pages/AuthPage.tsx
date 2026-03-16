@@ -8,6 +8,7 @@ import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Bike, ShoppingBag
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import logoImg from "@/assets/logo.png";
 
 type AccountType = "customer" | "driver";
 
