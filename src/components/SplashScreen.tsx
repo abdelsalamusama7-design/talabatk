@@ -14,7 +14,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
   return (
     <div
       className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-600 ${phase >= 2 ? "opacity-0" : "opacity-100"}`}
-      style={{ backgroundColor: "#b0f5f5" }}
+      style={{ backgroundColor: "#1a9be0" }}
     >
       <img
         src={splashLogo}
