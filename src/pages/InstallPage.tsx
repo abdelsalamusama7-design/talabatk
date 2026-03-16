@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Download, Smartphone, Share, ArrowRight, CheckCircle, WifiOff, Bell, MapPin, Zap } from "lucide-react";
+import { Download, Smartphone, Share, ArrowRight, CheckCircle, WifiOff, Bell, MapPin, Zap, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled, isIOSDevice } from "@/lib/install-prompt";
 
@@ -133,6 +133,40 @@ const InstallPage = () => {
             </button>
           </div>
         </div>
+      </div>
+
+        {/* Fixed Install Banner */}
+        {!isInstalled && (
+          <div className="fixed bottom-0 inset-x-0 z-50 p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+            <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 rounded-2xl shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/10 via-transparent to-primary-foreground/10 rounded-2xl" />
+              <div className="relative flex items-center gap-3 p-4">
+                <button
+                  onClick={() => navigate("/")}
+                  className="text-primary-foreground/50 hover:text-primary-foreground p-1.5 flex-shrink-0 rounded-full hover:bg-primary-foreground/10 transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <div className="flex-1 min-w-0 text-right">
+                  <h3 className="font-bold text-primary-foreground text-[15px] leading-tight">
+                    📲 حمّل تطبيق طلباتك
+                  </h3>
+                  <p className="text-[12px] text-primary-foreground/75 mt-0.5 leading-relaxed">
+                    {isIOS
+                      ? "اضغط على زر المشاركة ↑ ثم \"إضافة للشاشة الرئيسية\""
+                      : "وصول أسرع • إشعارات فورية • يعمل بدون نت"}
+                  </p>
+                </div>
+                <button
+                  onClick={handleInstall}
+                  className="w-14 h-14 rounded-2xl bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0 shadow-lg border border-primary-foreground/10 hover:bg-primary-foreground/30 transition-colors"
+                >
+                  <Download className="h-7 w-7 text-primary-foreground" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
