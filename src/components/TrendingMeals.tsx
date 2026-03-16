@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { stores } from "@/lib/data";
 import { Flame, Sparkles, TrendingUp, RefreshCw, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
