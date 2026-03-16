@@ -164,6 +164,7 @@ export interface Order {
 export const categories: Category[] = [
   { id: "restaurants", name: "المطاعم", image: catRestaurants },
   { id: "pharmacy", name: "صيدليات", image: catPharmacy },
+  { id: "supermarket", name: "سوبر ماركت", image: catSupermarket },
   { id: "grocery", name: "البقالة", image: catGrocery },
   { id: "vegetables", name: "خضار", image: catVegetables },
   { id: "fruits", name: "فواكه", image: catFruits },
