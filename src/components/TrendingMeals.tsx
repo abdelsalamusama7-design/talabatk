@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { stores } from "@/lib/data";
 import { Flame, Sparkles, TrendingUp, RefreshCw, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,6 +10,7 @@ interface TrendingMeal {
   meal_name: string;
   meal_description: string | null;
   restaurant_name: string | null;
+  restaurant_id: string | null;
   price: number | null;
   image_url: string | null;
   score: number | null;
@@ -18,6 +21,7 @@ interface TrendingMeal {
 const SCORE_EMOJIS = ["🔥", "⭐", "💎", "🏆", "✨"];
 
 const TrendingMeals = () => {
+  const navigate = useNavigate();
   const [meals, setMeals] = useState<TrendingMeal[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -119,7 +123,18 @@ const TrendingMeals = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="min-w-[200px] bg-card rounded-2xl shadow-card overflow-hidden shrink-0 relative"
+              className="min-w-[200px] bg-card rounded-2xl shadow-card overflow-hidden shrink-0 relative cursor-pointer hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
+              onClick={() => {
+                // Try to find a matching local store by name
+                const matchedStore = stores.find(s => 
+                  meal.restaurant_name && s.name.includes(meal.restaurant_name)
+                );
+                if (matchedStore) {
+                  navigate(`/store/${matchedStore.id}`);
+                } else if (meal.restaurant_id) {
+                  navigate(`/store/${meal.restaurant_id}`);
+                }
+              }}
             >
               {/* Rank badge */}
               <div className="absolute top-2 right-2 z-10 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-lg">
