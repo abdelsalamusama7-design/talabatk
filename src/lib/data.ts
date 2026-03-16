@@ -139,6 +139,18 @@ import prodMince from "@/assets/prod-mince.jpg";
 import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
 import prodSausage from "@/assets/prod-sausage.jpg";
 
+// Home food images
+import catHomefood from "@/assets/cat-homefood.jpg";
+import storeKitchen1 from "@/assets/store-kitchen1.jpg";
+import storeKitchen2 from "@/assets/store-kitchen2.jpg";
+import storeKitchen3 from "@/assets/store-kitchen3.jpg";
+import prodMolokhia from "@/assets/prod-molokhia.jpg";
+import prodMahshi from "@/assets/prod-mahshi.jpg";
+import prodKofta from "@/assets/prod-kofta.jpg";
+import prodBamia from "@/assets/prod-bamia.jpg";
+import prodFattah from "@/assets/prod-fattah.jpg";
+import prodMacaronaBechamel from "@/assets/prod-macarona-bechamel.jpg";
+
 // New store images
 import storeChickenRest from "@/assets/store-chicken-rest.jpg";
 import storeCrepe from "@/assets/store-crepe.jpg";
