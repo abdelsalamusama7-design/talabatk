@@ -18,10 +18,6 @@ const PWAInstallPrompt = () => {
     // Don't show if running inside Capacitor WebView or already installed
     if ((window as any).Capacitor?.isNativePlatform?.() || window.matchMedia("(display-mode: standalone)").matches) return;
 
-    // Check if dismissed in this session only
-    const dismissed = sessionStorage.getItem("pwa-prompt-dismissed");
-    if (dismissed) return;
-
     // Detect iOS
     const isIOSDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(isIOSDevice);
@@ -40,7 +36,14 @@ const PWAInstallPrompt = () => {
     };
 
     window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+
+    // Always show the prompt after delay even without beforeinstallprompt
+    const fallbackTimer = setTimeout(() => setShowPrompt(true), 3000);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const handleInstall = async () => {
@@ -56,7 +59,7 @@ const PWAInstallPrompt = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    sessionStorage.setItem("pwa-prompt-dismissed", "1");
+    // Don't persist dismissal — show again on next visit
   };
 
   if (!showPrompt) return null;
