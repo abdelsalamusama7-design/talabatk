@@ -139,6 +139,21 @@ import prodMince from "@/assets/prod-mince.jpg";
 import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
 import prodSausage from "@/assets/prod-sausage.jpg";
 
+// New store images
+import storeChickenRest from "@/assets/store-chicken-rest.jpg";
+import storeCrepe from "@/assets/store-crepe.jpg";
+import storeKebda from "@/assets/store-kebda.jpg";
+import storePharmacy4 from "@/assets/store-pharmacy4.jpg";
+import storeGrocery3 from "@/assets/store-grocery3.jpg";
+import storeVegetables3 from "@/assets/store-vegetables3.jpg";
+import storeFruits3 from "@/assets/store-fruits3.jpg";
+import storeJuice2 from "@/assets/store-juice2.jpg";
+import storeSweets2 from "@/assets/store-sweets2.jpg";
+import storeSuper2 from "@/assets/store-super2.jpg";
+import storeServices2 from "@/assets/store-services2.jpg";
+import prodCrepe from "@/assets/prod-crepe.jpg";
+import prodKebda from "@/assets/prod-kebda.jpg";
+
 export interface Category {
   id: string;
   name: string;
