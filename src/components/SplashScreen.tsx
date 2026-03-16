@@ -28,9 +28,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
       <div
         className={`relative transition-all duration-700 ease-out ${phase >= 0 ? "opacity-100 scale-100" : "opacity-0 scale-50"}`}
       >
-        <div className="w-28 h-28 rounded-3xl bg-primary-foreground/15 backdrop-blur-sm flex items-center justify-center shadow-2xl border border-primary-foreground/10">
-          <ShoppingBag className="w-14 h-14 text-primary-foreground" strokeWidth={1.5} />
-        </div>
+        <img src={logoImg} alt="طلباتك" className="w-32 h-32 rounded-3xl shadow-2xl object-contain bg-white p-2" />
       </div>
 
       {/* App name */}

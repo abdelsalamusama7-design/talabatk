@@ -142,8 +142,9 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col" dir={dir}>
       {/* Header */}
-      <div className="bg-primary pt-16 pb-12 px-6 rounded-b-[2.5rem] text-center">
-        <h1 className="text-3xl font-bold text-primary-foreground mb-2">{lang === "ar" ? "طلباتك" : "Talabatk"}</h1>
+      <div className="bg-primary pt-12 pb-10 px-6 rounded-b-[2.5rem] text-center flex flex-col items-center">
+        <img src={logoImg} alt="طلباتك" className="w-20 h-20 rounded-2xl object-contain bg-white p-1.5 shadow-lg mb-3" />
+        <h1 className="text-3xl font-bold text-primary-foreground mb-1">{lang === "ar" ? "طلباتك" : "Talabatk"}</h1>
         <p className="text-primary-foreground/80 text-sm">{lang === "ar" ? "أسرع منصة توصيل في مصر" : "The fastest delivery platform in Egypt"}</p>
       </div>
 
