@@ -122,7 +122,18 @@ const TrendingMeals = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="min-w-[200px] bg-card rounded-2xl shadow-card overflow-hidden shrink-0 relative"
+              className="min-w-[200px] bg-card rounded-2xl shadow-card overflow-hidden shrink-0 relative cursor-pointer hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
+              onClick={() => {
+                // Try to find a matching local store by name
+                const matchedStore = stores.find(s => 
+                  meal.restaurant_name && s.name.includes(meal.restaurant_name)
+                );
+                if (matchedStore) {
+                  navigate(`/store/${matchedStore.id}`);
+                } else if (meal.restaurant_id) {
+                  navigate(`/store/${meal.restaurant_id}`);
+                }
+              }}
             >
               {/* Rank badge */}
               <div className="absolute top-2 right-2 z-10 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-lg">
