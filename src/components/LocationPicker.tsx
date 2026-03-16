@@ -91,7 +91,7 @@ const LeafletMap = ({
       mapRef.current = null;
       markerRef.current = null;
     };
-  }, [center]);
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current || !markerRef.current) return;
