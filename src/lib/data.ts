@@ -154,8 +154,9 @@ export const categories: Category[] = [
   { id: "grocery", name: "البقالة", image: catGrocery },
   { id: "vegetables", name: "خضار", image: catVegetables },
   { id: "fruits", name: "فواكه", image: catFruits },
-  { id: "services", name: "خدمات", image: catServices },
+  { id: "juices", name: "عصائر", image: catJuices },
   { id: "sweets", name: "حلويات", image: catSweets },
+  { id: "services", name: "خدمات", image: catServices },
 ];
 
 export const stores: Store[] = [
