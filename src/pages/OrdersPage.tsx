@@ -2,7 +2,7 @@ import { useOrders } from "@/lib/order-context";
 import { useLiveOrders } from "@/lib/live-order-context";
 import { useAuth } from "@/lib/auth-context";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, Truck, Clock, ChefHat, Package, MapPin, X, Eye, Star } from "lucide-react";
+import { CheckCircle, Truck, Clock, ChefHat, Package, MapPin, X, Eye, Star, ShoppingBag } from "lucide-react";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
