@@ -128,6 +128,17 @@ import prodWaterDrinks from "@/assets/prod-water-drinks.jpg";
 import prodBiscuits from "@/assets/prod-biscuits.jpg";
 import prodGum from "@/assets/prod-gum.jpg";
 
+// Meat & Poultry images
+import catMeat from "@/assets/cat-meat.jpg";
+import storeMeat1 from "@/assets/store-meat1.jpg";
+import storeMeat2 from "@/assets/store-meat2.jpg";
+import storeMeat3 from "@/assets/store-meat3.jpg";
+import prodBeef from "@/assets/prod-beef.jpg";
+import prodLamb from "@/assets/prod-lamb.jpg";
+import prodMince from "@/assets/prod-mince.jpg";
+import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
+import prodSausage from "@/assets/prod-sausage.jpg";
+
 export interface Category {
   id: string;
   name: string;
@@ -199,6 +210,7 @@ export const categories: Category[] = [
   { id: "sweets", name: "حلويات", image: catSweets },
   { id: "electronics", name: "إلكترونيات", image: catElectronics },
   { id: "kiosk", name: "كشك", image: catKiosk },
+  { id: "meat", name: "لحوم ودواجن", image: catMeat },
   { id: "services", name: "خدمات", image: catServices },
 ];
 
@@ -726,6 +738,68 @@ export const stores: Store[] = [
       { id: "k22", name: "بسكويت تايجر", price: 8, description: "بسكويت تايجر بالشوكولاتة", image: prodBiscuits },
       { id: "k23", name: "مياه كبيرة", price: 8, description: "زجاجة مياه 1.5 لتر", image: prodWaterDrinks },
       { id: "k24", name: "لبان سترايد", price: 10, description: "لبان سترايد نعناع قوي", image: prodGum },
+    ],
+  },
+  // ===== لحوم ودواجن =====
+  {
+    id: "el-prince-meat",
+    name: "الأمير للحوم",
+    category: "لحوم ودواجن",
+    categoryId: "meat",
+    image: storeMeat1,
+    rating: 4.6,
+    reviewCount: 520,
+    deliveryTime: "30-50",
+    deliveryFee: 15,
+    products: [
+      { id: "m1", name: "لحم بقري طازج - كيلو", price: 320, description: "لحم بقري بلدي طازج عالي الجودة", image: prodBeef },
+      { id: "m2", name: "لحم ضاني - كيلو", price: 380, description: "لحم ضاني طازج بالعظم", image: prodLamb },
+      { id: "m3", name: "لحم مفروم - كيلو", price: 280, description: "لحم مفروم بقري طازج للكفتة والكباب", image: prodMince },
+      { id: "m4", name: "فراخ كاملة طازجة", price: 120, description: "فرخة كاملة طازجة بلدي - حوالي 1.5 كيلو", image: prodChickenRaw },
+      { id: "m5", name: "سجق بلدي - كيلو", price: 200, description: "سجق بلدي طازج بالبهارات", image: prodSausage },
+      { id: "m6", name: "ناجتس فراخ مجمد", price: 95, description: "ناجتس دجاج مجمد 500 جرام", image: prodFrozenMeat },
+      { id: "m7", name: "برجر لحم مجمد", price: 110, description: "برجر لحم بقري مجمد 8 قطع", image: prodSausage },
+      { id: "m8", name: "أوراك فراخ طازجة - كيلو", price: 140, description: "أوراك دجاج طازجة مخلية", image: prodChickenRaw },
+    ],
+  },
+  {
+    id: "fresh-poultry",
+    name: "الطازج للدواجن",
+    category: "لحوم ودواجن",
+    categoryId: "meat",
+    image: storeMeat2,
+    rating: 4.4,
+    reviewCount: 380,
+    deliveryTime: "25-45",
+    deliveryFee: 12,
+    products: [
+      { id: "m9", name: "فراخ كاملة مجمدة", price: 100, description: "فرخة كاملة مجمدة - 1.2 كيلو", image: prodFrozenMeat },
+      { id: "m10", name: "صدور فراخ طازجة - كيلو", price: 160, description: "صدور دجاج طازجة مخلية", image: prodChickenRaw },
+      { id: "m11", name: "أجنحة فراخ - كيلو", price: 110, description: "أجنحة دجاج طازجة", image: prodChickenRaw },
+      { id: "m12", name: "شيش طاووق جاهز - كيلو", price: 180, description: "دجاج متبل جاهز للشوي", image: prodChickenRaw },
+      { id: "m13", name: "ناجتس دجاج 1 كيلو", price: 170, description: "ناجتس دجاج مجمد عبوة عائلية", image: prodFrozenMeat },
+      { id: "m14", name: "بانيه فراخ مجمد", price: 150, description: "بانيه دجاج مجمد جاهز للقلي 750 جرام", image: prodFrozenMeat },
+    ],
+  },
+  {
+    id: "sultan-meat",
+    name: "سلطان اللحوم",
+    category: "لحوم ودواجن",
+    categoryId: "meat",
+    image: storeMeat3,
+    rating: 4.7,
+    reviewCount: 650,
+    deliveryTime: "30-50",
+    deliveryFee: 20,
+    products: [
+      { id: "m15", name: "ستيك بقري - كيلو", price: 450, description: "ستيك بقري ممتاز قطع سميكة", image: prodBeef },
+      { id: "m16", name: "ريش ضاني - كيلو", price: 420, description: "ريش ضاني طازجة فاخرة", image: prodLamb },
+      { id: "m17", name: "كفتة جاهزة - كيلو", price: 250, description: "كفتة لحم بقري متبلة جاهزة للشوي", image: prodMince },
+      { id: "m18", name: "لحم مفروم ضاني - كيلو", price: 350, description: "لحم مفروم ضاني طازج", image: prodMince },
+      { id: "m19", name: "فراخ مشوية جاهزة", price: 130, description: "فرخة مشوية كاملة متبلة", image: prodChickenRaw },
+      { id: "m20", name: "سجق شرقي - كيلو", price: 220, description: "سجق شرقي حار بالبهارات", image: prodSausage },
+      { id: "m21", name: "كباب لحم جاهز - كيلو", price: 300, description: "كباب لحم متبل جاهز للشوي", image: prodMince },
+      { id: "m22", name: "هوت دوج مجمد", price: 85, description: "هوت دوج بقري مجمد 10 قطع", image: prodSausage },
     ],
   },
 ];

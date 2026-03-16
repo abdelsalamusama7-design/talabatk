@@ -13,6 +13,7 @@ const catNameMap: Record<string, { ar: string; en: string }> = {
   "حلويات": { ar: "حلويات", en: "Sweets" },
   "إلكترونيات": { ar: "إلكترونيات", en: "Electronics" },
   "كشك": { ar: "كشك", en: "Kiosk" },
+  "لحوم ودواجن": { ar: "لحوم ودواجن", en: "Meat & Poultry" },
   "خدمات": { ar: "خدمات", en: "Services" },
 };
 
