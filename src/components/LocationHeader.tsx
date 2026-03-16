@@ -1,4 +1,4 @@
-import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw } from "lucide-react";
+import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
