@@ -183,12 +183,17 @@ const OrdersPage = () => {
         )}
 
         {orders.length === 0 && (
-          <div className="text-center py-12">
-            <Package className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="font-semibold text-foreground mb-1">لا توجد طلبات</p>
-            <p className="text-sm text-muted-foreground mb-4">ابدأ بطلب وجبتك المفضلة الآن</p>
-            <Button onClick={() => navigate("/")} className="rounded-xl">
-              تصفح المطاعم
+          <div className="text-center py-16">
+            <div className="bg-muted/30 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-5">
+              <Package className="h-12 w-12 text-muted-foreground/40" />
+            </div>
+            <p className="font-bold text-foreground text-lg mb-2">لا توجد طلبات بعد</p>
+            <p className="text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
+              لم تقم بأي طلب حتى الآن. تصفح المطاعم والمتاجر واطلب وجبتك المفضلة!
+            </p>
+            <Button onClick={() => navigate("/")} className="rounded-xl px-8 h-12 font-semibold text-base gap-2">
+              <ShoppingBag className="h-5 w-5" />
+              اطلب الآن
             </Button>
           </div>
         )}
