@@ -185,6 +185,7 @@ export const categories: Category[] = [
   { id: "fruits", name: "فواكه", image: catFruits },
   { id: "juices", name: "عصائر", image: catJuices },
   { id: "sweets", name: "حلويات", image: catSweets },
+  { id: "electronics", name: "إلكترونيات", image: catElectronics },
   { id: "services", name: "خدمات", image: catServices },
 ];
 
