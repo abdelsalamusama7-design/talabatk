@@ -139,6 +139,18 @@ import prodMince from "@/assets/prod-mince.jpg";
 import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
 import prodSausage from "@/assets/prod-sausage.jpg";
 
+// Home food images
+import catHomefood from "@/assets/cat-homefood.jpg";
+import storeKitchen1 from "@/assets/store-kitchen1.jpg";
+import storeKitchen2 from "@/assets/store-kitchen2.jpg";
+import storeKitchen3 from "@/assets/store-kitchen3.jpg";
+import prodMolokhia from "@/assets/prod-molokhia.jpg";
+import prodMahshi from "@/assets/prod-mahshi.jpg";
+import prodKofta from "@/assets/prod-kofta.jpg";
+import prodBamia from "@/assets/prod-bamia.jpg";
+import prodFattah from "@/assets/prod-fattah.jpg";
+import prodMacaronaBechamel from "@/assets/prod-macarona-bechamel.jpg";
+
 // New store images
 import storeChickenRest from "@/assets/store-chicken-rest.jpg";
 import storeCrepe from "@/assets/store-crepe.jpg";
@@ -226,6 +238,7 @@ export const categories: Category[] = [
   { id: "electronics", name: "إلكترونيات", image: catElectronics },
   { id: "kiosk", name: "كشك", image: catKiosk },
   { id: "meat", name: "لحوم ودواجن", image: catMeat },
+  { id: "homefood", name: "أكل بيتي", image: catHomefood },
   { id: "services", name: "خدمات", image: catServices },
 ];
 
@@ -1053,6 +1066,64 @@ export const stores: Store[] = [
       { id: "x73", name: "تنظيف منازل", price: 300, description: "تنظيف شامل للمنزل - 4 ساعات", image: storeServices2 },
       { id: "x74", name: "صيانة تكييفات", price: 250, description: "غسيل وصيانة تكييف سبليت", image: storeServices2 },
       { id: "x75", name: "دهان غرفة", price: 500, description: "دهان غرفة كاملة بالمواد", image: storeServices2 },
+    ],
+  },
+  // Home Food - أكل بيتي
+  {
+    id: "kitchen-mona",
+    name: "مطبخ مني",
+    category: "أكل بيتي",
+    categoryId: "homefood",
+    image: storeKitchen1,
+    rating: 4.8,
+    reviewCount: 245,
+    deliveryTime: "30-45",
+    deliveryFee: 10,
+    products: [
+      { id: "hf1", name: "ملوخية بالأرانب", price: 75, description: "ملوخية خضراء طازجة مع أرانب بلدي وأرز", image: prodMolokhia },
+      { id: "hf2", name: "محشي ورق عنب", price: 65, description: "ورق عنب محشي بالأرز والخضار على الطريقة المصرية", image: prodMahshi },
+      { id: "hf3", name: "كفتة مشوية", price: 80, description: "كفتة لحم مشوية على الفحم مع أرز وسلطة", image: prodKofta },
+      { id: "hf4", name: "بامية باللحمة", price: 70, description: "بامية طازجة مطبوخة مع قطع اللحم والأرز", image: prodBamia },
+      { id: "hf5", name: "مكرونة بشاميل", price: 55, description: "مكرونة بشاميل بالفراخ في الفرن", image: prodMacaronaBechamel },
+      { id: "hf6", name: "فتة باللحمة", price: 85, description: "فتة مصرية بالعيش والأرز واللحمة والصلصة", image: prodFattah },
+    ],
+  },
+  {
+    id: "kitchen-um-mohamed",
+    name: "مطبخ أم محمد",
+    category: "أكل بيتي",
+    categoryId: "homefood",
+    image: storeKitchen2,
+    rating: 4.9,
+    reviewCount: 410,
+    deliveryTime: "35-50",
+    deliveryFee: 12,
+    products: [
+      { id: "hf7", name: "ملوخية بالفراخ", price: 65, description: "ملوخية خضراء مع فراخ مسلوقة وأرز بالشعرية", image: prodMolokhia },
+      { id: "hf8", name: "محشي كوسة وفلفل", price: 70, description: "كوسة وفلفل محشي بالأرز واللحمة المفرومة", image: prodMahshi },
+      { id: "hf9", name: "كفتة بالصلصة", price: 75, description: "كفتة محمرة في صلصة الطماطم مع أرز أبيض", image: prodKofta },
+      { id: "hf10", name: "بامية بالدجاج", price: 65, description: "بامية مطبوخة مع قطع الدجاج وأرز", image: prodBamia },
+      { id: "hf11", name: "مكرونة بشاميل باللحمة", price: 60, description: "مكرونة بشاميل باللحمة المفرومة", image: prodMacaronaBechamel },
+      { id: "hf12", name: "فتة فراخ", price: 70, description: "فتة بالفراخ والخل والثوم على الطريقة المصرية", image: prodFattah },
+    ],
+  },
+  {
+    id: "kitchen-yasmin",
+    name: "مطبخ الياسمين",
+    category: "أكل بيتي",
+    categoryId: "homefood",
+    image: storeKitchen3,
+    rating: 4.7,
+    reviewCount: 180,
+    deliveryTime: "30-40",
+    deliveryFee: 10,
+    products: [
+      { id: "hf13", name: "ملوخية باللحمة", price: 70, description: "ملوخية ناعمة باللحمة البلدي والأرز", image: prodMolokhia },
+      { id: "hf14", name: "محشي مشكل", price: 75, description: "محشي كوسة وباذنجان وفلفل وورق عنب", image: prodMahshi },
+      { id: "hf15", name: "كفتة داوود باشا", price: 85, description: "كفتة في صلصة الطماطم مع البطاطس", image: prodKofta },
+      { id: "hf16", name: "فاصوليا باللحمة", price: 65, description: "فاصوليا بيضاء مطبوخة مع اللحم والصلصة", image: prodBamia },
+      { id: "hf17", name: "مكرونة بشاميل بالفراخ", price: 55, description: "مكرونة بشاميل بقطع الفراخ المسحبة", image: prodMacaronaBechamel },
+      { id: "hf18", name: "فتة لحمة بلدي", price: 90, description: "فتة باللحم البلدي والخل والثوم", image: prodFattah },
     ],
   },
 ];
