@@ -1,19 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLiveOrders } from "@/lib/live-order-context";
+import { supabase } from "@/integrations/supabase/client";
 import LiveDeliveryMap from "@/components/LiveDeliveryMap";
 import OrderProgressStepper from "@/components/OrderProgressStepper";
 import OrderChat from "@/components/OrderChat";
-import { ArrowRight, Phone, MessageCircle, Star, Clock, MapPin } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Star, Clock, MapPin, Timer, Navigation } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+
+interface DriverInfo {
+  id: string;
+  name: string | null;
+  phone: string | null;
+  rating: number | null;
+  vehicle_type: string | null;
+  total_deliveries: number | null;
+}
 
 const LiveTrackingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { liveOrders } = useLiveOrders();
   const [chatOpen, setChatOpen] = useState(false);
+  const [driver, setDriver] = useState<DriverInfo | null>(null);
   const order = liveOrders.find((o) => o.id === id);
+
+  // Fetch driver info when driver_id changes
+  useEffect(() => {
+    if (!order?.driver_id) {
+      setDriver(null);
+      return;
+    }
+
+    const fetchDriver = async () => {
+      const { data } = await supabase
+        .from("drivers")
+        .select("id, name, phone, rating, vehicle_type, total_deliveries")
+        .eq("id", order.driver_id!)
+        .maybeSingle();
+      if (data) setDriver(data as DriverInfo);
+    };
+    fetchDriver();
+
+    // Listen for driver updates (e.g. rating changes)
+    const channel = supabase
+      .channel(`driver-info-${order.driver_id}`)
+      .on("postgres_changes", {
+        event: "UPDATE",
+        schema: "public",
+        table: "drivers",
+        filter: `id=eq.${order.driver_id}`,
+      }, (payload) => {
+        const d = payload.new as any;
+        setDriver({
+          id: d.id,
+          name: d.name,
+          phone: d.phone,
+          rating: d.rating,
+          vehicle_type: d.vehicle_type,
+          total_deliveries: d.total_deliveries,
+        });
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [order?.driver_id]);
 
   if (!order) {
     return (
@@ -28,6 +80,30 @@ const LiveTrackingPage = () => {
 
   const isActive = !["delivered", "cancelled"].includes(order.status);
   const items = Array.isArray(order.items) ? order.items : [];
+  const driverName = driver?.name || "المندوب";
+
+  // Calculate ETA
+  const getEta = () => {
+    if (order.estimated_delivery) {
+      const etaDate = new Date(order.estimated_delivery);
+      const now = new Date();
+      const diffMin = Math.max(0, Math.round((etaDate.getTime() - now.getTime()) / 60000));
+      if (diffMin <= 0) return "وصل تقريباً";
+      return `${diffMin} دقيقة`;
+    }
+    // Fallback estimates based on status
+    switch (order.status) {
+      case "pending": return "30-45 دقيقة";
+      case "confirmed": return "25-40 دقيقة";
+      case "preparing": return "20-30 دقيقة";
+      case "ready": return "15-25 دقيقة";
+      case "picked_up": return "10-20 دقيقة";
+      case "delivering": return "5-15 دقيقة";
+      default: return "";
+    }
+  };
+
+  const eta = getEta();
 
   return (
     <div className="min-h-screen bg-background pb-6" dir="rtl">
@@ -58,13 +134,29 @@ const LiveTrackingPage = () => {
             {order.status === "cancelled" && "❌ تم إلغاء الطلب"}
           </p>
         </motion.div>
+
+        {/* ETA badge in header */}
+        {isActive && eta && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="mt-3 flex items-center justify-center gap-2"
+          >
+            <div className="bg-card/30 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2">
+              <Timer className="h-4 w-4 text-primary-foreground" />
+              <span className="text-primary-foreground font-bold text-sm">
+                الوصول المتوقع: {eta}
+              </span>
+            </div>
+          </motion.div>
+        )}
       </div>
 
       <div className="px-4 pt-4 space-y-4">
         {/* Live Map */}
         {isActive && (
           <LiveDeliveryMap
-            driverName="أحمد"
+            driverName={driverName}
             orderStatus={order.status}
             driverId={order.driver_id}
             customerLat={order.delivery_lat || undefined}
@@ -72,35 +164,85 @@ const LiveTrackingPage = () => {
           />
         )}
 
-        {/* Driver info card */}
-        {isActive && ["picked_up", "delivering"].includes(order.status) && (
+        {/* Driver info card - show when driver is assigned */}
+        {isActive && driver && (
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="bg-card rounded-2xl p-4 shadow-card"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
                 🏍️
               </div>
-              <div className="flex-1">
-                <p className="font-bold text-foreground">أحمد محمد</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="h-3 w-3 text-warning fill-warning" /> 4.8
-                  <span className="mx-1">•</span>
-                  دراجة نارية
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-foreground text-base">{driver.name || "المندوب"}</p>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
+                  <Star className="h-3 w-3 text-warning fill-warning" />
+                  <span>{driver.rating?.toFixed(1) || "5.0"}</span>
+                  <span className="mx-0.5">•</span>
+                  <span>{driver.vehicle_type === "motorcycle" ? "موتوسيكل" : driver.vehicle_type || "موتوسيكل"}</span>
+                  {driver.total_deliveries ? (
+                    <>
+                      <span className="mx-0.5">•</span>
+                      <span>{driver.total_deliveries} توصيلة</span>
+                    </>
+                  ) : null}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
-                  <Phone className="h-4 w-4 text-success" />
-                </button>
-                <button
-                  onClick={() => setChatOpen(!chatOpen)}
-                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-2 mt-3">
+              {/* Phone call */}
+              {driver.phone ? (
+                <a
+                  href={`tel:${driver.phone}`}
+                  className="flex-1 h-11 rounded-xl bg-success/10 flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
-                  <MessageCircle className="h-4 w-4 text-primary" />
+                  <Phone className="h-4 w-4 text-success" />
+                  <span className="text-sm font-semibold text-success">اتصال</span>
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="flex-1 h-11 rounded-xl bg-muted flex items-center justify-center gap-2 opacity-50"
+                >
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-muted-foreground">اتصال</span>
                 </button>
+              )}
+
+              {/* Chat */}
+              <button
+                onClick={() => setChatOpen(!chatOpen)}
+                className={`flex-1 h-11 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform ${
+                  chatOpen ? "bg-primary text-primary-foreground" : "bg-primary/10"
+                }`}
+              >
+                <MessageCircle className={`h-4 w-4 ${chatOpen ? "text-primary-foreground" : "text-primary"}`} />
+                <span className={`text-sm font-semibold ${chatOpen ? "text-primary-foreground" : "text-primary"}`}>
+                  محادثة
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Waiting for driver assignment */}
+        {isActive && !driver && ["confirmed", "preparing", "ready"].includes(order.status) && (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-card rounded-2xl p-4 shadow-card"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                <Navigation className="h-5 w-5 text-muted-foreground animate-pulse" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground text-sm">جاري تعيين مندوب...</p>
+                <p className="text-xs text-muted-foreground mt-0.5">سيتم إعلامك فور تعيين المندوب</p>
               </div>
             </div>
           </motion.div>

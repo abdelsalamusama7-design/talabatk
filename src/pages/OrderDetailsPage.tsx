@@ -30,6 +30,9 @@ import {
   MessageCircle,
   Star,
   XCircle,
+  Phone,
+  Timer,
+  Navigation,
 } from "lucide-react";
 
 interface OrderItem {
@@ -37,6 +40,15 @@ interface OrderItem {
   price: number;
   quantity: number;
   image?: string;
+}
+
+interface DriverInfo {
+  id: string;
+  name: string | null;
+  phone: string | null;
+  rating: number | null;
+  vehicle_type: string | null;
+  total_deliveries: number | null;
 }
 
 const OrderDetailsPage = () => {
@@ -48,6 +60,7 @@ const OrderDetailsPage = () => {
   const [restaurantName, setRestaurantName] = useState<string>("");
   const [reordering, setReordering] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  const [driver, setDriver] = useState<DriverInfo | null>(null);
   const order = liveOrders.find((o) => o.id === id);
 
   // Fetch restaurant name
@@ -62,6 +75,22 @@ const OrderDetailsPage = () => {
         if (data) setRestaurantName(data.name);
       });
   }, [order?.restaurant_id]);
+
+  // Fetch driver info
+  useEffect(() => {
+    if (!order?.driver_id) {
+      setDriver(null);
+      return;
+    }
+    supabase
+      .from("drivers")
+      .select("id, name, phone, rating, vehicle_type, total_deliveries")
+      .eq("id", order.driver_id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setDriver(data as DriverInfo);
+      });
+  }, [order?.driver_id]);
 
   if (!user) {
     return (
@@ -93,6 +122,28 @@ const OrderDetailsPage = () => {
   const canCancel = ["pending", "confirmed"].includes(order.status);
   const orderDate = new Date(order.created_at);
 
+  // Calculate ETA
+  const getEta = () => {
+    if (order.estimated_delivery) {
+      const etaDate = new Date(order.estimated_delivery);
+      const now = new Date();
+      const diffMin = Math.max(0, Math.round((etaDate.getTime() - now.getTime()) / 60000));
+      if (diffMin <= 0) return "وصل تقريباً";
+      return `${diffMin} دقيقة`;
+    }
+    switch (order.status) {
+      case "pending": return "30-45 دقيقة";
+      case "confirmed": return "25-40 دقيقة";
+      case "preparing": return "20-30 دقيقة";
+      case "ready": return "15-25 دقيقة";
+      case "picked_up": return "10-20 دقيقة";
+      case "delivering": return "5-15 دقيقة";
+      default: return "";
+    }
+  };
+
+  const eta = getEta();
+
   const handleCancel = async () => {
     setCancelling(true);
     try {
@@ -112,7 +163,6 @@ const OrderDetailsPage = () => {
   const handleReorder = async () => {
     setReordering(true);
     try {
-      // Fetch menu items from restaurant to get current prices & images
       const { data: menuItems } = await supabase
         .from("menu_items")
         .select("*")
@@ -224,9 +274,110 @@ const OrderDetailsPage = () => {
           </div>
         </motion.div>
 
+        {/* ETA card for active orders */}
+        {isActive && eta && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.03 }}
+            className="bg-primary/5 border border-primary/20 rounded-2xl p-4 flex items-center gap-3"
+          >
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Timer className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs text-muted-foreground">الوقت المتوقع للتوصيل</p>
+              <p className="text-lg font-bold text-primary">{eta}</p>
+            </div>
+            {isActive && (
+              <motion.div
+                className="w-3 h-3 rounded-full bg-success"
+                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              />
+            )}
+          </motion.div>
+        )}
+
+        {/* Driver info card */}
+        {isActive && driver && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.05 }}
+            className="bg-card rounded-2xl p-4 shadow-card"
+          >
+            <h3 className="font-semibold text-foreground mb-3 text-sm flex items-center gap-2">
+              🏍️ المندوب المسؤول
+            </h3>
+            <div className="flex items-center gap-3">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
+                🏍️
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-foreground">{driver.name || "المندوب"}</p>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
+                  <Star className="h-3 w-3 text-warning fill-warning" />
+                  <span>{driver.rating?.toFixed(1) || "5.0"}</span>
+                  <span className="mx-0.5">•</span>
+                  <span>{driver.vehicle_type === "motorcycle" ? "موتوسيكل" : driver.vehicle_type || "موتوسيكل"}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-3">
+              {driver.phone ? (
+                <a
+                  href={`tel:${driver.phone}`}
+                  className="flex-1 h-11 rounded-xl bg-success/10 flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                >
+                  <Phone className="h-4 w-4 text-success" />
+                  <span className="text-sm font-semibold text-success">اتصال</span>
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="flex-1 h-11 rounded-xl bg-muted flex items-center justify-center gap-2 opacity-50"
+                >
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-muted-foreground">اتصال</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => navigate(`/track/${order.id}`)}
+                className="flex-1 h-11 rounded-xl bg-primary/10 flex items-center justify-center gap-2 active:scale-95 transition-transform"
+              >
+                <MessageCircle className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">محادثة وتتبع</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Waiting for driver */}
+        {isActive && !driver && ["confirmed", "preparing", "ready"].includes(order.status) && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.05 }}
+            className="bg-card rounded-2xl p-4 shadow-card"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                <Navigation className="h-5 w-5 text-muted-foreground animate-pulse" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground text-sm">جاري تعيين مندوب...</p>
+                <p className="text-xs text-muted-foreground mt-0.5">سيتم إعلامك فور تعيين المندوب</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Order progress */}
         {isActive && (
-          <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.05 }}>
+          <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.08 }}>
             <OrderProgressStepper orderStatus={order.status} createdAt={order.created_at} />
           </motion.div>
         )}
@@ -315,26 +466,27 @@ const OrderDetailsPage = () => {
           transition={{ delay: 0.25 }}
           className="space-y-3"
         >
+          {/* Track button for active */}
+          {isActive && (
+            <Button
+              onClick={() => navigate(`/track/${order.id}`)}
+              className="w-full rounded-2xl h-12 font-bold text-base gap-2"
+            >
+              <MapPin className="h-5 w-5" />
+              تتبع الطلب مباشرة
+            </Button>
+          )}
+
           {/* Reorder button */}
           <Button
             onClick={handleReorder}
             disabled={reordering}
+            variant={isActive ? "outline" : "default"}
             className="w-full rounded-2xl h-12 font-bold text-base gap-2"
           >
             <RefreshCw className={`h-5 w-5 ${reordering ? "animate-spin" : ""}`} />
             {reordering ? "جاري إعادة الطلب..." : "إعادة الطلب بنقرة واحدة"}
           </Button>
-
-          {/* Track button for active */}
-          {isActive && (
-            <Button
-              onClick={() => navigate(`/track/${order.id}`)}
-              variant="outline"
-              className="w-full rounded-2xl h-11 font-semibold"
-            >
-              تتبع الطلب مباشرة
-            </Button>
-          )}
 
           {/* Cancel button for pending/confirmed */}
           {canCancel && (
