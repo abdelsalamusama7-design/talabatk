@@ -262,6 +262,9 @@ export const stores: Store[] = [
       { id: "p6", name: "أدوية برد وإنفلونزا", price: 85, description: "مجموعة أدوية البرد الأساسية", image: prodMedicine },
       { id: "p7", name: "فيتامين سي", price: 45, description: "فيتامين سي 1000 مجم - 30 قرص", image: prodVitamins },
       { id: "p8", name: "مسكنات", price: 30, description: "بنادول أقراص - 24 قرص", image: prodMedicine },
+      { id: "p8b", name: "كريم واقي شمس", price: 150, description: "واقي شمس SPF 50 - 100 مل", image: prodSunscreen },
+      { id: "p8c", name: "فيتامين د3", price: 60, description: "فيتامين د3 - 30 كبسولة", image: prodVitamins },
+      { id: "p8d", name: "شاش وقطن طبي", price: 20, description: "شاش معقم + قطن طبي", image: prodMedicine },
     ],
   },
   {
