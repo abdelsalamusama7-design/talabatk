@@ -49,7 +49,7 @@ const InstallPage = () => {
         <p className="text-primary-foreground/80 text-sm">ثبّت التطبيق على هاتفك وتمتع بتجربة أسرع</p>
       </div>
 
-      <div className="px-6 py-8 space-y-6">
+      <div className="px-6 py-8 pb-28 space-y-6">
         {/* Status */}
         {isInstalled && (
           <div className="bg-success/10 border border-success/20 rounded-2xl p-4 flex items-center gap-3">
