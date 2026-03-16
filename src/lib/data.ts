@@ -316,6 +316,9 @@ export const stores: Store[] = [
       { id: "p15", name: "بيتزا مارجريتا", price: 90, description: "بيتزا بصوص الطماطم وجبنة موزاريلا", image: prodPizzaMargherita },
       { id: "p16", name: "بيتزا بيبروني", price: 110, description: "بيتزا مع شرائح البيبروني", image: prodPizzaPepperoni },
       { id: "p17", name: "بيتزا سوبريم", price: 130, description: "بيتزا بكل الإضافات", image: prodPizzaSupreme },
+      { id: "p17b", name: "بيتزا دجاج باربيكيو", price: 120, description: "بيتزا بالدجاج وصوص باربيكيو", image: prodPizzaPepperoni },
+      { id: "p17c", name: "باستا ألفريدو", price: 85, description: "باستا بصوص الألفريدو الكريمي والدجاج", image: prodPasta },
+      { id: "p17d", name: "سلطة سيزر", price: 50, description: "سلطة سيزر مع خس ودجاج مشوي", image: prodHerbs },
     ],
   },
   {
