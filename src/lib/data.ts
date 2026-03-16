@@ -64,6 +64,30 @@ import prodDairy from "@/assets/prod-dairy.jpg";
 import prodGroceryStaples from "@/assets/prod-grocery-staples.jpg";
 import prodPhoneRepair from "@/assets/prod-phone-repair.jpg";
 
+// Juice images
+import catJuices from "@/assets/cat-juices.jpg";
+import storeFarghaly from "@/assets/store-farghaly.jpg";
+import storeJuiceTime from "@/assets/store-juice-time.jpg";
+import prodJuiceMango from "@/assets/prod-juice-mango.jpg";
+import prodJuiceStrawberry from "@/assets/prod-juice-strawberry.jpg";
+import prodJuiceOrange from "@/assets/prod-juice-orange.jpg";
+import prodJuiceSugarcane from "@/assets/prod-juice-sugarcane.jpg";
+import prodJuiceGuava from "@/assets/prod-juice-guava.jpg";
+import prodJuiceCocktail from "@/assets/prod-juice-cocktail.jpg";
+import prodJuiceLemonmint from "@/assets/prod-juice-lemonmint.jpg";
+
+// Sweets images
+import storeBalaban from "@/assets/store-balaban.jpg";
+import storelapoar from "@/assets/store-lapoar.jpg";
+import prodKunafa from "@/assets/prod-kunafa.jpg";
+import prodBasbousa from "@/assets/prod-basbousa.jpg";
+import prodRicePudding from "@/assets/prod-rice-pudding.jpg";
+import prodChocolateCake from "@/assets/prod-chocolate-cake.jpg";
+import prodMacarons from "@/assets/prod-macarons.jpg";
+import prodBaklava from "@/assets/prod-baklava.jpg";
+import prodCreamCaramel from "@/assets/prod-cream-caramel.jpg";
+import prodCheesecake from "@/assets/prod-cheesecake.jpg";
+
 export interface Category {
   id: string;
   name: string;
@@ -130,8 +154,9 @@ export const categories: Category[] = [
   { id: "grocery", name: "البقالة", image: catGrocery },
   { id: "vegetables", name: "خضار", image: catVegetables },
   { id: "fruits", name: "فواكه", image: catFruits },
-  { id: "services", name: "خدمات", image: catServices },
+  { id: "juices", name: "عصائر", image: catJuices },
   { id: "sweets", name: "حلويات", image: catSweets },
+  { id: "services", name: "خدمات", image: catServices },
 ];
 
 export const stores: Store[] = [
@@ -408,6 +433,85 @@ export const stores: Store[] = [
       { id: "p65", name: "كيلو أناناس", price: 70, description: "أناناس طازج مقشر", image: prodPineapple },
       { id: "p66", name: "سلة فواكه مشكلة", price: 120, description: "تشكيلة فواكه موسمية 2 كيلو", image: prodFruitBasket },
       { id: "p67", name: "كيلو بطيخ مقطع", price: 25, description: "بطيخ أحمر مقطع جاهز", image: prodWatermelon },
+    ],
+  },
+  // ===== عصائر =====
+  {
+    id: "farghaly-juice",
+    name: "عصائر فرغلي",
+    category: "عصائر",
+    categoryId: "juices",
+    image: storeFarghaly,
+    rating: 4.8,
+    reviewCount: 620,
+    deliveryTime: "15-25",
+    deliveryFee: 10,
+    products: [
+      { id: "j1", name: "عصير مانجو", price: 30, description: "عصير مانجو طبيعي 100%", image: prodJuiceMango },
+      { id: "j2", name: "عصير فراولة", price: 30, description: "عصير فراولة طازج بالحليب", image: prodJuiceStrawberry },
+      { id: "j3", name: "عصير برتقال", price: 25, description: "عصير برتقال طبيعي طازج", image: prodJuiceOrange },
+      { id: "j4", name: "عصير قصب", price: 15, description: "عصير قصب طبيعي منعش", image: prodJuiceSugarcane },
+      { id: "j5", name: "عصير جوافة بالحليب", price: 30, description: "جوافة طازجة بالحليب البارد", image: prodJuiceGuava },
+      { id: "j6", name: "كوكتيل فواكه", price: 40, description: "خليط فواكه موسمية طازجة", image: prodJuiceCocktail },
+      { id: "j7", name: "ليمون بالنعناع", price: 20, description: "ليمون طازج بالنعناع والثلج", image: prodJuiceLemonmint },
+    ],
+  },
+  {
+    id: "juice-time",
+    name: "جوس تايم",
+    category: "عصائر",
+    categoryId: "juices",
+    image: storeJuiceTime,
+    rating: 4.5,
+    reviewCount: 340,
+    deliveryTime: "15-20",
+    deliveryFee: 8,
+    products: [
+      { id: "j8", name: "سموذي مانجو", price: 35, description: "سموذي مانجو كريمي مع الثلج", image: prodJuiceMango },
+      { id: "j9", name: "عصير فراولة بالموز", price: 35, description: "فراولة وموز طازج بالحليب", image: prodJuiceStrawberry },
+      { id: "j10", name: "عصير برتقال بالجزر", price: 30, description: "مزيج برتقال وجزر صحي", image: prodJuiceOrange },
+      { id: "j11", name: "عصير جوافة", price: 25, description: "جوافة طبيعية 100%", image: prodJuiceGuava },
+      { id: "j12", name: "كوكتيل استوائي", price: 45, description: "مانجو + أناناس + باشن فروت", image: prodJuiceCocktail },
+      { id: "j13", name: "ليمون نعناع مثلج", price: 20, description: "ليمون بالنعناع والعسل", image: prodJuiceLemonmint },
+    ],
+  },
+  // ===== حلويات =====
+  {
+    id: "balaban-sweets",
+    name: "حلويات بلبن",
+    category: "حلويات",
+    categoryId: "sweets",
+    image: storeBalaban,
+    rating: 4.7,
+    reviewCount: 510,
+    deliveryTime: "20-30",
+    deliveryFee: 15,
+    products: [
+      { id: "s1", name: "كنافة نابلسية", price: 60, description: "كنافة بالجبنة مع شربات ساخنة", image: prodKunafa },
+      { id: "s2", name: "بسبوسة بالقشطة", price: 40, description: "بسبوسة طرية بالقشطة والمكسرات", image: prodBasbousa },
+      { id: "s3", name: "أرز باللبن", price: 25, description: "أرز باللبن كريمي مع مكسرات", image: prodRicePudding },
+      { id: "s4", name: "بقلاوة بالفستق", price: 80, description: "بقلاوة مقرمشة بالفستق الحلبي", image: prodBaklava },
+      { id: "s5", name: "كريم كراميل", price: 30, description: "كريم كراميل ناعم ومتماسك", image: prodCreamCaramel },
+      { id: "s6", name: "أم علي", price: 45, description: "أم علي بالمكسرات والزبيب ساخنة", image: prodRicePudding },
+    ],
+  },
+  {
+    id: "lapoar-patisserie",
+    name: "لابوار باتيسري",
+    category: "حلويات",
+    categoryId: "sweets",
+    image: storelapoar,
+    rating: 4.9,
+    reviewCount: 380,
+    deliveryTime: "25-40",
+    deliveryFee: 20,
+    products: [
+      { id: "s7", name: "كيكة شوكولاتة", price: 90, description: "كيكة شوكولاتة بلجيكية فاخرة", image: prodChocolateCake },
+      { id: "s8", name: "ماكرون فرنسي (6 قطع)", price: 120, description: "ماكرون بنكهات متنوعة", image: prodMacarons },
+      { id: "s9", name: "تشيز كيك توت", price: 85, description: "تشيز كيك بصوص التوت الطازج", image: prodCheesecake },
+      { id: "s10", name: "كريم بروليه", price: 55, description: "كريم بروليه فرنسي أصلي", image: prodCreamCaramel },
+      { id: "s11", name: "كنافة كريمية", price: 70, description: "كنافة بالكريمة والفستق", image: prodKunafa },
+      { id: "s12", name: "بسبوسة باللوز", price: 50, description: "بسبوسة فاخرة باللوز المحمص", image: prodBasbousa },
     ],
   },
 ];
