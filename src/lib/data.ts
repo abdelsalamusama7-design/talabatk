@@ -281,6 +281,8 @@ export const stores: Store[] = [
       { id: "p9", name: "تصليح شاشة موبايل", price: 350, description: "تغيير شاشة الموبايل بشاشة أصلية", image: prodPhoneRepair },
       { id: "p10", name: "صيانة لاب توب", price: 200, description: "فحص شامل وتنظيف", image: storeTech },
       { id: "p11", name: "استبدال بطارية", price: 150, description: "تغيير البطارية ببطارية جديدة", image: prodPhoneRepair },
+      { id: "p11b", name: "تركيب سوفت وير", price: 100, description: "تثبيت نظام تشغيل وبرامج", image: storeTech },
+      { id: "p11c", name: "تنظيف فيروسات", price: 120, description: "إزالة فيروسات وبرامج ضارة", image: storeTech },
     ],
   },
   {
