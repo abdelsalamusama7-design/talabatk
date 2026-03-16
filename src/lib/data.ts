@@ -116,6 +116,18 @@ import prodPhoneAccessories from "@/assets/prod-phone-accessories.jpg";
 import prodCharger from "@/assets/prod-charger.jpg";
 import prodGaming from "@/assets/prod-gaming.jpg";
 
+// Kiosk images
+import catKiosk from "@/assets/cat-kiosk.jpg";
+import storeOmda from "@/assets/store-omda.jpg";
+import storeHaga from "@/assets/store-haga.jpg";
+import storeKaram from "@/assets/store-karam.jpg";
+import prodChips from "@/assets/prod-chips.jpg";
+import prodCigarettes from "@/assets/prod-cigarettes.jpg";
+import prodCandy from "@/assets/prod-candy.jpg";
+import prodWaterDrinks from "@/assets/prod-water-drinks.jpg";
+import prodBiscuits from "@/assets/prod-biscuits.jpg";
+import prodGum from "@/assets/prod-gum.jpg";
+
 export interface Category {
   id: string;
   name: string;
