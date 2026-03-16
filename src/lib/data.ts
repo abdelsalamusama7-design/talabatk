@@ -297,6 +297,9 @@ export const stores: Store[] = [
       { id: "p12", name: "كشري صغير", price: 25, description: "طبق كشري صغير مع صلصة ودقة", image: prodKoshari },
       { id: "p13", name: "كشري وسط", price: 35, description: "طبق كشري وسط مع كل الإضافات", image: prodKoshari },
       { id: "p14", name: "كشري كبير", price: 50, description: "طبق كشري كبير مع إضافات مجانية", image: prodKoshari },
+      { id: "p14b", name: "كشري سوبر", price: 65, description: "كشري سوبر مع لسان عصفور وبصل مقلي إضافي", image: prodKoshari },
+      { id: "p14c", name: "مكرونة بالبشاميل", price: 45, description: "صينية مكرونة بالبشاميل واللحم المفروم", image: prodPasta },
+      { id: "p14d", name: "كولا 330 مل", price: 12, description: "مشروب غازي مع الوجبة", image: prodCola },
     ],
   },
   {
