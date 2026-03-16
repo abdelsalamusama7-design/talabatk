@@ -128,6 +128,17 @@ import prodWaterDrinks from "@/assets/prod-water-drinks.jpg";
 import prodBiscuits from "@/assets/prod-biscuits.jpg";
 import prodGum from "@/assets/prod-gum.jpg";
 
+// Meat & Poultry images
+import catMeat from "@/assets/cat-meat.jpg";
+import storeMeat1 from "@/assets/store-meat1.jpg";
+import storeMeat2 from "@/assets/store-meat2.jpg";
+import storeMeat3 from "@/assets/store-meat3.jpg";
+import prodBeef from "@/assets/prod-beef.jpg";
+import prodLamb from "@/assets/prod-lamb.jpg";
+import prodMince from "@/assets/prod-mince.jpg";
+import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
+import prodSausage from "@/assets/prod-sausage.jpg";
+
 export interface Category {
   id: string;
   name: string;
