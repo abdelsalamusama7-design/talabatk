@@ -15,8 +15,8 @@ const PWAInstallPrompt = () => {
   const { lang } = useLang();
 
   useEffect(() => {
-    // Don't show if already installed as PWA
-    if (window.matchMedia("(display-mode: standalone)").matches) return;
+    // Don't show if running inside Capacitor WebView or already installed
+    if ((window as any).Capacitor?.isNativePlatform?.() || window.matchMedia("(display-mode: standalone)").matches) return;
 
     // Check if dismissed recently (24 hours)
     const dismissed = localStorage.getItem("pwa-prompt-dismissed");

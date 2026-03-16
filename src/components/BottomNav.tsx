@@ -20,7 +20,7 @@ const BottomNav = () => {
   if (hiddenPaths.some((p) => location.pathname.startsWith(p))) return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card shadow-[0_-1px_3px_rgba(0,0,0,0.1)] safe-area-pb">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card shadow-[0_-1px_3px_rgba(0,0,0,0.1)]">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-4">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.path;
@@ -43,6 +43,8 @@ const BottomNav = () => {
           );
         })}
       </div>
+      {/* Safe area spacer for notch devices */}
+      <div className="safe-area-pb" />
     </nav>
   );
 };
