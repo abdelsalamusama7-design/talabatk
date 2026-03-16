@@ -143,7 +143,7 @@ const AuthPage = () => {
       {/* Header */}
       <div className="bg-primary pt-16 pb-12 px-6 rounded-b-[2.5rem] text-center">
         <h1 className="text-3xl font-bold text-primary-foreground mb-2">{lang === "ar" ? "طلباتك" : "Talabatk"}</h1>
-        <p className="text-primary-foreground/80 text-sm">{lang === "ar" ? "أسرع منصة توصيل بالذكاء الاصطناعي" : "The fastest AI-powered delivery platform"}</p>
+        <p className="text-primary-foreground/80 text-sm">{lang === "ar" ? "أسرع منصة توصيل في مصر" : "The fastest delivery platform in Egypt"}</p>
       </div>
 
       {/* Form */}
