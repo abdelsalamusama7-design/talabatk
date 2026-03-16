@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import LocationPicker from "@/components/LocationPicker";
 
 const CartPage = () => {
-  const { items, updateQuantity, removeItem, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
+  const { items, updateQuantity, removeItem, updateItemNote, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
   const { user } = useAuth();
   const { address, lat, lng, loading: geoLoading, error: geoError, requestLocation, setManualLocation } = useGeolocation();
   const navigate = useNavigate();
