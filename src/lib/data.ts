@@ -88,6 +88,19 @@ import prodBaklava from "@/assets/prod-baklava.jpg";
 import prodCreamCaramel from "@/assets/prod-cream-caramel.jpg";
 import prodCheesecake from "@/assets/prod-cheesecake.jpg";
 
+// Supermarket images
+import catSupermarket from "@/assets/cat-supermarket.jpg";
+import storeCarrefour from "@/assets/store-carrefour.jpg";
+import storeKheirzaman from "@/assets/store-kheirzaman.jpg";
+import prodCanned from "@/assets/prod-canned.jpg";
+import prodSnacks from "@/assets/prod-snacks.jpg";
+import prodCleaning from "@/assets/prod-cleaning.jpg";
+import prodChickenRaw from "@/assets/prod-chicken-raw.jpg";
+import prodPasta from "@/assets/prod-pasta.jpg";
+import prodTeaCoffee from "@/assets/prod-tea-coffee.jpg";
+import prodFrozen from "@/assets/prod-frozen.jpg";
+import prodBaby from "@/assets/prod-baby.jpg";
+
 export interface Category {
   id: string;
   name: string;
