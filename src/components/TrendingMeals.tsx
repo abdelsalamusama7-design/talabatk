@@ -10,6 +10,7 @@ interface TrendingMeal {
   meal_name: string;
   meal_description: string | null;
   restaurant_name: string | null;
+  restaurant_id: string | null;
   price: number | null;
   image_url: string | null;
   score: number | null;
