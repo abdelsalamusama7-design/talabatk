@@ -13,7 +13,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 
   return (
     <div
-      style={{ backgroundColor: '#1a9be0' }}
+      style={{ backgroundColor: '#2E78B7' }}
       className={`fixed inset-0 z-[9999] transition-opacity duration-600 ${phase >= 2 ? "opacity-0" : "opacity-100"}`}
     >
       <img
