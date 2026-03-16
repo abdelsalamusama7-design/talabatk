@@ -68,6 +68,7 @@ const LocationHeader = () => {
               aria-label="Install App"
             >
               <Download className="h-[18px] w-[18px] text-primary-foreground" />
+            </button>
           </div>
           <button
             onClick={() => setNotifOpen(true)}
