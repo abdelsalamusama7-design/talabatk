@@ -144,21 +144,53 @@ const CartPage = () => {
   const handleOrder = async () => {
     if (!user) {
       toast.error("سجل دخولك أولاً");
-      navigate("/auth");
+      navigate("/auth", { state: { from: "/cart" } });
       return;
     }
 
     setOrdering(true);
     try {
-      // Find restaurant in DB or use a placeholder
+      // Find restaurant in DB
       const storeName = items[0]?.store.name;
+      let restaurantId: string | undefined;
+
       const { data: restaurant } = await supabase
         .from("restaurants")
         .select("id")
         .eq("name", storeName)
         .maybeSingle();
 
-      const restaurantId = restaurant?.id;
+      restaurantId = restaurant?.id;
+
+      // If restaurant doesn't exist in DB, create it so the order can proceed
+      if (!restaurantId && user) {
+        const storeData = items[0]?.store;
+        const { data: newRestaurant, error: createErr } = await supabase
+          .from("restaurants")
+          .insert({
+            name: storeData.name,
+            category: storeData.category || "restaurants",
+            owner_id: user.id,
+            rating: storeData.rating || 0,
+            review_count: storeData.reviewCount || 0,
+            delivery_fee: storeData.deliveryFee || 10,
+            delivery_time: storeData.deliveryTime || "30-45",
+            image_url: storeData.image || null,
+            status: "approved",
+            is_open: true,
+          })
+          .select("id")
+          .single();
+
+        if (createErr || !newRestaurant) {
+          console.error("Failed to create restaurant:", createErr);
+          toast.error("حدث خطأ أثناء تسجيل المطعم. حاول مرة أخرى");
+          setOrdering(false);
+          return;
+        }
+        restaurantId = newRestaurant.id;
+      }
+
       if (!restaurantId) {
         toast.error("المطعم غير متوفر حالياً في النظام");
         setOrdering(false);
