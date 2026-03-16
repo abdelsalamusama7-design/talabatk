@@ -1,4 +1,4 @@
-import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw } from "lucide-react";
+import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
@@ -61,6 +61,13 @@ const LocationHeader = () => {
               className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
             >
               <RefreshCw className="h-[18px] w-[18px] text-primary-foreground" />
+            </button>
+            <button
+              onClick={() => navigate("/install")}
+              className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+              aria-label="Install App"
+            >
+              <Download className="h-[18px] w-[18px] text-primary-foreground" />
             </button>
           </div>
           <button
