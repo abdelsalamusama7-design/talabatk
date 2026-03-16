@@ -19,8 +19,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
       <img
         src={splashLogo}
         alt="talabatk"
-        className={`w-full h-full object-contain transition-all duration-500 ease-out ${phase >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
-        style={{ padding: "15vh 10vw" }}
+        className={`w-full h-full object-cover transition-all duration-500 ease-out ${phase >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
       />
     </div>
   );
