@@ -97,13 +97,13 @@ const OrdersPage = () => {
                         </span>
                       </div>
 
-                      {/* Map for delivering orders */}
-                      {["delivering", "picked_up"].includes(order.status) && (
+                      {/* Map for delivering live DB orders only */}
+                      {isLive && ["delivering", "picked_up"].includes(order.status) && (
                         <div className="mb-3">
                           <LiveDeliveryMap
-                            driverName={isLive ? "أحمد" : order.deliveryPerson}
+                            driverName="أحمد"
                             orderStatus={order.status}
-                            driverId={isLive ? order.driver_id : undefined}
+                            driverId={order.driver_id}
                             compact
                           />
                         </div>
