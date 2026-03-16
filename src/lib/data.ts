@@ -101,6 +101,21 @@ import prodTeaCoffee from "@/assets/prod-tea-coffee.jpg";
 import prodFrozen from "@/assets/prod-frozen.jpg";
 import prodBaby from "@/assets/prod-baby.jpg";
 
+// Electronics images
+import catElectronics from "@/assets/cat-electronics.jpg";
+import storeBtech from "@/assets/store-btech.jpg";
+import storeAman from "@/assets/store-aman.jpg";
+import storeFawry from "@/assets/store-fawry.jpg";
+import prodSmartphone from "@/assets/prod-smartphone.jpg";
+import prodLaptop from "@/assets/prod-laptop.jpg";
+import prodEarbuds from "@/assets/prod-earbuds.jpg";
+import prodTv from "@/assets/prod-tv.jpg";
+import prodPowerbank from "@/assets/prod-powerbank.jpg";
+import prodSmartwatch from "@/assets/prod-smartwatch.jpg";
+import prodPhoneAccessories from "@/assets/prod-phone-accessories.jpg";
+import prodCharger from "@/assets/prod-charger.jpg";
+import prodGaming from "@/assets/prod-gaming.jpg";
+
 export interface Category {
   id: string;
   name: string;
@@ -170,6 +185,7 @@ export const categories: Category[] = [
   { id: "fruits", name: "فواكه", image: catFruits },
   { id: "juices", name: "عصائر", image: catJuices },
   { id: "sweets", name: "حلويات", image: catSweets },
+  { id: "electronics", name: "إلكترونيات", image: catElectronics },
   { id: "services", name: "خدمات", image: catServices },
 ];
 
@@ -573,6 +589,66 @@ export const stores: Store[] = [
       { id: "sm18", name: "بسكويت وسناكس أطفال", price: 20, description: "بسكويت محشي شوكولاتة", image: prodSnacks },
       { id: "sm19", name: "دجاج مجمد نصف", price: 65, description: "نصف فرخة مجمدة طازة", image: prodChickenRaw },
       { id: "sm20", name: "بطاطس مجمدة 1 كيلو", price: 45, description: "بطاطس مجمدة جاهزة للقلي", image: prodFrozen },
+    ],
+  },
+  // ===== إلكترونيات =====
+  {
+    id: "btech",
+    name: "بي تك",
+    category: "إلكترونيات",
+    categoryId: "electronics",
+    image: storeBtech,
+    rating: 4.7,
+    reviewCount: 1200,
+    deliveryTime: "1-3 أيام",
+    deliveryFee: 50,
+    products: [
+      { id: "e1", name: "سمارت فون سامسونج", price: 8500, description: "هاتف سامسونج جالاكسي A54 - 128 جيجا", image: prodSmartphone },
+      { id: "e2", name: "لاب توب لينوفو", price: 15000, description: "لاب توب لينوفو IdeaPad - كور i5 - 8 رام", image: prodLaptop },
+      { id: "e3", name: "سماعات بلوتوث", price: 450, description: "سماعات لاسلكية بلوتوث مع علبة شحن", image: prodEarbuds },
+      { id: "e4", name: "شاشة تلفزيون 43 بوصة", price: 9500, description: "تلفزيون سمارت 43 بوصة Full HD", image: prodTv },
+      { id: "e5", name: "باور بانك 20000", price: 550, description: "باور بانك 20000 مللي أمبير شحن سريع", image: prodPowerbank },
+      { id: "e6", name: "ساعة ذكية", price: 1200, description: "ساعة ذكية رياضية مقاومة للمياه", image: prodSmartwatch },
+      { id: "e7", name: "يد تحكم ألعاب", price: 850, description: "يد تحكم ألعاب لاسلكية للكمبيوتر والموبايل", image: prodGaming },
+      { id: "e8", name: "شاحن سريع Type-C", price: 180, description: "شاحن سريع 25 وات مع كابل Type-C", image: prodCharger },
+    ],
+  },
+  {
+    id: "aman-store",
+    name: "أمان",
+    category: "إلكترونيات",
+    categoryId: "electronics",
+    image: storeAman,
+    rating: 4.5,
+    reviewCount: 780,
+    deliveryTime: "1-2 يوم",
+    deliveryFee: 30,
+    products: [
+      { id: "e9", name: "موبايل شاومي", price: 5500, description: "شاومي ريدمي نوت 13 - 128 جيجا", image: prodSmartphone },
+      { id: "e10", name: "سماعات أوفر إير", price: 350, description: "سماعات رأس بلوتوث بعزل الضوضاء", image: prodEarbuds },
+      { id: "e11", name: "جراب موبايل + اسكرينة", price: 120, description: "جراب سيليكون + اسكرينة حماية زجاج", image: prodPhoneAccessories },
+      { id: "e12", name: "باور بانك 10000", price: 350, description: "باور بانك 10000 مللي أمبير خفيف", image: prodPowerbank },
+      { id: "e13", name: "كابل شحن 3 في 1", price: 80, description: "كابل شحن يدعم Type-C و Lightning و Micro", image: prodCharger },
+      { id: "e14", name: "ساعة ذكية رياضية", price: 900, description: "ساعة ذكية مع متابعة الصحة واللياقة", image: prodSmartwatch },
+    ],
+  },
+  {
+    id: "fawry-plus",
+    name: "فوري بلس",
+    category: "إلكترونيات",
+    categoryId: "electronics",
+    image: storeFawry,
+    rating: 4.3,
+    reviewCount: 450,
+    deliveryTime: "1-2 يوم",
+    deliveryFee: 25,
+    products: [
+      { id: "e15", name: "موبايل أوبو", price: 4800, description: "أوبو A78 - 128 جيجا - شاشة AMOLED", image: prodSmartphone },
+      { id: "e16", name: "سماعات TWS", price: 250, description: "سماعات لاسلكية مع ميكروفون للمكالمات", image: prodEarbuds },
+      { id: "e17", name: "شاحن لاسلكي", price: 300, description: "شاحن لاسلكي سريع 15 وات", image: prodCharger },
+      { id: "e18", name: "جراب ضد الصدمات", price: 90, description: "جراب حماية قوي ضد الصدمات", image: prodPhoneAccessories },
+      { id: "e19", name: "باور بانك صغير", price: 200, description: "باور بانك 5000 مللي أمبير للجيب", image: prodPowerbank },
+      { id: "e20", name: "يد ألعاب موبايل", price: 180, description: "يد تحكم ألعاب خاصة بالموبايل", image: prodGaming },
     ],
   },
 ];
