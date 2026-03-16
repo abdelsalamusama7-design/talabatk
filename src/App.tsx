@@ -41,6 +41,7 @@ const App = () => {
                     <AnimatedRoutes />
                     <Footer />
                     <BottomNav />
+                    <PWAInstallPrompt />
                   </BrowserRouter>
                 </LiveOrderProvider>
               </OrderProvider>
