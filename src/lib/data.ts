@@ -64,6 +64,30 @@ import prodDairy from "@/assets/prod-dairy.jpg";
 import prodGroceryStaples from "@/assets/prod-grocery-staples.jpg";
 import prodPhoneRepair from "@/assets/prod-phone-repair.jpg";
 
+// Juice images
+import catJuices from "@/assets/cat-juices.jpg";
+import storeFarghaly from "@/assets/store-farghaly.jpg";
+import storeJuiceTime from "@/assets/store-juice-time.jpg";
+import prodJuiceMango from "@/assets/prod-juice-mango.jpg";
+import prodJuiceStrawberry from "@/assets/prod-juice-strawberry.jpg";
+import prodJuiceOrange from "@/assets/prod-juice-orange.jpg";
+import prodJuiceSugarcane from "@/assets/prod-juice-sugarcane.jpg";
+import prodJuiceGuava from "@/assets/prod-juice-guava.jpg";
+import prodJuiceCocktail from "@/assets/prod-juice-cocktail.jpg";
+import prodJuiceLemonmint from "@/assets/prod-juice-lemonmint.jpg";
+
+// Sweets images
+import storeBalaban from "@/assets/store-balaban.jpg";
+import storelapoar from "@/assets/store-lapoar.jpg";
+import prodKunafa from "@/assets/prod-kunafa.jpg";
+import prodBasbousa from "@/assets/prod-basbousa.jpg";
+import prodRicePudding from "@/assets/prod-rice-pudding.jpg";
+import prodChocolateCake from "@/assets/prod-chocolate-cake.jpg";
+import prodMacarons from "@/assets/prod-macarons.jpg";
+import prodBaklava from "@/assets/prod-baklava.jpg";
+import prodCreamCaramel from "@/assets/prod-cream-caramel.jpg";
+import prodCheesecake from "@/assets/prod-cheesecake.jpg";
+
 export interface Category {
   id: string;
   name: string;
