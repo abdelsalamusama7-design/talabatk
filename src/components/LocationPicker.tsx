@@ -489,20 +489,10 @@ const LocationPicker = ({
 
       {/* Map */}
       <div className="flex-1 min-h-0 relative">
-        <MapContainer
+        <LeafletMap
           center={selectedPos}
-          zoom={15}
-          style={{ height: "100%", width: "100%" }}
-          zoomControl={false}
-          attributionControl={false}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <FlyTo center={selectedPos} />
-          <DraggableMarker
-            position={selectedPos}
-            onMove={(lat, lng) => setSelectedPos([lat, lng])}
-          />
-        </MapContainer>
+          onMove={(lat, lng) => setSelectedPos([lat, lng])}
+        />
 
         {/* GPS Button */}
         <button
