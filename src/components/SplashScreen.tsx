@@ -13,13 +13,13 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] transition-opacity duration-500 ${phase >= 2 ? "opacity-0" : "opacity-100"}`}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-500 ${phase >= 2 ? "opacity-0" : "opacity-100"}`}
       style={{ backgroundColor: "#2E78B7" }}
     >
       <img
         src={splashLogo}
         alt="talabatk"
-        className={`w-full h-full object-cover transition-all duration-400 ease-out ${phase >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+        className={`max-w-[60%] max-h-[30%] object-contain transition-all duration-400 ease-out ${phase >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
       />
     </div>
   );
