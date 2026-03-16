@@ -7,11 +7,7 @@ import LocationPicker from "./LocationPicker";
 import NotificationsPanel from "./NotificationsPanel";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { useLang } from "@/lib/lang-context";
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
+import { triggerInstall, isIOSDevice } from "@/lib/install-prompt";
 
 const LocationHeader = () => {
   const [searchOpen, setSearchOpen] = useState(false);
