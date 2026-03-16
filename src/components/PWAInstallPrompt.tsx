@@ -59,7 +59,7 @@ const PWAInstallPrompt = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    sessionStorage.setItem("pwa-prompt-dismissed", "1");
+    // Don't persist dismissal — show again on next visit
   };
 
   if (!showPrompt) return null;
