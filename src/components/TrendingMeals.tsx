@@ -125,14 +125,17 @@ const TrendingMeals = () => {
               transition={{ delay: index * 0.1 }}
               className="min-w-[200px] bg-card rounded-2xl shadow-card overflow-hidden shrink-0 relative cursor-pointer hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
               onClick={() => {
-                // Try to find a matching local store by name
                 const matchedStore = stores.find(s => 
-                  meal.restaurant_name && s.name.includes(meal.restaurant_name)
+                  meal.restaurant_name && (s.name.includes(meal.restaurant_name) || meal.restaurant_name.includes(s.name))
                 );
                 if (matchedStore) {
                   navigate(`/store/${matchedStore.id}`);
                 } else if (meal.restaurant_id) {
                   navigate(`/store/${meal.restaurant_id}`);
+                } else {
+                  // Fallback: navigate to first restaurant in same category or first store
+                  const fallback = stores.find(s => s.categoryId === "restaurants") || stores[0];
+                  if (fallback) navigate(`/store/${fallback.id}`);
                 }
               }}
             >
