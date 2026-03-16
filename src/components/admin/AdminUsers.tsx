@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Users, Eye, Trash2, MapPin, Phone, Calendar, ShoppingCart } from "lucide-react";
+import { Users, Eye, Trash2, MapPin, Phone, Calendar, ShoppingCart, ShieldCheck, ShieldOff } from "lucide-react";
 
 interface Profile {
   id: string;
@@ -17,6 +17,49 @@ interface Profile {
 const AdminUsers = ({ profiles: initial, orders }: { profiles: Profile[]; orders: any[] }) => {
   const [profiles, setProfiles] = useState<Profile[]>(initial);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [adminUserIds, setAdminUserIds] = useState<Set<string>>(new Set());
+  const [loadingRole, setLoadingRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadAdminRoles();
+  }, []);
+
+  const loadAdminRoles = async () => {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("user_id, role")
+      .eq("role", "admin");
+    if (data) {
+      setAdminUserIds(new Set(data.map((r) => r.user_id)));
+    }
+  };
+
+  const toggleAdmin = async (userId: string) => {
+    setLoadingRole(userId);
+    const isAdmin = adminUserIds.has(userId);
+    try {
+      if (isAdmin) {
+        const { error } = await supabase.rpc("admin_remove_role", {
+          _target_user_id: userId,
+          _role: "admin",
+        });
+        if (error) throw error;
+        setAdminUserIds((prev) => { const s = new Set(prev); s.delete(userId); return s; });
+        toast.success("تم إزالة صلاحية الأدمن");
+      } else {
+        const { error } = await supabase.rpc("admin_set_role", {
+          _target_user_id: userId,
+          _role: "admin",
+        });
+        if (error) throw error;
+        setAdminUserIds((prev) => new Set(prev).add(userId));
+        toast.success("تم ترقية المستخدم لأدمن");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "خطأ في تغيير الصلاحية");
+    }
+    setLoadingRole(null);
+  };
 
   const deleteUser = async (id: string, userId: string) => {
     if (!confirm("هل أنت متأكد؟ سيتم حذف بيانات المستخدم.")) return;
@@ -39,13 +82,19 @@ const AdminUsers = ({ profiles: initial, orders }: { profiles: Profile[]; orders
       {profiles.map((p) => {
         const userOrders = getUserOrders(p.user_id);
         const spending = getUserSpending(p.user_id);
+        const isAdmin = adminUserIds.has(p.user_id);
 
         return (
           <div key={p.id} className="bg-card rounded-2xl p-4 shadow-card">
             <div className="flex items-center justify-between mb-1">
-              <div>
-                <p className="font-semibold text-foreground text-sm">{p.full_name || "بدون اسم"}</p>
-                <p className="text-xs text-muted-foreground">{p.phone || "—"}</p>
+              <div className="flex items-center gap-2">
+                <div>
+                  <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                    {p.full_name || "بدون اسم"}
+                    {isAdmin && <ShieldCheck className="h-3.5 w-3.5 text-primary" />}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{p.phone || "—"}</p>
+                </div>
               </div>
               <div className="text-left">
                 <p className="text-xs font-medium text-foreground">{userOrders.length} طلب</p>
@@ -81,9 +130,18 @@ const AdminUsers = ({ profiles: initial, orders }: { profiles: Profile[]; orders
               </div>
             )}
 
-            <div className="flex gap-1.5 mt-2">
+            <div className="flex gap-1.5 mt-2 flex-wrap">
               <Button size="sm" variant="ghost" onClick={() => setExpandedId(expandedId === p.id ? null : p.id)} className="rounded-xl text-xs h-8">
                 <Eye className="h-3 w-3 ml-1" /> {expandedId === p.id ? "إخفاء" : "تفاصيل"}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => toggleAdmin(p.user_id)}
+                disabled={loadingRole === p.user_id}
+                className={`rounded-xl text-xs h-8 ${isAdmin ? "text-warning hover:text-warning" : "text-primary hover:text-primary"}`}
+              >
+                {isAdmin ? <><ShieldOff className="h-3 w-3 ml-1" /> إزالة أدمن</> : <><ShieldCheck className="h-3 w-3 ml-1" /> ترقية لأدمن</>}
               </Button>
               <Button size="sm" variant="ghost" onClick={() => deleteUser(p.id, p.user_id)} className="rounded-xl text-xs h-8 text-destructive hover:text-destructive">
                 <Trash2 className="h-3 w-3 ml-1" /> حذف
