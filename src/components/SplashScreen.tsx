@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Bike, MapPin, ShoppingBag } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
   const [phase, setPhase] = useState(0); // 0: logo, 1: tagline, 2: icons, 3: fade out
