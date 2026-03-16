@@ -1,63 +1,30 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Download, Smartphone, Share, ArrowRight, CheckCircle, Wifi, WifiOff, Bell, MapPin, Zap } from "lucide-react";
+import { Download, Smartphone, Share, ArrowRight, CheckCircle, WifiOff, Bell, MapPin, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
+import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled, isIOSDevice } from "@/lib/install-prompt";
 
 const InstallPage = () => {
   const navigate = useNavigate();
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [hasPrompt, setHasPrompt] = useState(!!getInstallPrompt());
+  const [isInstalled, setIsInstalled] = useState(isAppInstalled());
+  const [isIOS] = useState(isIOSDevice());
 
   useEffect(() => {
-    // Check if already installed
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      setIsInstalled(true);
-    }
-
-    // Detect iOS
-    const ua = navigator.userAgent;
-    setIsIOS(/iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream);
-
-    // Listen for install prompt
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return onInstallPromptChange((p) => setHasPrompt(!!p));
   }, []);
 
   const handleInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") setIsInstalled(true);
-      setDeferredPrompt(null);
-      return;
-    }
-    
-    // Fallback for browsers where beforeinstallprompt didn't fire
-    if (isIOS) {
-      alert("اضغط على زر المشاركة ⬆️ ثم اختر \"إضافة إلى الشاشة الرئيسية\"");
-    } else {
-      // Try using the browser's native install mechanism
-      try {
-        const relatedApps = await (navigator as any).getInstalledRelatedApps?.();
-        if (relatedApps?.length > 0) {
-          setIsInstalled(true);
-          return;
-        }
-      } catch {}
-      
-      // Show manual instructions for Android
-      alert("لتثبيت التطبيق:\n\n1️⃣ اضغط على قائمة المتصفح (⋮) أعلى الشاشة\n2️⃣ اختر \"تثبيت التطبيق\" أو \"إضافة إلى الشاشة الرئيسية\"\n3️⃣ اضغط \"تثبيت\" للتأكيد");
+    const result = await triggerInstall();
+    if (result === "accepted") {
+      setIsInstalled(true);
+      setHasPrompt(false);
+    } else if (result === "unavailable") {
+      if (isIOS) {
+        alert("اضغط على زر المشاركة ⬆️ ثم اختر \"إضافة إلى الشاشة الرئيسية\"");
+      } else {
+        alert("لتثبيت التطبيق:\n\n1️⃣ اضغط على قائمة المتصفح (⋮) أعلى الشاشة\n2️⃣ اختر \"تثبيت التطبيق\" أو \"إضافة إلى الشاشة الرئيسية\"\n3️⃣ اضغط \"تثبيت\" للتأكيد");
+      }
     }
   };
 
@@ -95,7 +62,7 @@ const InstallPage = () => {
         )}
 
         {/* Install button */}
-        {!isInstalled && deferredPrompt && (
+        {!isInstalled && hasPrompt && (
           <Button onClick={handleInstall} className="w-full h-14 rounded-2xl text-lg font-bold gap-3">
             <Download className="h-6 w-6" />
             تثبيت التطبيق الآن
@@ -103,7 +70,7 @@ const InstallPage = () => {
         )}
 
         {/* iOS instructions */}
-        {!isInstalled && isIOS && !deferredPrompt && (
+        {!isInstalled && isIOS && !hasPrompt && (
           <div className="bg-card rounded-2xl p-5 shadow-card space-y-4">
             <h3 className="font-bold text-foreground text-center">كيفية التثبيت على iPhone</h3>
             <div className="space-y-3">
@@ -156,14 +123,7 @@ const InstallPage = () => {
               <p className="text-[10px] text-muted-foreground">قريباً</p>
             </div>
             <button
-              onClick={() => {
-                if (isIOS) {
-                  // Show iOS instructions
-                  alert("اضغط على زر المشاركة ⬆️ ثم اختر \"إضافة إلى الشاشة الرئيسية\"");
-                } else {
-                  handleInstall();
-                }
-              }}
+              onClick={handleInstall}
               disabled={isInstalled}
               className="flex-1 bg-primary rounded-xl p-3 text-center text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >

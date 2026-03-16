@@ -14,32 +14,16 @@ const LocationHeader = () => {
   const [mapOpen, setMapOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const geo = useGeolocation();
   const navigate = useNavigate();
   const { lang, setLang, t } = useLang();
 
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
   const handleInstallClick = useCallback(async () => {
-    if (installPrompt) {
-      await installPrompt.prompt();
-      const { outcome } = await installPrompt.userChoice;
-      if (outcome === "accepted") {
-        toast.success(lang === "ar" ? "تم تثبيت التطبيق بنجاح! 🎉" : "App installed successfully! 🎉");
-      }
-      setInstallPrompt(null);
-    } else {
-      // Fallback: iOS or prompt not available
-      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-      if (isIOS) {
+    const result = await triggerInstall();
+    if (result === "accepted") {
+      toast.success(lang === "ar" ? "تم تثبيت التطبيق بنجاح! 🎉" : "App installed successfully! 🎉");
+    } else if (result === "unavailable") {
+      if (isIOSDevice()) {
         toast.info(lang === "ar" 
           ? "اضغط على زر المشاركة ↑ ثم \"إضافة للشاشة الرئيسية\"" 
           : "Tap Share ↑ then \"Add to Home Screen\"", { duration: 5000 });
@@ -47,7 +31,7 @@ const LocationHeader = () => {
         navigate("/install");
       }
     }
-  }, [installPrompt, lang, navigate]);
+  }, [lang, navigate]);
 
   useEffect(() => {
     if (dark) {
