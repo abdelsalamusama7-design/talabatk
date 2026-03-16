@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,6 +15,7 @@ import SplashScreen from "@/components/SplashScreen";
 import AnimatedRoutes from "@/components/AnimatedRoutes";
 import BottomNav from "./components/BottomNav";
 import Footer from "./components/Footer";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => {
                     <AnimatedRoutes />
                     <Footer />
                     <BottomNav />
+                    <PWAInstallPrompt />
                   </BrowserRouter>
                 </LiveOrderProvider>
               </OrderProvider>
