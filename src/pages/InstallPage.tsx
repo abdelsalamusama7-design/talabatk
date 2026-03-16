@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Download, Smartphone, Share, ArrowRight, CheckCircle, WifiOff, Bell, MapPin, Zap } from "lucide-react";
+import { Download, Smartphone, Share, ArrowRight, CheckCircle, WifiOff, Bell, MapPin, Zap, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled, isIOSDevice } from "@/lib/install-prompt";
 
