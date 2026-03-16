@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import splashLogo from "@/assets/splash-logo.png";
 
 const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
-  const [phase dset, setPhase] = useState(0);
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase(1), 200);
