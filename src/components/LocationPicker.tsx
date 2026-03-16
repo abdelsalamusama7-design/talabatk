@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { useEffect, useState, useCallback, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapPin, Loader2, Navigation, X, Search, Star, Trash2, Home, Briefcase, Heart, Edit3, CheckCircle } from "lucide-react";
@@ -47,37 +46,60 @@ const LABEL_ICONS: Record<string, typeof Home> = {
   "مفضل": Heart,
 };
 
-const FlyTo = ({ center }: { center: [number, number] }) => {
-  const map = useMap();
-  useEffect(() => {
-    // Invalidate size on first render to fix white map issue
-    setTimeout(() => map.invalidateSize(), 100);
-    map.flyTo(center, 16, { duration: 1.2 });
-  }, [center, map]);
-  return null;
-};
-
-const DraggableMarker = ({
-  position,
+const LeafletMap = ({
+  center,
   onMove,
 }: {
-  position: [number, number];
+  center: [number, number];
   onMove: (lat: number, lng: number) => void;
 }) => {
-  const [pos, setPos] = useState<[number, number]>(position);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
+  const onMoveRef = useRef(onMove);
 
   useEffect(() => {
-    setPos(position);
-  }, [position]);
+    onMoveRef.current = onMove;
+  }, [onMove]);
 
-  useMapEvents({
-    click(e) {
-      setPos([e.latlng.lat, e.latlng.lng]);
-      onMove(e.latlng.lat, e.latlng.lng);
-    },
-  });
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
 
-  return <Marker position={pos} icon={pinIcon} />;
+    const map = L.map(containerRef.current, {
+      zoomControl: false,
+      attributionControl: false,
+    }).setView(center, 15);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+    const marker = L.marker(center, { icon: pinIcon }).addTo(map);
+
+    map.on("click", (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+      marker.setLatLng([lat, lng]);
+      onMoveRef.current(lat, lng);
+    });
+
+    setTimeout(() => map.invalidateSize(), 100);
+
+    mapRef.current = map;
+    markerRef.current = marker;
+
+    return () => {
+      map.off();
+      map.remove();
+      mapRef.current = null;
+      markerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current || !markerRef.current) return;
+    markerRef.current.setLatLng(center);
+    mapRef.current.flyTo(center, 16, { duration: 1.2 });
+  }, [center]);
+
+  return <div ref={containerRef} className="h-full w-full" />;
 };
 
 const LocationPicker = ({
@@ -467,20 +489,10 @@ const LocationPicker = ({
 
       {/* Map */}
       <div className="flex-1 min-h-0 relative">
-        <MapContainer
+        <LeafletMap
           center={selectedPos}
-          zoom={15}
-          style={{ height: "100%", width: "100%" }}
-          zoomControl={false}
-          attributionControl={false}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <FlyTo center={selectedPos} />
-          <DraggableMarker
-            position={selectedPos}
-            onMove={(lat, lng) => setSelectedPos([lat, lng])}
-          />
-        </MapContainer>
+          onMove={(lat, lng) => setSelectedPos([lat, lng])}
+        />
 
         {/* GPS Button */}
         <button
