@@ -88,6 +88,19 @@ import prodBaklava from "@/assets/prod-baklava.jpg";
 import prodCreamCaramel from "@/assets/prod-cream-caramel.jpg";
 import prodCheesecake from "@/assets/prod-cheesecake.jpg";
 
+// Supermarket images
+import catSupermarket from "@/assets/cat-supermarket.jpg";
+import storeCarrefour from "@/assets/store-carrefour.jpg";
+import storeKheirzaman from "@/assets/store-kheirzaman.jpg";
+import prodCanned from "@/assets/prod-canned.jpg";
+import prodSnacks from "@/assets/prod-snacks.jpg";
+import prodCleaning from "@/assets/prod-cleaning.jpg";
+import prodChickenRaw from "@/assets/prod-chicken-raw.jpg";
+import prodPasta from "@/assets/prod-pasta.jpg";
+import prodTeaCoffee from "@/assets/prod-tea-coffee.jpg";
+import prodFrozen from "@/assets/prod-frozen.jpg";
+import prodBaby from "@/assets/prod-baby.jpg";
+
 export interface Category {
   id: string;
   name: string;
@@ -151,6 +164,7 @@ export interface Order {
 export const categories: Category[] = [
   { id: "restaurants", name: "المطاعم", image: catRestaurants },
   { id: "pharmacy", name: "صيدليات", image: catPharmacy },
+  { id: "supermarket", name: "سوبر ماركت", image: catSupermarket },
   { id: "grocery", name: "البقالة", image: catGrocery },
   { id: "vegetables", name: "خضار", image: catVegetables },
   { id: "fruits", name: "فواكه", image: catFruits },
@@ -512,6 +526,53 @@ export const stores: Store[] = [
       { id: "s10", name: "كريم بروليه", price: 55, description: "كريم بروليه فرنسي أصلي", image: prodCreamCaramel },
       { id: "s11", name: "كنافة كريمية", price: 70, description: "كنافة بالكريمة والفستق", image: prodKunafa },
       { id: "s12", name: "بسبوسة باللوز", price: 50, description: "بسبوسة فاخرة باللوز المحمص", image: prodBasbousa },
+    ],
+  },
+  // ===== سوبر ماركت =====
+  {
+    id: "carrefour",
+    name: "كارفور",
+    category: "سوبر ماركت",
+    categoryId: "supermarket",
+    image: storeCarrefour,
+    rating: 4.6,
+    reviewCount: 890,
+    deliveryTime: "30-50",
+    deliveryFee: 20,
+    products: [
+      { id: "sm1", name: "فراخ كاملة مجمدة", price: 120, description: "فراخ كاملة مجمدة 1.2 كيلو", image: prodChickenRaw },
+      { id: "sm2", name: "مكرونة سباغيتي 500 جم", price: 18, description: "مكرونة سباغيتي إيطالي", image: prodPasta },
+      { id: "sm3", name: "شاي وقهوة", price: 45, description: "شاي أحمر 100 كيس + نسكافيه", image: prodTeaCoffee },
+      { id: "sm4", name: "شيبسي وسناكس", price: 25, description: "عبوة شيبسي كبيرة بنكهات مختلفة", image: prodSnacks },
+      { id: "sm5", name: "معلبات فول وحمص", price: 15, description: "علبة فول أو حمص جاهزة 400 جم", image: prodCanned },
+      { id: "sm6", name: "منظفات منزلية", price: 55, description: "سائل تنظيف أرضيات + صابون أطباق", image: prodCleaning },
+      { id: "sm7", name: "خضروات مجمدة", price: 35, description: "خضروات مشكلة مجمدة 400 جم", image: prodFrozen },
+      { id: "sm8", name: "حفاضات أطفال", price: 180, description: "حفاضات أطفال مقاس ميديم 40 قطعة", image: prodBaby },
+      { id: "sm9", name: "لبن كامل الدسم 1 لتر", price: 22, description: "لبن طازج كامل الدسم", image: prodDairy },
+      { id: "sm10", name: "أرز مصري 2 كيلو", price: 55, description: "أرز مصري فاخر", image: prodGroceryStaples },
+    ],
+  },
+  {
+    id: "kheir-zaman",
+    name: "خير زمان",
+    category: "سوبر ماركت",
+    categoryId: "supermarket",
+    image: storeKheirzaman,
+    rating: 4.4,
+    reviewCount: 560,
+    deliveryTime: "25-40",
+    deliveryFee: 15,
+    products: [
+      { id: "sm11", name: "جبنة بيضاء كيلو", price: 75, description: "جبنة بيضاء دمياطي طازة", image: prodDairy },
+      { id: "sm12", name: "زيت عباد الشمس 1 لتر", price: 60, description: "زيت طبخ عالي الجودة", image: prodGroceryStaples },
+      { id: "sm13", name: "سكر كيلو", price: 18, description: "سكر أبيض ناعم", image: prodGroceryStaples },
+      { id: "sm14", name: "مكرونة وشعرية", price: 12, description: "مكرونة 400 جم أشكال متنوعة", image: prodPasta },
+      { id: "sm15", name: "تونة معلبة", price: 25, description: "تونة في زيت عباد الشمس 185 جم", image: prodCanned },
+      { id: "sm16", name: "صابون ومنظفات", price: 40, description: "صابون غسيل + معطر ملابس", image: prodCleaning },
+      { id: "sm17", name: "شاي كشري 250 جم", price: 30, description: "شاي أحمر كشري فاخر", image: prodTeaCoffee },
+      { id: "sm18", name: "بسكويت وسناكس أطفال", price: 20, description: "بسكويت محشي شوكولاتة", image: prodSnacks },
+      { id: "sm19", name: "دجاج مجمد نصف", price: 65, description: "نصف فرخة مجمدة طازة", image: prodChickenRaw },
+      { id: "sm20", name: "بطاطس مجمدة 1 كيلو", price: 45, description: "بطاطس مجمدة جاهزة للقلي", image: prodFrozen },
     ],
   },
 ];
