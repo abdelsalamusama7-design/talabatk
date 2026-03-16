@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useLang } from "@/lib/lang-context";
 
 const catNameMap: Record<string, { ar: string; en: string }> = {
-  "مطاعم": { ar: "مطاعم", en: "Restaurants" },
-  "صيدلية": { ar: "صيدلية", en: "Pharmacy" },
-  "بقالة": { ar: "بقالة", en: "Grocery" },
+  "المطاعم": { ar: "المطاعم", en: "Restaurants" },
+  "صيدليات": { ar: "صيدليات", en: "Pharmacy" },
+  "سوبر ماركت": { ar: "سوبر ماركت", en: "Supermarket" },
+  "البقالة": { ar: "البقالة", en: "Grocery" },
   "خضار": { ar: "خضار", en: "Vegetables" },
   "فواكه": { ar: "فواكه", en: "Fruits" },
+  "عصائر": { ar: "عصائر", en: "Juices" },
   "حلويات": { ar: "حلويات", en: "Sweets" },
+  "إلكترونيات": { ar: "إلكترونيات", en: "Electronics" },
+  "كشك": { ar: "كشك", en: "Kiosk" },
   "خدمات": { ar: "خدمات", en: "Services" },
 };
 
