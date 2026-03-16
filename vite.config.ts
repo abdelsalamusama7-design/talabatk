@@ -12,6 +12,22 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  build: {
+    target: "es2020",
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip", "@radix-ui/react-tabs", "@radix-ui/react-select", "@radix-ui/react-popover"],
+          "vendor-query": ["@tanstack/react-query"],
+          "vendor-motion": ["framer-motion"],
+          "vendor-charts": ["recharts"],
+          "vendor-map": ["leaflet", "react-leaflet"],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     mode === "development" && componentTagger(),
@@ -22,7 +38,7 @@ export default defineConfig(({ mode }) => ({
         name: "طلباتك - اطلب أي حاجة",
         short_name: "طلباتك",
         description: "منصة توصيل ذكية بالذكاء الاصطناعي - اطلب طعام، خضار، فواكه وأدوية",
-        theme_color: "#0ea5e9",
+        theme_color: "#2E78B7",
         background_color: "#f8fafc",
         display: "standalone",
         dir: "rtl",
