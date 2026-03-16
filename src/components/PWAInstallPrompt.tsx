@@ -18,9 +18,9 @@ const PWAInstallPrompt = () => {
     // Don't show if running inside Capacitor WebView or already installed
     if ((window as any).Capacitor?.isNativePlatform?.() || window.matchMedia("(display-mode: standalone)").matches) return;
 
-    // Check if dismissed recently (24 hours)
-    const dismissed = localStorage.getItem("pwa-prompt-dismissed");
-    if (dismissed && Date.now() - parseInt(dismissed) < 24 * 60 * 60 * 1000) return;
+    // Check if dismissed in this session only
+    const dismissed = sessionStorage.getItem("pwa-prompt-dismissed");
+    if (dismissed) return;
 
     // Detect iOS
     const isIOSDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
@@ -56,7 +56,7 @@ const PWAInstallPrompt = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem("pwa-prompt-dismissed", Date.now().toString());
+    sessionStorage.setItem("pwa-prompt-dismissed", "1");
   };
 
   if (!showPrompt) return null;
