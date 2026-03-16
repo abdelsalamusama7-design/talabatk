@@ -1,6 +1,7 @@
 import { MapPin, Search, Loader2, Bell, User, Moon, Sun, Globe, RefreshCw, Download } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import SearchOverlay from "./SearchOverlay";
 import LocationPicker from "./LocationPicker";
 import NotificationsPanel from "./NotificationsPanel";
