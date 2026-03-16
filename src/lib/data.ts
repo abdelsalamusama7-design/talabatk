@@ -139,6 +139,21 @@ import prodMince from "@/assets/prod-mince.jpg";
 import prodFrozenMeat from "@/assets/prod-frozen-meat.jpg";
 import prodSausage from "@/assets/prod-sausage.jpg";
 
+// New store images
+import storeChickenRest from "@/assets/store-chicken-rest.jpg";
+import storeCrepe from "@/assets/store-crepe.jpg";
+import storeKebda from "@/assets/store-kebda.jpg";
+import storePharmacy4 from "@/assets/store-pharmacy4.jpg";
+import storeGrocery3 from "@/assets/store-grocery3.jpg";
+import storeVegetables3 from "@/assets/store-vegetables3.jpg";
+import storeFruits3 from "@/assets/store-fruits3.jpg";
+import storeJuice2 from "@/assets/store-juice2.jpg";
+import storeSweets2 from "@/assets/store-sweets2.jpg";
+import storeSuper2 from "@/assets/store-super2.jpg";
+import storeServices2 from "@/assets/store-services2.jpg";
+import prodCrepe from "@/assets/prod-crepe.jpg";
+import prodKebda from "@/assets/prod-kebda.jpg";
+
 export interface Category {
   id: string;
   name: string;
@@ -247,6 +262,9 @@ export const stores: Store[] = [
       { id: "p6", name: "أدوية برد وإنفلونزا", price: 85, description: "مجموعة أدوية البرد الأساسية", image: prodMedicine },
       { id: "p7", name: "فيتامين سي", price: 45, description: "فيتامين سي 1000 مجم - 30 قرص", image: prodVitamins },
       { id: "p8", name: "مسكنات", price: 30, description: "بنادول أقراص - 24 قرص", image: prodMedicine },
+      { id: "p8b", name: "كريم واقي شمس", price: 150, description: "واقي شمس SPF 50 - 100 مل", image: prodSunscreen },
+      { id: "p8c", name: "فيتامين د3", price: 60, description: "فيتامين د3 - 30 كبسولة", image: prodVitamins },
+      { id: "p8d", name: "شاش وقطن طبي", price: 20, description: "شاش معقم + قطن طبي", image: prodMedicine },
     ],
   },
   {
@@ -263,6 +281,8 @@ export const stores: Store[] = [
       { id: "p9", name: "تصليح شاشة موبايل", price: 350, description: "تغيير شاشة الموبايل بشاشة أصلية", image: prodPhoneRepair },
       { id: "p10", name: "صيانة لاب توب", price: 200, description: "فحص شامل وتنظيف", image: storeTech },
       { id: "p11", name: "استبدال بطارية", price: 150, description: "تغيير البطارية ببطارية جديدة", image: prodPhoneRepair },
+      { id: "p11b", name: "تركيب سوفت وير", price: 100, description: "تثبيت نظام تشغيل وبرامج", image: storeTech },
+      { id: "p11c", name: "تنظيف فيروسات", price: 120, description: "إزالة فيروسات وبرامج ضارة", image: storeTech },
     ],
   },
   {
@@ -279,6 +299,9 @@ export const stores: Store[] = [
       { id: "p12", name: "كشري صغير", price: 25, description: "طبق كشري صغير مع صلصة ودقة", image: prodKoshari },
       { id: "p13", name: "كشري وسط", price: 35, description: "طبق كشري وسط مع كل الإضافات", image: prodKoshari },
       { id: "p14", name: "كشري كبير", price: 50, description: "طبق كشري كبير مع إضافات مجانية", image: prodKoshari },
+      { id: "p14b", name: "كشري سوبر", price: 65, description: "كشري سوبر مع لسان عصفور وبصل مقلي إضافي", image: prodKoshari },
+      { id: "p14c", name: "مكرونة بالبشاميل", price: 45, description: "صينية مكرونة بالبشاميل واللحم المفروم", image: prodPasta },
+      { id: "p14d", name: "كولا 330 مل", price: 12, description: "مشروب غازي مع الوجبة", image: prodCola },
     ],
   },
   {
@@ -295,6 +318,9 @@ export const stores: Store[] = [
       { id: "p15", name: "بيتزا مارجريتا", price: 90, description: "بيتزا بصوص الطماطم وجبنة موزاريلا", image: prodPizzaMargherita },
       { id: "p16", name: "بيتزا بيبروني", price: 110, description: "بيتزا مع شرائح البيبروني", image: prodPizzaPepperoni },
       { id: "p17", name: "بيتزا سوبريم", price: 130, description: "بيتزا بكل الإضافات", image: prodPizzaSupreme },
+      { id: "p17b", name: "بيتزا دجاج باربيكيو", price: 120, description: "بيتزا بالدجاج وصوص باربيكيو", image: prodPizzaPepperoni },
+      { id: "p17c", name: "باستا ألفريدو", price: 85, description: "باستا بصوص الألفريدو الكريمي والدجاج", image: prodPasta },
+      { id: "p17d", name: "سلطة سيزر", price: 50, description: "سلطة سيزر مع خس ودجاج مشوي", image: prodHerbs },
     ],
   },
   {
@@ -800,6 +826,233 @@ export const stores: Store[] = [
       { id: "m20", name: "سجق شرقي - كيلو", price: 220, description: "سجق شرقي حار بالبهارات", image: prodSausage },
       { id: "m21", name: "كباب لحم جاهز - كيلو", price: 300, description: "كباب لحم متبل جاهز للشوي", image: prodMince },
       { id: "m22", name: "هوت دوج مجمد", price: 85, description: "هوت دوج بقري مجمد 10 قطع", image: prodSausage },
+    ],
+  },
+  // ===== مطاعم إضافية =====
+  {
+    id: "chicken-crispy",
+    name: "تشيكن كريسبي",
+    category: "مطاعم",
+    categoryId: "restaurants",
+    image: storeChickenRest,
+    rating: 4.4,
+    reviewCount: 290,
+    deliveryTime: "25-35",
+    deliveryFee: 15,
+    products: [
+      { id: "x1", name: "وجبة بروستد 4 قطع", price: 95, description: "4 قطع دجاج بروستد + بطاطس + كولا", image: prodGrilledChicken },
+      { id: "x2", name: "وجبة بروستد 8 قطع", price: 170, description: "8 قطع دجاج بروستد + بطاطس كبيرة + 2 كولا", image: prodGrilledChicken },
+      { id: "x3", name: "ستربس دجاج", price: 75, description: "6 قطع ستربس دجاج مقرمشة مع صوص", image: prodGrilledChicken },
+      { id: "x4", name: "زنجر ساندوتش", price: 65, description: "ساندوتش دجاج كريسبي مع خس وصوص", image: prodShawarmaChicken },
+      { id: "x5", name: "بطاطس مقلية كبير", price: 30, description: "بطاطس مقلية مقرمشة حجم كبير", image: prodFries },
+      { id: "x6", name: "كولا كبير", price: 20, description: "كوكاكولا 500 مل", image: prodCola },
+    ],
+  },
+  {
+    id: "crepe-house",
+    name: "كريب هاوس",
+    category: "مطاعم",
+    categoryId: "restaurants",
+    image: storeCrepe,
+    rating: 4.5,
+    reviewCount: 380,
+    deliveryTime: "20-30",
+    deliveryFee: 12,
+    products: [
+      { id: "x7", name: "كريب نوتيلا", price: 45, description: "كريب بالنوتيلا والموز", image: prodCrepe },
+      { id: "x8", name: "كريب لوتس", price: 50, description: "كريب ببسكويت اللوتس والكراميل", image: prodCrepe },
+      { id: "x9", name: "كريب فراخ", price: 55, description: "كريب حادق بالفراخ والجبنة والخضار", image: prodCrepe },
+      { id: "x10", name: "كريب لحمة", price: 60, description: "كريب حادق باللحمة المفرومة والجبنة", image: prodCrepe },
+      { id: "x11", name: "وافل بالشوكولاتة", price: 55, description: "وافل بلجيكي بصوص شوكولاتة وآيس كريم", image: prodChocolateCake },
+      { id: "x12", name: "كريب فواكه", price: 50, description: "كريب بالفواكه الموسمية والكريمة", image: prodCrepe },
+    ],
+  },
+  {
+    id: "kebda-prince",
+    name: "كبدة الأمير",
+    category: "مطاعم",
+    categoryId: "restaurants",
+    image: storeKebda,
+    rating: 4.3,
+    reviewCount: 510,
+    deliveryTime: "15-25",
+    deliveryFee: 10,
+    products: [
+      { id: "x13", name: "كبدة إسكندراني", price: 35, description: "كبدة بالفلفل الحار والطماطم", image: prodKebda },
+      { id: "x14", name: "سجق إسكندراني", price: 40, description: "سجق حار مع فلفل وطماطم", image: prodSausage },
+      { id: "x15", name: "ميكس كبدة وسجق", price: 50, description: "خليط كبدة وسجق إسكندراني", image: prodKebda },
+      { id: "x16", name: "سجق عادي", price: 35, description: "سجق بلدي مشوي في عيش", image: prodSausage },
+      { id: "x17", name: "بطاطس محمرة", price: 20, description: "بطاطس محمرة مقرمشة", image: prodFries },
+      { id: "x18", name: "طعمية ساخنة (5 أقراص)", price: 15, description: "طعمية مقرمشة طازة", image: prodFalafel },
+    ],
+  },
+  // ===== صيدلية إضافية =====
+  {
+    id: "pharmacy-roshdy",
+    name: "صيدلية رشدي",
+    category: "صيدليات",
+    categoryId: "pharmacy",
+    image: storePharmacy4,
+    rating: 4.5,
+    reviewCount: 280,
+    deliveryTime: "15-25",
+    deliveryFee: 10,
+    products: [
+      { id: "x19", name: "بنادول إكسترا", price: 35, description: "بنادول إكسترا 24 قرص مسكن", image: prodMedicine },
+      { id: "x20", name: "فيتامين سي فوار", price: 55, description: "فيتامين سي فوار 20 قرص", image: prodVitamins },
+      { id: "x21", name: "كريم مرطب نيفيا", price: 75, description: "كريم مرطب للبشرة 200 مل", image: prodSunscreen },
+      { id: "x22", name: "أوميجا 3 بلس", price: 180, description: "أوميجا 3 بلس 30 كبسولة", image: prodVitamins },
+      { id: "x23", name: "شامبو هيد آند شولدرز", price: 65, description: "شامبو مضاد للقشرة 400 مل", image: prodSunscreen },
+      { id: "x24", name: "كولد آند فلو", price: 45, description: "أقراص بارد وإنفلونزا 20 قرص", image: prodMedicine },
+      { id: "x25", name: "مالتي فيتامين", price: 120, description: "مالتي فيتامين يومي 30 قرص", image: prodVitamins },
+      { id: "x26", name: "لاصقة طبية", price: 25, description: "لاصقات طبية متنوعة الأحجام", image: prodMedicine },
+    ],
+  },
+  // ===== بقالة إضافية =====
+  {
+    id: "grocery-elbaraka",
+    name: "بقالة البركة",
+    category: "بقالة",
+    categoryId: "grocery",
+    image: storeGrocery3,
+    rating: 4.2,
+    reviewCount: 190,
+    deliveryTime: "20-35",
+    deliveryFee: 10,
+    products: [
+      { id: "x27", name: "لبن زبادي 6 عبوات", price: 30, description: "زبادي طبيعي 6 عبوات", image: prodDairy },
+      { id: "x28", name: "عسل نحل طبيعي 500 جم", price: 90, description: "عسل نحل جبلي طبيعي", image: prodGroceryStaples },
+      { id: "x29", name: "فول مدمس معلب", price: 12, description: "فول مدمس جاهز 400 جم", image: prodCanned },
+      { id: "x30", name: "مكرونة أشكال 500 جم", price: 15, description: "مكرونة بأشكال متنوعة", image: prodPasta },
+      { id: "x31", name: "سمنة بلدي 500 جم", price: 70, description: "سمنة بلدي طبيعية", image: prodGroceryStaples },
+      { id: "x32", name: "شاي أخضر 25 كيس", price: 25, description: "شاي أخضر عضوي", image: prodTeaCoffee },
+      { id: "x33", name: "جبنة رومي كيلو", price: 120, description: "جبنة رومي قديمة مستوية", image: prodDairy },
+    ],
+  },
+  // ===== خضار إضافي =====
+  {
+    id: "khedar-elsayed",
+    name: "خضار السيد",
+    category: "خضار",
+    categoryId: "vegetables",
+    image: storeVegetables3,
+    rating: 4.3,
+    reviewCount: 250,
+    deliveryTime: "20-30",
+    deliveryFee: 8,
+    products: [
+      { id: "x34", name: "كيلو طماطم صعيدي", price: 12, description: "طماطم صعيدي طازة", image: prodTomatoes },
+      { id: "x35", name: "كيلو بطاطس", price: 10, description: "بطاطس نظيفة ومختارة", image: prodPotatoes },
+      { id: "x36", name: "كيلو خيار بلدي", price: 12, description: "خيار بلدي صغير طازج", image: prodCucumber },
+      { id: "x37", name: "كيلو فلفل أخضر", price: 15, description: "فلفل أخضر حار أو حلو", image: prodPeppers },
+      { id: "x38", name: "كيلو ملوخية", price: 20, description: "ملوخية خضرا طازة", image: prodHerbs },
+      { id: "x39", name: "كيلو بامية", price: 30, description: "بامية صغيرة طازة", image: prodZucchini },
+      { id: "x40", name: "كيلو سبانخ", price: 15, description: "سبانخ طازة مغسولة", image: prodHerbs },
+    ],
+  },
+  // ===== فواكه إضافية =====
+  {
+    id: "fruits-elsham",
+    name: "فواكه الشام",
+    category: "فواكه",
+    categoryId: "fruits",
+    image: storeFruits3,
+    rating: 4.5,
+    reviewCount: 190,
+    deliveryTime: "25-35",
+    deliveryFee: 12,
+    products: [
+      { id: "x41", name: "كيلو مشمش", price: 35, description: "مشمش بلدي حلو طازج", image: prodOrangeBanana },
+      { id: "x42", name: "كيلو خوخ", price: 40, description: "خوخ بلدي طازج ومختار", image: prodStrawberry },
+      { id: "x43", name: "كيلو جوافة", price: 25, description: "جوافة بلدي طازة", image: prodAppleKiwi },
+      { id: "x44", name: "كيلو يوسفي", price: 20, description: "يوسفي حلو بدون بذر", image: prodOrangeBanana },
+      { id: "x45", name: "كيلو تين شوكي", price: 15, description: "تين شوكي مقشر جاهز", image: prodPineapple },
+      { id: "x46", name: "سلة فواكه فاخرة", price: 200, description: "سلة فواكه مشكلة 3 كيلو هدايا", image: prodFruitBasket },
+    ],
+  },
+  // ===== عصائر إضافية =====
+  {
+    id: "aseer-elbalad",
+    name: "عصير البلد",
+    category: "عصائر",
+    categoryId: "juices",
+    image: storeJuice2,
+    rating: 4.4,
+    reviewCount: 270,
+    deliveryTime: "15-25",
+    deliveryFee: 8,
+    products: [
+      { id: "x47", name: "عصير تمر هندي", price: 15, description: "تمر هندي طبيعي منعش", image: prodJuiceCocktail },
+      { id: "x48", name: "سوبيا", price: 15, description: "سوبيا مصرية أصلية باردة", image: prodJuiceCocktail },
+      { id: "x49", name: "عرقسوس", price: 12, description: "عرقسوس طبيعي منعش", image: prodJuiceCocktail },
+      { id: "x50", name: "عصير جزر", price: 20, description: "عصير جزر طبيعي طازج", image: prodJuiceOrange },
+      { id: "x51", name: "عصير رمان", price: 35, description: "عصير رمان طبيعي 100%", image: prodJuiceStrawberry },
+      { id: "x52", name: "ميلك شيك شوكولاتة", price: 40, description: "ميلك شيك شوكولاتة بالآيس كريم", image: prodJuiceCocktail },
+      { id: "x53", name: "موهيتو", price: 30, description: "موهيتو بالنعناع والليمون", image: prodJuiceLemonmint },
+    ],
+  },
+  // ===== حلويات إضافية =====
+  {
+    id: "halaweyat-elsham",
+    name: "حلويات الشام",
+    category: "حلويات",
+    categoryId: "sweets",
+    image: storeSweets2,
+    rating: 4.6,
+    reviewCount: 340,
+    deliveryTime: "25-35",
+    deliveryFee: 15,
+    products: [
+      { id: "x54", name: "بقلاوة مشكلة كيلو", price: 180, description: "بقلاوة شامية مشكلة بالفستق واللوز", image: prodBaklava },
+      { id: "x55", name: "مبروشة بالقشطة", price: 50, description: "مبروشة بالقشطة والفستق", image: prodKunafa },
+      { id: "x56", name: "هريسة بالسمن", price: 35, description: "هريسة شامية بالسمن البلدي", image: prodBasbousa },
+      { id: "x57", name: "معمول بالتمر", price: 60, description: "معمول بالتمر الفاخر 12 قطعة", image: prodBaklava },
+      { id: "x58", name: "وربات بالقشطة", price: 45, description: "وربات مقرمشة بالقشطة والفستق", image: prodBaklava },
+      { id: "x59", name: "قطايف بالمكسرات", price: 55, description: "قطايف محشية مكسرات مشكلة", image: prodKunafa },
+    ],
+  },
+  // ===== سوبر ماركت إضافي =====
+  {
+    id: "olad-ragab",
+    name: "أولاد رجب",
+    category: "سوبر ماركت",
+    categoryId: "supermarket",
+    image: storeSuper2,
+    rating: 4.5,
+    reviewCount: 720,
+    deliveryTime: "30-45",
+    deliveryFee: 18,
+    products: [
+      { id: "x60", name: "زيت زيتون 500 مل", price: 85, description: "زيت زيتون بكر ممتاز", image: prodGroceryStaples },
+      { id: "x61", name: "أرز بسمتي 1 كيلو", price: 45, description: "أرز بسمتي هندي فاخر", image: prodGroceryStaples },
+      { id: "x62", name: "جبنة شيدر شرائح", price: 35, description: "جبنة شيدر شرائح 200 جم", image: prodDairy },
+      { id: "x63", name: "نسكافيه 200 جم", price: 110, description: "نسكافيه جولد 200 جم", image: prodTeaCoffee },
+      { id: "x64", name: "حليب بودرة 400 جم", price: 95, description: "حليب مجفف كامل الدسم", image: prodBaby },
+      { id: "x65", name: "دقيق فاخر 1 كيلو", price: 20, description: "دقيق أبيض فاخر للخبز", image: prodGroceryStaples },
+      { id: "x66", name: "تونة لايت 3 علب", price: 60, description: "تونة لايت في ماء 3 عبوات", image: prodCanned },
+      { id: "x67", name: "مناديل وورق تواليت", price: 45, description: "عبوة مناديل + 4 رولات ورق", image: prodCleaning },
+      { id: "x68", name: "شوكولاتة كادبوري كبيرة", price: 55, description: "كادبوري ديري ميلك 200 جم", image: prodCandy },
+      { id: "x69", name: "عصير كرتونة 12 علبة", price: 60, description: "عصير فواكه مشكلة 12 × 200 مل", image: prodWaterDrinks },
+    ],
+  },
+  // ===== خدمات إضافية =====
+  {
+    id: "home-services",
+    name: "خدمات المنزل",
+    category: "خدمات صيانة",
+    categoryId: "services",
+    image: storeServices2,
+    rating: 4.1,
+    reviewCount: 120,
+    deliveryTime: "حجز موعد",
+    deliveryFee: 0,
+    products: [
+      { id: "x70", name: "سباكة - إصلاح تسريب", price: 150, description: "إصلاح تسريب مياه أو صرف", image: storeServices2 },
+      { id: "x71", name: "كهرباء - إصلاح أعطال", price: 200, description: "إصلاح أعطال كهربائية منزلية", image: storeServices2 },
+      { id: "x72", name: "نجارة - إصلاح أبواب", price: 180, description: "إصلاح وصيانة الأبواب والأثاث", image: storeServices2 },
+      { id: "x73", name: "تنظيف منازل", price: 300, description: "تنظيف شامل للمنزل - 4 ساعات", image: storeServices2 },
+      { id: "x74", name: "صيانة تكييفات", price: 250, description: "غسيل وصيانة تكييف سبليت", image: storeServices2 },
+      { id: "x75", name: "دهان غرفة", price: 500, description: "دهان غرفة كاملة بالمواد", image: storeServices2 },
     ],
   },
 ];
