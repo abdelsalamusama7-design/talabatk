@@ -35,11 +35,30 @@ const InstallPage = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === "accepted") setIsInstalled(true);
-    setDeferredPrompt(null);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") setIsInstalled(true);
+      setDeferredPrompt(null);
+      return;
+    }
+    
+    // Fallback for browsers where beforeinstallprompt didn't fire
+    if (isIOS) {
+      alert("اضغط على زر المشاركة ⬆️ ثم اختر \"إضافة إلى الشاشة الرئيسية\"");
+    } else {
+      // Try using the browser's native install mechanism
+      try {
+        const relatedApps = await (navigator as any).getInstalledRelatedApps?.();
+        if (relatedApps?.length > 0) {
+          setIsInstalled(true);
+          return;
+        }
+      } catch {}
+      
+      // Show manual instructions for Android
+      alert("لتثبيت التطبيق:\n\n1️⃣ اضغط على قائمة المتصفح (⋮) أعلى الشاشة\n2️⃣ اختر \"تثبيت التطبيق\" أو \"إضافة إلى الشاشة الرئيسية\"\n3️⃣ اضغط \"تثبيت\" للتأكيد");
+    }
   };
 
   const features = [
