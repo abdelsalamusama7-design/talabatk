@@ -20,6 +20,7 @@ interface TrendingMeal {
 const SCORE_EMOJIS = ["🔥", "⭐", "💎", "🏆", "✨"];
 
 const TrendingMeals = () => {
+  const navigate = useNavigate();
   const [meals, setMeals] = useState<TrendingMeal[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
