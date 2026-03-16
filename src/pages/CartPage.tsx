@@ -3,7 +3,8 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins, Edit3, Navigation } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MapPin, Tag, FileText, Loader2, Zap, TrendingUp, Clock, Coins, Edit3, Navigation, Scale, MessageCircle } from "lucide-react";
+import { weightLabels } from "@/lib/data";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -12,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import LocationPicker from "@/components/LocationPicker";
 
 const CartPage = () => {
-  const { items, updateQuantity, removeItem, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
+  const { items, updateQuantity, removeItem, updateItemNote, clearCart, total, pendingPromoCode, setPendingPromoCode } = useCart();
   const { user } = useAuth();
   const { address, lat, lng, loading: geoLoading, error: geoError, requestLocation, setManualLocation } = useGeolocation();
   const navigate = useNavigate();
@@ -199,8 +200,10 @@ const CartPage = () => {
 
       const orderItems = items.map((i) => ({
         name: i.product.name,
-        price: i.product.price,
+        price: i.weight ? i.product.price * parseFloat(i.weight) : i.product.price,
         quantity: i.quantity,
+        weight: i.weight ? weightLabels[i.weight] : undefined,
+        itemNote: i.itemNote || undefined,
       }));
 
       const { data: order, error } = await supabase.from("orders").insert({
@@ -288,43 +291,63 @@ const CartPage = () => {
         <h1 className="text-2xl font-bold mb-6">السلة</h1>
 
         <AnimatePresence>
-          {items.map((item) => (
+          {items.map((item) => {
+            const itemPrice = item.weight
+              ? item.product.price * parseFloat(item.weight)
+              : item.product.price;
+            return (
             <motion.div
-              key={item.product.id}
+              key={`${item.product.id}${item.weight ? `__${item.weight}` : ""}`}
               layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              className="bg-card rounded-2xl p-4 shadow-card mb-3 flex items-center gap-4"
+              className="bg-card rounded-2xl p-4 shadow-card mb-3"
             >
-              <div className="flex-1">
-                <h3 className="font-semibold text-foreground">{item.product.name}</h3>
-                <p className="text-xs text-muted-foreground">{item.store.name}</p>
-                <p className="text-primary font-bold mt-1 tabular-nums">{item.product.price * item.quantity} ج.م</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">{item.product.name}</h3>
+                  <p className="text-xs text-muted-foreground">{item.store.name}</p>
+                  {item.weight && (
+                    <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-lg mt-1">
+                      <Scale className="h-3 w-3" />
+                      {weightLabels[item.weight]}
+                    </span>
+                  )}
+                  <p className="text-primary font-bold mt-1 tabular-nums">{(itemPrice * item.quantity).toFixed(0)} ج.م</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.weight)}
+                    className="h-8 w-8 rounded-xl bg-muted flex items-center justify-center"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="font-semibold tabular-nums w-6 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.weight)}
+                    className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => removeItem(item.product.id, item.weight)}
+                    className="h-8 w-8 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive mr-1"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                  className="h-8 w-8 rounded-xl bg-muted flex items-center justify-center"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="font-semibold tabular-nums w-6 text-center">{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                  className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => removeItem(item.product.id)}
-                  className="h-8 w-8 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive mr-1"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
+              {/* Per-item note */}
+              {item.itemNote && (
+                <div className="mt-2 flex items-start gap-1.5 text-xs text-muted-foreground bg-muted/50 rounded-lg p-2">
+                  <MessageCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary" />
+                  <span>{item.itemNote}</span>
+                </div>
+              )}
             </motion.div>
-          ))}
+            );
+          })}
         </AnimatePresence>
 
         {/* Delivery Address */}

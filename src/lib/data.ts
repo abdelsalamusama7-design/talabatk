@@ -49,10 +49,25 @@ export interface Store {
   products: Product[];
 }
 
+export type WeightOption = "0.25" | "0.5" | "1" | "2" | "3";
+
+export const weightLabels: Record<WeightOption, string> = {
+  "0.25": "ربع كيلو",
+  "0.5": "نص كيلو",
+  "1": "كيلو",
+  "2": "2 كيلو",
+  "3": "3 كيلو",
+};
+
+export const isWeightCategory = (categoryId: string) =>
+  ["vegetables", "fruits"].includes(categoryId);
+
 export interface CartItem {
   product: Product;
   store: Store;
   quantity: number;
+  weight?: WeightOption;
+  itemNote?: string;
 }
 
 export interface Order {
