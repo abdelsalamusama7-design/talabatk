@@ -62,6 +62,12 @@ const LocationHeader = () => {
             >
               <RefreshCw className="h-[18px] w-[18px] text-primary-foreground" />
             </button>
+            <button
+              onClick={() => navigate("/install")}
+              className="h-9 w-9 rounded-full bg-primary-foreground/15 flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+              aria-label="Install App"
+            >
+              <Download className="h-[18px] w-[18px] text-primary-foreground" />
           </div>
           <button
             onClick={() => setNotifOpen(true)}
