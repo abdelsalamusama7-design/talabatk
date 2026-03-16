@@ -109,11 +109,30 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    /* Safe area insets for notch devices */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'IBM Plex Sans Arabic', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Allow text selection in inputs/textareas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -131,5 +150,14 @@
   }
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-area-bottom {
+    bottom: env(safe-area-inset-bottom);
   }
 }
