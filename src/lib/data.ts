@@ -591,10 +591,7 @@ export const stores: Store[] = [
       { id: "sm20", name: "بطاطس مجمدة 1 كيلو", price: 45, description: "بطاطس مجمدة جاهزة للقلي", image: prodFrozen },
     ],
   },
-];
-
-// ===== إلكترونيات =====
-const electronicsStores: Store[] = [
+  // ===== إلكترونيات =====
   {
     id: "btech",
     name: "بي تك",
@@ -655,9 +652,6 @@ const electronicsStores: Store[] = [
     ],
   },
 ];
-
-// Combine all stores
-const allStores = stores.concat(electronicsStores);
 
 export const sampleOrders: Order[] = [
   {
