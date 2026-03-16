@@ -101,6 +101,21 @@ import prodTeaCoffee from "@/assets/prod-tea-coffee.jpg";
 import prodFrozen from "@/assets/prod-frozen.jpg";
 import prodBaby from "@/assets/prod-baby.jpg";
 
+// Electronics images
+import catElectronics from "@/assets/cat-electronics.jpg";
+import storeBtech from "@/assets/store-btech.jpg";
+import storeAman from "@/assets/store-aman.jpg";
+import storeFawry from "@/assets/store-fawry.jpg";
+import prodSmartphone from "@/assets/prod-smartphone.jpg";
+import prodLaptop from "@/assets/prod-laptop.jpg";
+import prodEarbuds from "@/assets/prod-earbuds.jpg";
+import prodTv from "@/assets/prod-tv.jpg";
+import prodPowerbank from "@/assets/prod-powerbank.jpg";
+import prodSmartwatch from "@/assets/prod-smartwatch.jpg";
+import prodPhoneAccessories from "@/assets/prod-phone-accessories.jpg";
+import prodCharger from "@/assets/prod-charger.jpg";
+import prodGaming from "@/assets/prod-gaming.jpg";
+
 export interface Category {
   id: string;
   name: string;
