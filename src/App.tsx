@@ -16,7 +16,6 @@ import AnimatedRoutes from "@/components/AnimatedRoutes";
 import BottomNav from "./components/BottomNav";
 import Footer from "./components/Footer";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
-import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
 
