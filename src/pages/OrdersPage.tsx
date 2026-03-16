@@ -24,16 +24,12 @@ const OrdersPage = () => {
   const { orders: localOrders } = useOrders();
   const { liveOrders } = useLiveOrders();
 
-  // Use live orders if logged in, otherwise fall back to local sample orders
-  const orders = user && liveOrders.length > 0 ? liveOrders : localOrders;
+  // Use DB orders when available; otherwise always fall back to local sample orders
+  const sourceOrders = user && liveOrders.length > 0 ? liveOrders : localOrders;
 
-  const activeOrders = user
-    ? liveOrders.filter((o) => !["delivered", "cancelled"].includes(o.status))
-    : localOrders.filter((o) => o.status !== "delivered");
-
-  const pastOrders = user
-    ? liveOrders.filter((o) => ["delivered", "cancelled"].includes(o.status))
-    : localOrders.filter((o) => o.status === "delivered");
+  const activeOrders = sourceOrders.filter((o: any) => !["delivered", "cancelled"].includes(o.status));
+  const pastOrders = sourceOrders.filter((o: any) => ["delivered", "cancelled"].includes(o.status));
+  const orders = sourceOrders;
 
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">

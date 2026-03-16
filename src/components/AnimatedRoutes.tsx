@@ -24,25 +24,27 @@ const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-        <Route path="/auth" element={<PageTransition><AuthPage /></PageTransition>} />
-        <Route path="/store/:id" element={<PageTransition><StorePage /></PageTransition>} />
-        <Route path="/cart" element={<PageTransition><CartPage /></PageTransition>} />
-        <Route path="/orders" element={<PageTransition><OrdersPage /></PageTransition>} />
-        <Route path="/order/:id" element={<ProtectedRoute><PageTransition><OrderDetailsPage /></PageTransition></ProtectedRoute>} />
-        <Route path="/track/:id" element={<ProtectedRoute><PageTransition><LiveTrackingPage /></PageTransition></ProtectedRoute>} />
-        <Route path="/account" element={<PageTransition><AccountPage /></PageTransition>} />
-        <Route path="/category/:id" element={<PageTransition><CategoryPage /></PageTransition>} />
-        <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><PageTransition><AdminDashboard /></PageTransition></ProtectedRoute>} />
-        <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><PageTransition><RestaurantDashboard /></PageTransition></ProtectedRoute>} />
-        <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><PageTransition><DriverDashboard /></PageTransition></ProtectedRoute>} />
-        <Route path="/loyalty" element={<ProtectedRoute><PageTransition><LoyaltyPage /></PageTransition></ProtectedRoute>} />
-        <Route path="/offers" element={<PageTransition><OffersPage /></PageTransition>} />
-        <Route path="/install" element={<PageTransition><InstallPage /></PageTransition>} />
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-      </Routes>
+    <AnimatePresence mode="wait" initial={false}>
+      <PageTransition key={location.pathname}>
+        <Routes location={location}>
+          <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/store/:id" element={<StorePage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/order/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
+          <Route path="/track/:id" element={<ProtectedRoute><LiveTrackingPage /></ProtectedRoute>} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/category/:id" element={<CategoryPage />} />
+          <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/restaurant-dashboard" element={<ProtectedRoute requiredRole="restaurant_owner"><RestaurantDashboard /></ProtectedRoute>} />
+          <Route path="/driver" element={<ProtectedRoute requiredRole="driver"><DriverDashboard /></ProtectedRoute>} />
+          <Route path="/loyalty" element={<ProtectedRoute><LoyaltyPage /></ProtectedRoute>} />
+          <Route path="/offers" element={<OffersPage />} />
+          <Route path="/install" element={<InstallPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </PageTransition>
     </AnimatePresence>
   );
 };
