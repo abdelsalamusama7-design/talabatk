@@ -121,7 +121,7 @@ const InstallPage = () => {
           </div>
         </div>
 
-        {/* Native apps section */}
+        {/* Native apps & Direct Install section */}
         <div className="bg-card rounded-2xl p-5 shadow-card">
           <h3 className="font-semibold text-foreground mb-2">تطبيقات الهاتف الأصلية</h3>
           <p className="text-sm text-muted-foreground mb-4">
@@ -136,6 +136,22 @@ const InstallPage = () => {
               <p className="text-xs font-medium text-foreground">App Store</p>
               <p className="text-[10px] text-muted-foreground">قريباً</p>
             </div>
+            <button
+              onClick={() => {
+                if (isIOS) {
+                  // Show iOS instructions
+                  alert("اضغط على زر المشاركة ⬆️ ثم اختر \"إضافة إلى الشاشة الرئيسية\"");
+                } else {
+                  handleInstall();
+                }
+              }}
+              disabled={isInstalled}
+              className="flex-1 bg-primary rounded-xl p-3 text-center text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <Download className="h-5 w-5 mx-auto mb-0.5" />
+              <p className="text-xs font-bold">تحميل مباشر</p>
+              <p className="text-[10px] opacity-80">{isInstalled ? "مثبت ✓" : "ثبّت الآن"}</p>
+            </button>
           </div>
         </div>
       </div>
