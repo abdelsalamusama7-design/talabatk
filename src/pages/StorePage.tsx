@@ -87,10 +87,17 @@ const StorePage = () => {
                   layout
                   className="bg-card rounded-2xl p-4 shadow-card"
                 >
-                  <div className="flex gap-4 items-center">
-                    <div className="flex-1">
+                  <div className="flex gap-3 items-center">
+                    {product.image && (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-20 h-20 rounded-xl object-cover shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-foreground">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground mt-0.5">{product.description}</p>
+                      <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{product.description}</p>
                       <p className="text-primary font-bold mt-2 tabular-nums">
                         {displayPrice.toFixed(0)} ج.م
                         {isWeightStore && (
