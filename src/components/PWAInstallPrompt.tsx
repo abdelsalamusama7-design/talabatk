@@ -20,11 +20,10 @@ const PWAInstallPrompt = () => {
   }, []);
 
   const handleInstall = async () => {
-    const result = await triggerInstall();
-    if (result === "accepted") setIsInstalled(true);
+    await triggerInstall();
   };
 
-  if (isInstalled || dismissed) return null;
+  if (dismissed) return null;
 
   const isAr = lang === "ar";
 
