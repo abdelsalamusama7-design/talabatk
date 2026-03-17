@@ -28,7 +28,7 @@ const PWAInstallPrompt = () => {
   const isAr = lang === "ar";
 
   return (
-    <div className="fixed bottom-24 inset-x-3 z-50 animate-in slide-in-from-bottom-6 duration-500">
+    <div className="fixed bottom-16 inset-x-0 z-50 px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 rounded-2xl shadow-2xl p-[1px]">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/20 via-transparent to-primary-foreground/20 animate-pulse rounded-2xl" />
         
