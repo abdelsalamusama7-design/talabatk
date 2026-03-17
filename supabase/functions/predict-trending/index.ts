@@ -77,7 +77,7 @@ Return ONLY the JSON array, no markdown, no explanation.`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-5-mini",
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: "You are a food trend prediction AI. Always respond with valid JSON only. No markdown formatting." },
           { role: "user", content: prompt },
