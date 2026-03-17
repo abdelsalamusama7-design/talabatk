@@ -67,6 +67,12 @@ const PWAInstallPrompt = () => {
               )}
             </div>
             
+            <button
+              onClick={() => setDismissed(true)}
+              className="text-primary-foreground/50 hover:text-primary-foreground p-1.5 flex-shrink-0 rounded-full hover:bg-primary-foreground/10 transition-colors self-start"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
