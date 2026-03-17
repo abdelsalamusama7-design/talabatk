@@ -24,7 +24,7 @@ const PWAInstallPrompt = () => {
     if (result === "accepted") setIsInstalled(true);
   };
 
-  if (isInstalled) return null;
+  if (isInstalled || dismissed) return null;
 
   const isAr = lang === "ar";
 
