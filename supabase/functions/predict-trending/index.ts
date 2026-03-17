@@ -59,13 +59,15 @@ ${menuSummary || "No menu items registered yet - suggest popular Egyptian meals 
 
 Based on the day of week, time of day, Egyptian food culture, weather patterns, and ordering trends, predict the TOP 5 most popular meals for today.
 
-For each meal, provide:
+Return ONLY a JSON array with exactly 5 objects, each having these fields:
 - meal_name: Arabic name of the meal
 - meal_description: Short Arabic description (max 50 chars)
 - restaurant_name: The restaurant it's from (use real ones from menu if available, otherwise suggest fitting names)
-- price: Estimated price in EGP
-- score: Popularity score 1-10
-- reason: Short Arabic reason why it's trending (max 30 chars)`;
+- price: Estimated price in EGP (number)
+- score: Popularity score 1-10 (number)
+- reason: Short Arabic reason why it's trending (max 30 chars)
+
+Return ONLY the JSON array, no markdown, no explanation.`;
 
     // 4. Call AI
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -77,42 +79,9 @@ For each meal, provide:
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: "You are a food trend prediction AI. Always respond with valid JSON only." },
+          { role: "system", content: "You are a food trend prediction AI. Always respond with valid JSON only. No markdown formatting." },
           { role: "user", content: prompt },
         ],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "predict_trending_meals",
-              description: "Return the top 5 predicted trending meals for today",
-              parameters: {
-                type: "object",
-                properties: {
-                  meals: {
-                    type: "array",
-                    items: {
-                      type: "object",
-                      properties: {
-                        meal_name: { type: "string" },
-                        meal_description: { type: "string" },
-                        restaurant_name: { type: "string" },
-                        price: { type: "number" },
-                        score: { type: "number" },
-                        reason: { type: "string" },
-                      },
-                      required: ["meal_name", "meal_description", "restaurant_name", "price", "score", "reason"],
-                      additionalProperties: false,
-                    },
-                  },
-                },
-                required: ["meals"],
-                additionalProperties: false,
-              },
-            },
-          },
-        ],
-        tool_choice: { type: "function", function: { name: "predict_trending_meals" } },
       }),
     });
 
@@ -136,12 +105,20 @@ For each meal, provide:
     }
 
     const aiData = await aiResponse.json();
-    const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
+    const content = aiData.choices?.[0]?.message?.content || "";
     
+    // Parse JSON from response (handle possible markdown wrapping)
     let meals: any[] = [];
-    if (toolCall?.function?.arguments) {
-      const parsed = JSON.parse(toolCall.function.arguments);
-      meals = parsed.meals || [];
+    try {
+      const jsonStr = content.replace(/```json?\n?/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(jsonStr);
+      meals = Array.isArray(parsed) ? parsed : parsed.meals || [];
+    } catch (e) {
+      console.error("Failed to parse AI response:", content);
+      return new Response(JSON.stringify({ error: "Failed to parse AI response" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (meals.length === 0) {
