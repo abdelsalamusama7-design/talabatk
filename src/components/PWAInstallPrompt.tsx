@@ -6,25 +6,16 @@ import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled
 
 const PWAInstallPrompt = () => {
   const [hasPrompt, setHasPrompt] = useState(!!getInstallPrompt());
-  const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS] = useState(isIOSDevice());
+  const [isInstalled, setIsInstalled] = useState(isAppInstalled());
   const { lang } = useLang();
 
   useEffect(() => {
-    if (isAppInstalled()) return;
-
+    setIsInstalled(isAppInstalled());
     const unsub = onInstallPromptChange((p) => {
       setHasPrompt(!!p);
-      if (p) setTimeout(() => setShowPrompt(true), 2000);
     });
-
-    // Always show after delay (for iOS or when prompt already captured)
-    const timer = setTimeout(() => setShowPrompt(true), 3000);
-
-    return () => {
-      unsub();
-      clearTimeout(timer);
-    };
+    return () => unsub();
   }, []);
 
   const handleInstall = async () => {
