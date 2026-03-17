@@ -8,6 +8,7 @@ const PWAInstallPrompt = () => {
   const [hasPrompt, setHasPrompt] = useState(!!getInstallPrompt());
   const [isIOS] = useState(isIOSDevice());
   const [isInstalled, setIsInstalled] = useState(isAppInstalled());
+  const [dismissed, setDismissed] = useState(false);
   const { lang } = useLang();
 
   useEffect(() => {
