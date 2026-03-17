@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Download, Sparkles } from "lucide-react";
+import { Download, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang-context";
 import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled, isIOSDevice } from "@/lib/install-prompt";
@@ -8,6 +8,7 @@ const PWAInstallPrompt = () => {
   const [hasPrompt, setHasPrompt] = useState(!!getInstallPrompt());
   const [isIOS] = useState(isIOSDevice());
   const [isInstalled, setIsInstalled] = useState(isAppInstalled());
+  const [dismissed, setDismissed] = useState(false);
   const { lang } = useLang();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const PWAInstallPrompt = () => {
     if (result === "accepted") setIsInstalled(true);
   };
 
-  if (isInstalled) return null;
+  if (isInstalled || dismissed) return null;
 
   const isAr = lang === "ar";
 
@@ -66,6 +67,12 @@ const PWAInstallPrompt = () => {
               )}
             </div>
             
+            <button
+              onClick={() => setDismissed(true)}
+              className="text-primary-foreground/50 hover:text-primary-foreground p-1.5 flex-shrink-0 rounded-full hover:bg-primary-foreground/10 transition-colors self-start"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
