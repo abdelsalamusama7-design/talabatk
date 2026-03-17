@@ -1,47 +1,34 @@
 import { useState, useEffect } from "react";
-import { X, Download, Sparkles } from "lucide-react";
+import { Download, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang-context";
 import { triggerInstall, getInstallPrompt, onInstallPromptChange, isAppInstalled, isIOSDevice } from "@/lib/install-prompt";
 
 const PWAInstallPrompt = () => {
   const [hasPrompt, setHasPrompt] = useState(!!getInstallPrompt());
-  const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS] = useState(isIOSDevice());
+  const [isInstalled, setIsInstalled] = useState(isAppInstalled());
   const { lang } = useLang();
 
   useEffect(() => {
-    if (isAppInstalled()) return;
-
+    setIsInstalled(isAppInstalled());
     const unsub = onInstallPromptChange((p) => {
       setHasPrompt(!!p);
-      if (p) setTimeout(() => setShowPrompt(true), 2000);
     });
-
-    // Always show after delay (for iOS or when prompt already captured)
-    const timer = setTimeout(() => setShowPrompt(true), 3000);
-
-    return () => {
-      unsub();
-      clearTimeout(timer);
-    };
+    return () => unsub();
   }, []);
 
   const handleInstall = async () => {
     const result = await triggerInstall();
-    if (result === "accepted") setShowPrompt(false);
+    if (result === "accepted") setIsInstalled(true);
   };
 
-  const handleDismiss = () => {
-    setShowPrompt(false);
-  };
-
-  if (!showPrompt) return null;
+  if (isInstalled) return null;
 
   const isAr = lang === "ar";
 
   return (
-    <div className="fixed bottom-24 inset-x-3 z-50 animate-in slide-in-from-bottom-6 duration-500">
+    <div className="fixed bottom-16 inset-x-0 z-50 px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 rounded-2xl shadow-2xl p-[1px]">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground/20 via-transparent to-primary-foreground/20 animate-pulse rounded-2xl" />
         
@@ -79,12 +66,6 @@ const PWAInstallPrompt = () => {
               )}
             </div>
             
-            <button
-              onClick={handleDismiss}
-              className="text-primary-foreground/50 hover:text-primary-foreground p-1.5 flex-shrink-0 rounded-full hover:bg-primary-foreground/10 transition-colors"
-            >
-              <X className="h-4 w-4" />
-            </button>
           </div>
         </div>
       </div>
