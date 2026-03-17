@@ -75,7 +75,7 @@ For each meal, provide:
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: "You are a food trend prediction AI. Always respond with valid JSON only." },
           { role: "user", content: prompt },
