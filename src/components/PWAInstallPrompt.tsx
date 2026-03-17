@@ -23,7 +23,7 @@ const PWAInstallPrompt = () => {
     await triggerInstall();
   };
 
-  if (isInstalled || dismissed) return null;
+  if (dismissed) return null;
 
   const isAr = lang === "ar";
 
